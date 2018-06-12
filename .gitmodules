@@ -1,0 +1,3 @@
+[submodule "Farango"]
+	path = Farango
+	url = git@github.com:yjpark/Farango.git
