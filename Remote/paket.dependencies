@@ -1,0 +1,22 @@
+version 5.161.3
+
+source https://nuget.yjpark.org/nuget/dap
+source https://www.nuget.org/api/v2
+storage: none
+framework: auto-detect
+generate_load_scripts: true
+
+nuget Dap.Platform.Net
+nuget Dap.Remote.Net
+
+nuget Microsoft.AspNetCore.WebSockets
+nuget FSharp.Data 3.0.0-beta3
+
+group Build
+    source https://nuget.yjpark.org/nuget/dap
+    source https://www.nuget.org/api/v2
+    storage: none
+    framework: netstandard2.0
+
+    clitool dotnet-fake
+    nuget Dap.Build

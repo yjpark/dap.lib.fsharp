@@ -1,0 +1,23 @@
+{
+	"folders": [
+		{
+			"path": "Remote"
+		},
+		{
+			"path": "Farango"
+		}
+	],
+    "settings": {
+        "files.exclude": {
+            "**/bin": true,
+            "**/obj": true,
+            "*.log": true,
+            "log" : true,
+            ".vs": true,
+            ".vscode": true,
+            ".gitignore": true,
+            ".paket": true,
+            "paket-files": true
+        }
+    }
+}

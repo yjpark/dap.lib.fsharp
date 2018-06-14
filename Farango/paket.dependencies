@@ -1,0 +1,21 @@
+version 5.161.3
+
+storage: none
+
+source https://www.nuget.org/api/v2
+framework: auto-detect
+
+nuget Fable.JsonConverter
+nuget FSharp.Control.AsyncSeq
+nuget FSharp.Core
+nuget FSharp.Data 3.0.0-beta3
+nuget Newtonsoft.Json
+
+group Build
+    source https://nuget.yjpark.org/nuget/dap
+    source https://www.nuget.org/api/v2
+    storage: none
+    framework: netstandard2.0
+
+    clitool dotnet-fake
+    nuget Dap.Build
