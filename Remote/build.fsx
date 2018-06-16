@@ -16,7 +16,7 @@ let projects =
 
 let feed : NuGet.Feed = {
     NuGet.Source = "https://nuget.yjpark.org/nuget/dap"
-    NuGet.ApiKey = NuGet.Environment "API_KEY_nuget_yjpark_org"
+    NuGet.ApiKey = NuGet.Plain "wnHZEG9N_OrmO3XKoAGT"
 }
 
 NuGet.run cleanDirs projects feed

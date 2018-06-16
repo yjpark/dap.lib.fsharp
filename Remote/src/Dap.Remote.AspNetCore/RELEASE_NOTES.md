@@ -1,4 +1,4 @@
-## 0.5.0
+## 0.6.0
 * Logging abstraction
 * `^<|` as right associative `<|`
 * Result helpers: isOk isError get getError iter iterError
