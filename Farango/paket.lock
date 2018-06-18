@@ -17,7 +17,7 @@ STORAGE: NONE
 RESTRICTION: == netstandard2.0
 NUGET
   remote: https://nuget.yjpark.org/nuget/dap
-    Dap.Build (0.6.1)
+    Dap.Build (0.6.2)
       Fake.Core.Process (>= 5.0)
       Fake.Core.ReleaseNotes (>= 5.0)
       Fake.Core.String (>= 5.0)
