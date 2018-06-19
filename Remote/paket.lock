@@ -524,16 +524,16 @@ STORAGE: NONE
 RESTRICTION: == netstandard2.0
 NUGET
   remote: https://nuget.yjpark.org/nuget/dap
-    Dap.Build (0.6.2)
-      Fake.Core.Process (>= 5.0)
-      Fake.Core.ReleaseNotes (>= 5.0)
-      Fake.Core.String (>= 5.0)
-      Fake.Core.Target (>= 5.0)
-      Fake.DotNet.Cli (>= 5.0)
-      Fake.DotNet.NuGet (>= 5.0)
-      Fake.IO.FileSystem (>= 5.0)
-      Fake.IO.Zip (>= 5.0)
-      Fake.Tools.Git (>= 5.0)
+    Dap.Build (0.6.3)
+      Fake.Core.Process (>= 5.1)
+      Fake.Core.ReleaseNotes (>= 5.1)
+      Fake.Core.String (>= 5.1)
+      Fake.Core.Target (>= 5.1)
+      Fake.DotNet.Cli (>= 5.1)
+      Fake.DotNet.NuGet (>= 5.1)
+      Fake.IO.FileSystem (>= 5.1)
+      Fake.IO.Zip (>= 5.1)
+      Fake.Tools.Git (>= 5.1)
       FSharp.Core (>= 4.5)
   remote: https://www.nuget.org/api/v2
     dotnet-fake (5.1) - clitool: true
