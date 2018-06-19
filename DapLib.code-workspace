@@ -17,7 +17,8 @@
             ".vscode": true,
             ".gitignore": true,
             ".paket": true,
-            "paket-files": true
+            "paket-files": true,
+            ".fake": true,
         }
     }
 }
