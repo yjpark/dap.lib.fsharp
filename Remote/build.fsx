@@ -15,4 +15,4 @@ let projects =
     !! "src/Dap.Remote.FSharpData/*.fsproj"
     ++ "src/Dap.Remote.AspNetCore/*.fsproj"
 
-NuGet.run NuGet.release feed projects
+NuGet.createAndRun NuGet.release feed projects
