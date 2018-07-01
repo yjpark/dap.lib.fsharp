@@ -4,6 +4,9 @@
 			"path": "Remote"
 		},
 		{
+			"path": "External/Farango"
+		}
+		{
 			"path": "Farango"
 		}
 	],
