@@ -14,4 +14,4 @@ let feed : NuGet.Feed = {
 let projects =
     !! "src/Dap.Farango/*.fsproj"
 
-NuGet.run NuGet.release feed projects
+NuGet.createAndRun NuGet.release feed projects
