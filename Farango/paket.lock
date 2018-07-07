@@ -26,6 +26,7 @@ NUGET
       Fake.DotNet.NuGet (>= 5.1)
       Fake.IO.FileSystem (>= 5.1)
       Fake.IO.Zip (>= 5.1)
+      Fake.Net.Http (>= 5.1)
       Fake.Tools.Git (>= 5.1)
       FSharp.Core (>= 4.5)
   remote: https://www.nuget.org/api/v2
@@ -113,6 +114,9 @@ NUGET
       FSharp.Core (>= 4.3.4)
       System.IO.Compression (>= 4.3)
       System.IO.Compression.ZipFile (>= 4.3)
+    Fake.Net.Http (5.1)
+      Fake.Core.Trace (>= 5.1)
+      FSharp.Core (>= 4.3.4)
     Fake.Tools.Git (5.1)
       Fake.Core.Environment (>= 5.1)
       Fake.Core.Process (>= 5.1)
