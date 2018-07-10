@@ -9,7 +9,7 @@ generate_load_scripts: true
 nuget Dap.Remote
 
 nuget Microsoft.AspNetCore.WebSockets
-nuget FSharp.Data 3.0.0-beta3
+nuget FSharp.Data 3.0.0-beta4
 
 group Build
     source https://nuget.yjpark.org/nuget/dap

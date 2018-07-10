@@ -31,7 +31,7 @@ NUGET
       FSharp.Core (>= 4.2.3)
       Newtonsoft.Json (>= 11.0.1)
     FSharp.Core (4.5)
-    FSharp.Data (3.0.0-beta3)
+    FSharp.Data (3.0.0-beta4)
       FSharp.Core (>= 4.3.4)
     Microsoft.AspNetCore.Http.Abstractions (2.1.1)
       Microsoft.AspNetCore.Http.Features (>= 2.1.1)
