@@ -8,7 +8,7 @@ NUGET
     FSharp.Control.AsyncSeq (2.0.21)
       FSharp.Core (>= 4.3.2)
     FSharp.Core (4.5)
-    FSharp.Data (3.0.0-beta3)
+    FSharp.Data (3.0.0-beta4)
       FSharp.Core (>= 4.3.4)
     Newtonsoft.Json (11.0.2)
 
