@@ -1,0 +1,26 @@
+version 5.172.4
+
+source https://nuget.yjpark.org/nuget/dap
+source https://www.nuget.org/api/v2
+storage: none
+framework: auto-detect
+generate_load_scripts: true
+
+nuget Fable.Dap.Remote
+
+nuget Fable.PowerPack
+nuget Fable.Import.Browser
+nuget Fable.React
+nuget Fable.Elmish.React
+nuget Fable.Elmish.Browser
+nuget Fable.Elmish.Debugger
+nuget Fable.Elmish.HMR
+
+group Build
+    source https://nuget.yjpark.org/nuget/dap
+    source https://www.nuget.org/api/v2
+    storage: none
+    framework: netstandard2.0
+
+    clitool dotnet-fake
+    nuget Dap.Build
