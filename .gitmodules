@@ -1,3 +1,6 @@
 [submodule "External/Farango"]
 	path = External/Farango
 	url = git@github.com:yjpark/Farango.git
+[submodule "External/XamarinClipboardPlugin"]
+	path = External/XamarinClipboardPlugin
+	url = git@github.com:yjpark/XamarinClipboardPlugin.git
