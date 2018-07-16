@@ -26,7 +26,7 @@ let [<PassGenericsAttribute>] private handleReq (req : Req<'route>) : ActorOpera
         let dispatch = fun _ -> ()
         (Navigation.modifyUrl route.Url)
         |> List.iter (fun cmd -> cmd dispatch)
-        noOperation
+        addSubCmd InternalEvt ^<| SetRoute route
 
 let [<PassGenericsAttribute>] private runProgram : ActorOperate<'runner, 'route, 'model, 'msg> =
     fun runner (model, cmd) ->
