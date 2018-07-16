@@ -20,8 +20,13 @@ type ActorOperate<'runner, 'route, 'model, 'msg
                 and 'model : not struct and 'msg :> IMsg> =
     Operate<'runner, Model<'route, 'model, 'msg>, Msg<'route, 'model, 'msg>>
 
-let private handleReq req : ActorOperate<'runner, 'route, 'model, 'msg> =
-    noOperation
+let [<PassGenericsAttribute>] private handleReq (req : Req<'route>) : ActorOperate<'runner, 'route, 'model, 'msg> =
+    match req with
+    | DoRoute route ->
+        let dispatch = fun _ -> ()
+        (Navigation.modifyUrl route.Url)
+        |> List.iter (fun cmd -> cmd dispatch)
+        noOperation
 
 let [<PassGenericsAttribute>] private runProgram : ActorOperate<'runner, 'route, 'model, 'msg> =
     fun runner (model, cmd) ->
@@ -68,7 +73,7 @@ let [<PassGenericsAttribute>] private initProgram (initer : IAgent<Msg<'route, '
     let mutable firstView = true
     let view = fun (model : 'model) (dispatch : 'msg -> unit) ->
         if (firstView) then
-            runner.SetDispatch' dispatch
+            runner.SetReact' dispatch
             firstView <- false
         args.View runner model
     let subscribe = fun (model : 'model) ->

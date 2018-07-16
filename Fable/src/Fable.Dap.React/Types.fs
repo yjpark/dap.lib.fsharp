@@ -97,15 +97,15 @@ and
                 and 'route :> IRoute
                 and 'model : not struct and 'msg :> IMsg> (param) =
     inherit BaseAgent<'runner, Args<'runner, 'route, 'model, 'msg>, Model<'route, 'model, 'msg>, Msg<'route, 'model, 'msg>, Req<'route>, Evt> (param)
-    let mutable dispatch : ('msg -> unit) option = None
+    let mutable react : ('msg -> unit) option = None
     member this.AsApp = this
     member this.Program = this.Actor.State.Program
     member this.Route = this.Actor.State.Route |> Option.get
     member this.DoRoute route = this.Deliver <| AppReq ^<| DoRoute route
-    member _this.SetDispatch' dispatch' =
-        dispatch <- Some dispatch'
-    member _this.Dispatch (msg : 'msg) =
-        dispatch
+    member _this.SetReact' react' =
+        react <- Some react'
+    member _this.React (msg : 'msg) =
+        react
         |> Option.iter (fun d -> d msg)
     abstract Setup : AppIniter<'route, 'model, 'msg> -> unit
 
