@@ -25,9 +25,10 @@ with
 type Error =
     | BadUrl of string
     | NetworkError of WebException
+    | DecodeError of pkt:string * err:D.DecoderError
     | InternalError of exn
     | BadStatus of HttpResponse
-    | BadPayload of HttpResponse * D.DecoderError
+    | BadPayload of HttpResponse * err:string
 
 type Request<'res> = {
     Method : Method
@@ -65,13 +66,17 @@ let handleAsync (runner : IRunner) (callback : Response<'res> -> unit) (req : Re
         let! response = FSharp.Data.Http.AsyncRequest (req.Url, ?headers = req.Headers, ?httpMethod = httpMethod, ?body = req.Body, ?timeout = timeout)
         match response.Body with
         | Text text ->
-            decodeJson text
-            |> req.Decoder
-            |> Result.mapError (fun e -> BadPayload (response, e))
-            |> Result.map (fun res -> (res, text))
-            |> callback'
+            try
+                decodeJson text
+                |> req.Decoder
+                |> Result.mapError (fun e ->
+                    DecodeError (text, e)
+                )|> Result.map (fun res -> (res, text))
+                |> callback'
+            with e ->
+                callback' <| Error ^<| DecodeError (text, D.FailMessage <| sprintf "Exception_Raised: %s" e.Message)
         | Binary bytes ->
-            callback' <| Error ^<| BadPayload (response, D.FailMessage ^<| sprintf "Expecting text, but got a binary response (%d bytes)" bytes.Length)
+            callback' <| Error ^<| BadPayload (response, sprintf "Expecting text, but got a binary response (%d bytes)" bytes.Length)
     with
     | :? WebException as e ->
         callback' <| Error ^<| NetworkError e
@@ -84,7 +89,7 @@ let handle : Api<IRunner, Request<'res>, Response<'res>> =
         handleAsync runner callback req
         |> Async.Start
 
-let get runner callback url (decoder : D.Decoder<'res>) = 
+let get runner callback url (decoder : D.Decoder<'res>) =
     let req = Request<'res>.Create Get url decoder None None None
     handle runner callback req
 
