@@ -7,10 +7,11 @@
 			"path": "Fable"
 		},
 		{
-			"path": "External/Farango"
+			"path": "Farango"
 		}
 		{
-			"path": "Farango"
+            "name": "Farango (External)",
+			"path": "External/Farango"
 		}
 	],
     "settings": {

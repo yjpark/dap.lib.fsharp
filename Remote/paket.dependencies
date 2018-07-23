@@ -19,18 +19,6 @@ group Build
 
     nuget Dap.Build
 
-    clitool dotnet-fake
-    nuget Fake.Core.Target
-    nuget Fake.Core.Process
-    nuget Fake.Core.String
-    nuget Fake.Core.ReleaseNotes
-    nuget Fake.DotNet.Cli
-    nuget Fake.DotNet.NuGet
-    nuget Fake.IO.FileSystem
-    nuget Fake.IO.Zip
-    nuget Fake.Net.Http
-    nuget Fake.Tools.Git
-
     clitool dotnet-sourcelink
     nuget Microsoft.SourceLink.GitHub 1.0.0-beta-62925-02
     nuget Microsoft.Build.Tasks.Git 1.0.0-beta-62925-02
