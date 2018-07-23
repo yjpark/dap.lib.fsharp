@@ -24,18 +24,17 @@ group Build
 
     nuget Dap.Build
 
-    # TODO: Find better solution
-    clitool dotnet-fake 5.1
-    nuget Fake.Core.Target 5.1
-    nuget Fake.Core.Process 5.1
-    nuget Fake.Core.String 5.1
-    nuget Fake.Core.ReleaseNotes 5.1
-    nuget Fake.DotNet.Cli 5.1
-    nuget Fake.DotNet.NuGet 5.1
-    nuget Fake.IO.FileSystem 5.1
-    nuget Fake.IO.Zip 5.1
-    nuget Fake.Net.Http 5.1
-    nuget Fake.Tools.Git 5.1
+    clitool dotnet-fake
+    nuget Fake.Core.Target
+    nuget Fake.Core.Process
+    nuget Fake.Core.String
+    nuget Fake.Core.ReleaseNotes
+    nuget Fake.DotNet.Cli
+    nuget Fake.DotNet.NuGet
+    nuget Fake.IO.FileSystem
+    nuget Fake.IO.Zip
+    nuget Fake.Net.Http
+    nuget Fake.Tools.Git
 
     clitool dotnet-sourcelink
     nuget Microsoft.SourceLink.GitHub 1.0.0-beta-62925-02
