@@ -93,11 +93,10 @@ let handleAsync' (runner : IRunner) (req : Request<'res>) (callback : Response<'
 let handleAsync : AsyncApi<IRunner, Request<'res>, Response<'res>> =
     fun runner req -> task {
         let mutable res = None
-        fun r -> res <- Some r
-        |> handleAsync' runner req
-        |> Async.StartAsTask
-        |> Async.AwaitTask
-        |> ignore
+        do! fun r -> (res <- Some r)
+            |> handleAsync' runner req
+            |> Async.StartAsTask
+            |> Async.AwaitTask
         return res |> Option.get
     }
 
