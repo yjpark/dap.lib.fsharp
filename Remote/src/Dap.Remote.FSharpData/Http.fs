@@ -18,11 +18,15 @@ module D = Thoth.Json.Net.Decode
 type Method =
     | Get
     | Post
+    | Put
+    | Delete
 with
     member this.ToHttpMethod () =
         match this with
         | Get -> "GET"
         | Post -> "POST"
+        | Put -> "PUT"
+        | Delete -> "DELETE"
 
 type Error =
     | BadUrl of string
@@ -116,4 +120,20 @@ let post runner url (decoder : D.Decoder<'res>) body callback =
 
 let postAsync runner url (decoder : D.Decoder<'res>) body =
     let req = Request<'res>.Create Post url decoder None None (Some body)
+    handleAsync runner req
+
+let put runner url (decoder : D.Decoder<'res>) body callback =
+    let req = Request<'res>.Create Put url decoder None None (Some body)
+    handle runner req callback
+
+let putAsync runner url (decoder : D.Decoder<'res>) body =
+    let req = Request<'res>.Create Put url decoder None None (Some body)
+    handleAsync runner req
+
+let delete runner url (decoder : D.Decoder<'res>) callback =
+    let req = Request<'res>.Create Delete url decoder None None None
+    handle runner req callback
+
+let deleteAsync runner url (decoder : D.Decoder<'res>) body =
+    let req = Request<'res>.Create Delete url decoder None None None
     handleAsync runner req
