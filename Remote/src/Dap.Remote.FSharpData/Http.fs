@@ -55,7 +55,7 @@ type Response<'res> = Result<'res * string, Error>
 let private tplFailed<'res> : Request<'res> -> Error -> LogEvent =
     LogEvent.Template3<string, Request<'res>, Error>(LogLevelError, "[{Section}] {Req} ~> Failed: {Error}") "Http"
 
-let handleAsync' (runner : IRunner) (callback : Response<'res> -> unit) (req : Request<'res>) = async {
+let handleAsync' (runner : IRunner) (req : Request<'res>) (callback : Response<'res> -> unit) = async {
     let callback' = fun res ->
         res
         |> Result.mapError (fun err ->
@@ -89,8 +89,8 @@ let handleAsync' (runner : IRunner) (callback : Response<'res> -> unit) (req : R
 let handleAsync : AsyncApi<IRunner, Request<'res>, Response<'res>> =
     fun runner req -> task {
         let mutable res = None
-        let callback = fun r -> res <- Some r
-        handleAsync' runner callback req
+        fun r -> res <- Some r
+        |> handleAsync' runner req
         |> Async.StartAsTask
         |> Async.AwaitTask
         |> ignore
@@ -98,14 +98,22 @@ let handleAsync : AsyncApi<IRunner, Request<'res>, Response<'res>> =
     }
 
 let handle : Api<IRunner, Request<'res>, Response<'res>> =
-    fun runner callback req ->
-        handleAsync' runner callback req
+    fun runner req callback ->
+        handleAsync' runner req callback
         |> Async.Start
 
-let get runner callback url (decoder : D.Decoder<'res>) =
+let get runner url (decoder : D.Decoder<'res>) callback =
     let req = Request<'res>.Create Get url decoder None None None
-    handle runner callback req
+    handle runner req callback
 
-let post runner callback url (decoder : D.Decoder<'res>) body =
+let getAsync runner url (decoder : D.Decoder<'res>) =
+    let req = Request<'res>.Create Get url decoder None None None
+    handleAsync runner req
+
+let post runner url (decoder : D.Decoder<'res>) body callback =
     let req = Request<'res>.Create Post url decoder None None (Some body)
-    handle runner callback req
+    handle runner req callback
+
+let postAsync runner url (decoder : D.Decoder<'res>) body =
+    let req = Request<'res>.Create Post url decoder None None (Some body)
+    handleAsync runner req
