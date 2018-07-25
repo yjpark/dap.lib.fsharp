@@ -96,7 +96,6 @@ let handleAsync : AsyncApi<IRunner, Request<'res>, Response<'res>> =
         do! fun r -> (res <- Some r)
             |> handleAsync' runner req
             |> Async.StartAsTask
-            |> Async.AwaitTask
         return res |> Option.get
     }
 
