@@ -3,6 +3,8 @@ module Dap.Remote.Http
 
 open System.Net
 open FSharp.Data
+open FSharp.Control.Tasks.V2
+
 open Newtonsoft.Json
 open Newtonsoft.Json.Linq
 
@@ -53,7 +55,7 @@ type Response<'res> = Result<'res * string, Error>
 let private tplFailed<'res> : Request<'res> -> Error -> LogEvent =
     LogEvent.Template3<string, Request<'res>, Error>(LogLevelError, "[{Section}] {Req} ~> Failed: {Error}") "Http"
 
-let handleAsync (runner : IRunner) (callback : Response<'res> -> unit) (req : Request<'res>) = async {
+let handleAsync' (runner : IRunner) (callback : Response<'res> -> unit) (req : Request<'res>) = async {
     let callback' = fun res ->
         res
         |> Result.mapError (fun err ->
@@ -84,9 +86,20 @@ let handleAsync (runner : IRunner) (callback : Response<'res> -> unit) (req : Re
         callback' <| Error ^<| InternalError e
 }
 
+let handleAsync : AsyncApi<IRunner, Request<'res>, Response<'res>> =
+    fun runner req -> task {
+        let mutable res = None
+        let callback = fun r -> res <- Some r
+        handleAsync' runner callback req
+        |> Async.StartAsTask
+        |> Async.AwaitTask
+        |> ignore
+        return res |> Option.get
+    }
+
 let handle : Api<IRunner, Request<'res>, Response<'res>> =
     fun runner callback req ->
-        handleAsync runner callback req
+        handleAsync' runner callback req
         |> Async.Start
 
 let get runner callback url (decoder : D.Decoder<'res>) =
