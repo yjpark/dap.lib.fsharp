@@ -23,7 +23,12 @@ let private runProgram : ActorOperate<'runner, 'model, 'msg> =
 let private handleInternalEvt evt : ActorOperate<'runner, 'model, 'msg> =
     match evt with
     | RunProgram ->
-        runProgram
+        if isRealForms () then
+            runProgram
+        else
+            fun runner (model, cmd) ->
+                logError runner "Forms_App" "Is_Mock_Forms" ()
+                (model, cmd)
 
 let private update : ActorUpdate<'runner, Args<'runner, 'model, 'msg>, Model<'model, 'msg>, Msg<'model, 'msg>, Req, Evt> =
     fun runner model msg ->

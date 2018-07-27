@@ -89,3 +89,12 @@ let castEvt<'model, 'msg when 'model : not struct and 'msg :> IMsg>
     function
     | AppEvt evt -> Some evt
     | _ -> None
+
+let isMockForms () =
+    try
+        Device.Info = null
+    with _ ->
+        true
+
+let isRealForms () =
+    not <| isMockForms ()

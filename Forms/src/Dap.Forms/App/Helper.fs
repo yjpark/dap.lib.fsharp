@@ -31,7 +31,7 @@ let createAsync<'runner, 'model, 'msg when 'runner :> App<'runner, 'model, 'msg>
     let timestamp = Profile.perMinute.CalcVolumeKey <| getNow' ()
     let ident = timestamp.Replace(":", "_")
     let logging =
-        if Device.RuntimePlatform = Device.UWP then
+        if (isRealForms ()) && Device.RuntimePlatform = Device.UWP then
             setupSerilog
                 [
                     addConsoleSink <| Some consoleLogLevel
@@ -49,9 +49,12 @@ let createAsync<'runner, 'model, 'msg when 'runner :> App<'runner, 'model, 'msg>
     return app
 }
 
-let newApplication () =
-    let application = new Application ()
-    let emptyPage = View.ContentPage (content = View.Label (text = ""))
-    let page = emptyPage.Create ()
-    application.MainPage <- page :?> Page
-    application
+let newApplication (env : IEnv) =
+    if isRealForms () then
+        let application = new Application ()
+        let emptyPage = View.ContentPage (content = View.Label (text = ""))
+        let page = emptyPage.Create ()
+        application.MainPage <- page :?> Page
+        Some application
+    else
+        None
