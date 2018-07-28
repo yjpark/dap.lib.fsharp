@@ -7,6 +7,7 @@ open Elmish.XamarinForms.DynamicViews
 
 open Dap.Prelude
 open Dap.Platform
+open Dap.Forms
 
 open Dap.Forms.App.Types
 
@@ -17,7 +18,10 @@ type ActorOperate<'runner, 'model, 'msg
 
 let private runProgram : ActorOperate<'runner, 'model, 'msg> =
     fun runner (model, cmd) ->
-        let formsRunner = model.Program |> Program.runWithDynamicView runner.Actor.Args.Application
+        runner.RunUiFunc (fun _ ->
+            let formsRunner = model.Program |> Program.runWithDynamicView runner.Actor.Args.Application
+            ()
+        ) |> ignore
         (model, cmd)
 
 let private handleInternalEvt evt : ActorOperate<'runner, 'model, 'msg> =
