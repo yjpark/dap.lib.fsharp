@@ -19,8 +19,9 @@ type ActorOperate<'runner, 'model, 'msg
 let private runProgram : ActorOperate<'runner, 'model, 'msg> =
     fun runner (model, cmd) ->
         runner.RunUiFunc (fun _ ->
-            model.Program |> Program.runWithDynamicView runner.Actor.Args.Application
-            |> ignore
+            model.Program
+            |> Program.runWithDynamicView runner.Actor.Args.Application
+            |> runner.SetFormsRunner'
         )
         (model, cmd)
 

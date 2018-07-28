@@ -76,9 +76,12 @@ and
                 and 'model : not struct and 'msg :> IMsg> (param) =
     inherit BaseAgent<'runner, Args<'runner, 'model, 'msg>, Model<'model, 'msg>, Msg<'model, 'msg>, Req, Evt> (param)
     let mutable react : ('msg -> unit) option = None
+    let mutable formsRunner : obj option = None
     member this.AsApp = this
     member this.Program = this.Actor.State.Program
     member this.AppState = this.Actor.State.App
+    member _this.SetFormsRunner' runner =
+        formsRunner <- Some runner
     member _this.SetReact' react' =
         react <- Some react'
     member _this.React (msg : 'msg) =
