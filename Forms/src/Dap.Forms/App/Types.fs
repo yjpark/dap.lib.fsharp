@@ -32,8 +32,9 @@ and Args<'runner, 'model, 'msg
     Logic : AppLogic<'runner, 'model, 'msg>
     View : AppView<'runner, 'model, 'msg>
     SetupAsync : IEnv -> Task<unit>
+    Application : Application
 } with
-    static member Create init update subscribe view setupAsync =
+    static member Create init update subscribe view setupAsync application =
         {
             Logic =
                 {
@@ -43,6 +44,7 @@ and Args<'runner, 'model, 'msg
                 }
             View = view
             SetupAsync = setupAsync
+            Application = application
         }
 
 and Model<'model, 'msg
@@ -82,7 +84,6 @@ and
     member _this.React (msg : 'msg) =
         react
         |> Option.iter (fun d -> d msg)
-    abstract member Application : Application with get
 
 let castEvt<'model, 'msg when 'model : not struct and 'msg :> IMsg>
                 : CastEvt<Msg<'model, 'msg>, Evt> =

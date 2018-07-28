@@ -17,7 +17,7 @@ type ActorOperate<'runner, 'model, 'msg
 
 let private runProgram : ActorOperate<'runner, 'model, 'msg> =
     fun runner (model, cmd) ->
-        let formsRunner = model.Program |> Program.runWithDynamicView runner.Application
+        let formsRunner = model.Program |> Program.runWithDynamicView runner.Actor.Args.Application
         (model, cmd)
 
 let private handleInternalEvt evt : ActorOperate<'runner, 'model, 'msg> =

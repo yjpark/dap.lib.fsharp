@@ -13,28 +13,20 @@ open Dap.Archive
 open Dap.Forms.App.Types
 module Logic = Dap.Forms.App.Logic
 
-let createAsync'<'runner, 'model, 'msg when 'runner :> App<'runner, 'model, 'msg>
-                and 'model : not struct and 'msg :> IMsg>
-            (spawn : Spawner<'runner>)
-            (args : Args<'runner, 'model, 'msg>)
-            (env : IEnv) : Task<'runner> = task {
-    let spec = Logic.spec spawn args
-    let! app = env |> Env.addServiceAsync spec "App" noKey
-    return app
-}
-
-let createAsync<'runner, 'model, 'msg when 'runner :> App<'runner, 'model, 'msg>
-                and 'model : not struct and 'msg :> IMsg>
-            (spawn : Spawner<'runner>)
-            (args : Args<'runner, 'model, 'msg>)
-            (scope : Scope) (consoleLogLevel) (logFile : string) = task {
+let env (scope : Scope) (consoleLogLevel) (logFile : string) =
     let timestamp = Profile.perMinute.CalcVolumeKey <| getNow' ()
     let ident = timestamp.Replace(":", "_")
     let logging =
-        if (isRealForms ()) && Device.RuntimePlatform = Device.UWP then
+        let isReal = isRealForms ()
+        if isReal && Device.RuntimePlatform = Device.UWP then
             setupSerilog
                 [
                     addConsoleSink <| Some consoleLogLevel
+                ]
+        elif isReal && (Device.RuntimePlatform = Device.macOS || Device.RuntimePlatform = Device.iOS) then
+            setupSerilog
+                [
+                    addDailyFileSink <| sprintf "log/%s/%s" ident logFile
                 ]
         else
             setupSerilog
@@ -43,16 +35,35 @@ let createAsync<'runner, 'model, 'msg when 'runner :> App<'runner, 'model, 'msg>
                     addDailyFileSink <| sprintf "log/%s/%s" ident logFile
                     //addSeqSink "http://localhost:5341"
                 ]
-    let env = Env.live MailboxPlatform logging scope
+    Env.live MailboxPlatform logging scope
+
+let initAsync<'runner, 'model, 'msg when 'runner :> App<'runner, 'model, 'msg>
+                and 'model : not struct and 'msg :> IMsg>
+            (spawn : Spawner<'runner>)
+            (args : Args<'runner, 'model, 'msg>)
+            (env : IEnv) : Task<'runner> = task {
     do! args.SetupAsync env
-    let! app = env |> createAsync'<'runner, 'model, 'msg> spawn args
+    let spec = Logic.spec spawn args
+    let! app = env |> Env.addServiceAsync spec "App" noKey
     return app
 }
+
+let init<'runner, 'model, 'msg when 'runner :> App<'runner, 'model, 'msg>
+                and 'model : not struct and 'msg :> IMsg>
+            (spawn : Spawner<'runner>)
+            (args : Args<'runner, 'model, 'msg>)
+            (callback : 'runner -> unit)
+            (env : IEnv) =
+    env.RunTask0 ignoreOnFailed (fun runner -> task {
+        let! app = initAsync<'runner, 'model, 'msg> spawn args env
+        callback app
+        return ()
+    })
 
 let newApplication (env : IEnv) =
     if isRealForms () then
         let application = new Application ()
-        let emptyPage = View.ContentPage (content = View.Label (text = ""))
+        let emptyPage = View.ContentPage (content = View.Label (text = "TEST"))
         let page = emptyPage.Create ()
         application.MainPage <- page :?> Page
         Some application
