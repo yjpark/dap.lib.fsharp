@@ -9,6 +9,7 @@ open Elmish.XamarinForms.DynamicViews
 open Dap.Prelude
 open Dap.Platform
 open Dap.Archive
+open Dap.Forms
 
 open Dap.Forms.App.Types
 module Logic = Dap.Forms.App.Logic
@@ -16,23 +17,25 @@ module Logic = Dap.Forms.App.Logic
 let env (scope : Scope) (consoleLogLevel) (logFile : string) =
     let timestamp = Profile.perMinute.CalcVolumeKey <| getNow' ()
     let ident = timestamp.Replace(":", "_")
+    let filePath = sprintf "%s/%s/%s" Const.LogFolder ident logFile
     let logging =
         let isReal = isRealForms ()
         if isReal && Device.RuntimePlatform = Device.UWP then
             setupSerilog
                 [
                     addConsoleSink <| Some consoleLogLevel
+                    addDailyFileSink filePath
                 ]
         elif isReal && (Device.RuntimePlatform = Device.macOS || Device.RuntimePlatform = Device.iOS) then
             setupSerilog
                 [
-                    addDailyFileSink <| sprintf "log/%s/%s" ident logFile
+                    addDailyFileSink filePath
                 ]
         else
             setupSerilog
                 [
                     addConsoleSink <| Some consoleLogLevel
-                    addDailyFileSink <| sprintf "log/%s/%s" ident logFile
+                    addDailyFileSink filePath
                     //addSeqSink "http://localhost:5341"
                 ]
     Env.live MailboxPlatform logging scope

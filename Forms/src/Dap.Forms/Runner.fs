@@ -9,12 +9,11 @@ open Dap.Prelude
 open Dap.Platform
 
 type IRunner<'runner when 'runner :> IRunner> with
-    member this.RunUiFunc<'res> (func : Func<'runner, 'res>) : Result<'res, exn> =
-        let mutable result = None
+    member this.RunUiFunc (func : Func<'runner, unit>) : unit =
         Device.BeginInvokeOnMainThread (fun () ->
-            result <- Some <| runFunc' this.Runner func
+            runFunc' this.Runner func
+            |> ignore
         )
-        result |> Option.get
     member this.GetUiTask (onFailed : OnFailed<'runner>)
                             (getTask : GetTask<'runner, unit>)
                             : GetTask<'runner, unit> =

@@ -9,6 +9,7 @@
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Const.fs" />
     <Compile Include="Runner.fs" />
     <Compile Include="App/Types.fs" />
     <Compile Include="App/Logic.fs" />

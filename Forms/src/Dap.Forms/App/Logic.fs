@@ -21,7 +21,7 @@ let private runProgram : ActorOperate<'runner, 'model, 'msg> =
         runner.RunUiFunc (fun _ ->
             let formsRunner = model.Program |> Program.runWithDynamicView runner.Actor.Args.Application
             ()
-        ) |> ignore
+        )
         (model, cmd)
 
 let private handleInternalEvt evt : ActorOperate<'runner, 'model, 'msg> =
