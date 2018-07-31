@@ -16,31 +16,28 @@ type ActorOperate<'runner, 'model, 'msg
                 and 'model : not struct and 'msg :> IMsg> =
     Operate<'runner, Model<'model, 'msg>, Msg<'model, 'msg>>
 
-let private runProgram : ActorOperate<'runner, 'model, 'msg> =
+let private doRun req (callback: Callback<unit>) : ActorOperate<'runner, 'model, 'msg> =
     fun runner (model, cmd) ->
-        runner.RunUiFunc (fun _ ->
-            model.Program
-            |> Program.runWithDynamicView runner.Actor.Args.Application
-            |> runner.SetFormsRunner'
-        )
+        if isRealForms () then
+            runner.RunUiFunc (fun _ ->
+                model.Program
+                |> Program.runWithDynamicView runner.Actor.Args.Application
+                |> runner.SetFormsRunner'
+                reply runner callback <| ack req ()
+            )
+        else
+            logError runner "Forms_App" "Is_Mock_Forms" ()
         (model, cmd)
 
-let private handleInternalEvt evt : ActorOperate<'runner, 'model, 'msg> =
-    match evt with
-    | RunProgram ->
-        if isRealForms () then
-            runProgram
-        else
-            fun runner (model, cmd) ->
-                logError runner "Forms_App" "Is_Mock_Forms" ()
-                (model, cmd)
+let private handleReq req : ActorOperate<'runner, 'model, 'msg> =
+    match req with
+    | DoRun a -> doRun req a
 
 let private update : ActorUpdate<'runner, Args<'runner, 'model, 'msg>, Model<'model, 'msg>, Msg<'model, 'msg>, Req, Evt> =
     fun runner model msg ->
         match msg with
-        | AppReq _req -> noOperation
+        | AppReq req -> handleReq req
         | AppEvt _evt -> noOperation
-        | InternalEvt evt -> handleInternalEvt evt
         <| runner <| (model, [])
 
 let private initProgram (initer : IAgent<Msg<'model, 'msg>>) (args : Args<'runner, 'model, 'msg>) ((initModel, initCmd) : 'model * Cmd<'msg>) =
@@ -66,14 +63,11 @@ let private init : ActorInit<Args<'runner, 'model, 'msg>, Model<'model, 'msg>, M
     fun initer args ->
         let (model, cmd) = args.Logic.Init initer ()
         let program = initProgram initer args (model, cmd)
-        let model =
-            {
-                Round = 1
-                App = model
-                Program = program
-            }
-        (initer, model, [])
-        |=|> addSubCmd InternalEvt RunProgram
+        ({
+            Round = 1
+            App = model
+            Program = program
+        }, noCmd)
 
 let spec<'runner, 'model, 'msg when 'runner :> App<'runner, 'model, 'msg>
                 and 'model : not struct and 'msg :> IMsg>

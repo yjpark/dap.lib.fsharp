@@ -48,6 +48,7 @@ let initAsync<'runner, 'model, 'msg when 'runner :> App<'runner, 'model, 'msg>
     do! args.SetupAsync env
     let spec = Logic.spec spawn args
     let! app = env |> Env.addServiceAsync spec "App" noKey
+    do! app.PostAsync DoRun
     return app
 }
 

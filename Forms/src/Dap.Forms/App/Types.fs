@@ -55,18 +55,16 @@ and Model<'model, 'msg
     Program : Program<'model, 'msg, 'model -> ('msg -> unit) -> Widget>
 }
 
-and Req = NoReq
+and Req =
+    | DoRun of Callback<unit>
+with interface IReq
 
 and Evt = NoEvt
-
-and InternalEvt =
-    | RunProgram
 
 and Msg<'model, 'msg
             when 'model : not struct and 'msg :> IMsg> =
     | AppReq of Req
     | AppEvt of Evt
-    | InternalEvt of InternalEvt
 with interface IMsg
 
 and
