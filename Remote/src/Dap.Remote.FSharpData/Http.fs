@@ -56,6 +56,13 @@ type Request<'res> = {
 
 type Response<'res> = Result<'res * string, Error>
 
+let getKindPayload (kind : string) (res : Response<'res>) =
+    match res with
+    | Ok (_res, pkt) ->
+        (kind, pkt)
+    | Error err ->
+        (sprintf "%s:Error" kind, sprintf "%A" err)
+
 let private tplFailed<'res> : Request<'res> -> Error -> LogEvent =
     LogEvent.Template3<string, Request<'res>, Error>(LogLevelError, "[{Section}] {Req} ~> Failed: {Error}") "Http"
 
