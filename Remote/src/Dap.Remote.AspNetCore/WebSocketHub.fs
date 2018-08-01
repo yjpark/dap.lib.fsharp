@@ -22,9 +22,9 @@ let handleWebSocket' (args : Args) (context : HttpContext) = task {
     let address = context.Connection.RemoteIpAddress.ToString()
     let guid = System.Guid.NewGuid().ToString()
     let ident = sprintf "%s_%s" address guid
-    let! (agent, _) = args.Env.HandleAsync <| DoGetAgent' args.ServiceKind ident
+    let! (agent, _) = args.Env.HandleAsync <| DoGetAgent args.ServiceKind ident
     let agent = agent :?> IAsyncPoster<WebSocketService.Req>
-    let! doProcess = agent.PostAsync <| WebSocketService.DoAttach' CancellationToken.None socket 
+    let! doProcess = agent.PostAsync <| WebSocketService.DoAttach CancellationToken.None socket
     do! doProcess
 }
 
