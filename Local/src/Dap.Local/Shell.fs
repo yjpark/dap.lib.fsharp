@@ -31,7 +31,7 @@ let private run (filename : string) (prefix : string) (cmd : string) =
     exec filename (prefix + args)
 
 let bash (cmd : string) =
-    run "/bin/bash" "-c "
+    run "/bin/bash" "-c " cmd
 
 let bat (cmd : string) =
-    run "cmd.exe" "/c "
+    run "cmd.exe" "/c " cmd
