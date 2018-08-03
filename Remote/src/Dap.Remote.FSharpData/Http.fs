@@ -80,7 +80,7 @@ let handleAsync' (runner : IRunner) (req : Request<'res>) (callback : Response<'
         match response.Body with
         | Text text ->
             try
-                decodeJson text
+                parseJson text
                 |> req.Decoder
                 |> Result.mapError (fun e ->
                     DecodeError (text, e)
