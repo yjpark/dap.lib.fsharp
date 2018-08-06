@@ -5,15 +5,10 @@ open System.Net
 open FSharp.Data
 open FSharp.Control.Tasks.V2
 
-open Newtonsoft.Json
-open Newtonsoft.Json.Linq
-
 open Dap.Prelude
 open Dap.Platform
 open Dap.Remote
 open System.Text
-
-module D = Thoth.Json.Net.Decode
 
 type Method =
     | Get
@@ -31,7 +26,7 @@ with
 type Error =
     | BadUrl of string
     | NetworkError of WebException
-    | DecodeError of pkt:string * err:D.DecoderError
+    | DecodeError of pkt:string * err:string
     | InternalError of exn
     | BadStatus of HttpResponse
     | BadPayload of HttpResponse * err:string
@@ -39,7 +34,7 @@ type Error =
 type Request<'res> = {
     Method : Method
     Url : string
-    Decoder : D.Decoder<'res>
+    Decoder : JsonDecoder<'res>
     Timeout : int<ms> option
     Headers : seq<string * string> option
     Body : HttpRequestBody option
@@ -80,14 +75,13 @@ let handleAsync' (runner : IRunner) (req : Request<'res>) (callback : Response<'
         match response.Body with
         | Text text ->
             try
-                parseJson text
-                |> req.Decoder
+                tryDecodeJson req.Decoder text
                 |> Result.mapError (fun e ->
                     DecodeError (text, e)
                 )|> Result.map (fun res -> (res, text))
                 |> callback'
             with e ->
-                callback' <| Error ^<| DecodeError (text, D.FailMessage <| sprintf "Exception_Raised: %s" e.Message)
+                callback' <| Error ^<| DecodeError (text, sprintf "Exception_Raised: %s" e.Message)
         | Binary bytes ->
             callback' <| Error ^<| BadPayload (response, sprintf "Expecting text, but got a binary response (%d bytes)" bytes.Length)
     with
@@ -111,34 +105,34 @@ let handle : Api<IRunner, Request<'res>, Response<'res>> =
         handleAsync' runner req callback
         |> Async.Start
 
-let get runner url (decoder : D.Decoder<'res>) callback =
+let get runner url (decoder : JsonDecoder<'res>) callback =
     let req = Request<'res>.Create Get url decoder None None None
     handle runner req callback
 
-let getAsync runner url (decoder : D.Decoder<'res>) =
+let getAsync runner url (decoder : JsonDecoder<'res>) =
     let req = Request<'res>.Create Get url decoder None None None
     handleAsync runner req
 
-let post runner url (decoder : D.Decoder<'res>) body callback =
+let post runner url (decoder : JsonDecoder<'res>) body callback =
     let req = Request<'res>.Create Post url decoder None None (Some body)
     handle runner req callback
 
-let postAsync runner url (decoder : D.Decoder<'res>) body =
+let postAsync runner url (decoder : JsonDecoder<'res>) body =
     let req = Request<'res>.Create Post url decoder None None (Some body)
     handleAsync runner req
 
-let put runner url (decoder : D.Decoder<'res>) body callback =
+let put runner url (decoder : JsonDecoder<'res>) body callback =
     let req = Request<'res>.Create Put url decoder None None (Some body)
     handle runner req callback
 
-let putAsync runner url (decoder : D.Decoder<'res>) body =
+let putAsync runner url (decoder : JsonDecoder<'res>) body =
     let req = Request<'res>.Create Put url decoder None None (Some body)
     handleAsync runner req
 
-let delete runner url (decoder : D.Decoder<'res>) callback =
+let delete runner url (decoder : JsonDecoder<'res>) callback =
     let req = Request<'res>.Create Delete url decoder None None None
     handle runner req callback
 
-let deleteAsync runner url (decoder : D.Decoder<'res>) body =
+let deleteAsync runner url (decoder : JsonDecoder<'res>) body =
     let req = Request<'res>.Create Delete url decoder None None None
     handleAsync runner req
