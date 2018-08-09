@@ -16,5 +16,6 @@ let projects =
     ++ "src/Dap.Remote.AspNetCore/*.fsproj"
     ++ "src/Dap.Remote.JoseJwt/*.fsproj"
     ++ "src/Dap.Remote.Server/*.fsproj"
+    ++ "src/Dap.Remote.Web/*.fsproj"
 
 NuGet.createAndRun NuGet.release feed projects

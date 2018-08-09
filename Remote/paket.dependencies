@@ -13,6 +13,16 @@ nuget Microsoft.AspNetCore.WebSockets
 nuget FSharp.Data 3.0.0-beta4
 nuget jose-jwt
 
+# Server.Web
+nuget Microsoft.AspNetCore.Cors
+nuget Microsoft.AspNetCore.Hosting
+nuget Microsoft.AspNetCore.Diagnostics
+nuget Microsoft.AspNetCore.Server.Kestrel
+nuget Microsoft.AspNetCore.StaticFiles
+nuget Microsoft.AspNetCore.WebSockets
+nuget Giraffe
+nuget Saturn
+
 group Build
     source https://nuget.yjpark.org/nuget/dap
     source https://www.nuget.org/api/v2
