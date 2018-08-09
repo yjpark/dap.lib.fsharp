@@ -1,4 +1,4 @@
-﻿module Dap.Remote.Server.Web.UserHub
+﻿module Dap.Remote.Web.WebSocketHub
 
 open Saturn
 open Giraffe
