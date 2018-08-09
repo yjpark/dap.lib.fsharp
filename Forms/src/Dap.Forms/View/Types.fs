@@ -1,4 +1,4 @@
-module Dap.Forms.App.Types
+module Dap.Forms.View.Types
 
 open System.Threading.Tasks
 open Xamarin.Forms
@@ -8,33 +8,24 @@ open Elmish.XamarinForms.DynamicViews
 open Dap.Prelude
 open Dap.Platform
 
-type IRoute =
-    abstract Url : string with get
-
 type Widget = ViewElement
 
-type AppIniter<'model, 'msg
+type ViewIniter<'model, 'msg
             when 'model : not struct and 'msg :> IMsg> =
     IAgent<Msg<'model, 'msg>>
 
-and AppView<'runner, 'model, 'msg when 'runner :> App<'runner, 'model, 'msg>
-                and 'model : not struct and 'msg :> IMsg> =
-    'runner -> 'model -> Widget
+and Render<'model, 'msg when 'model : not struct and 'msg :> IMsg> =
+    View<'model, 'msg> -> 'model -> Widget
 
-and AppLogic<'runner, 'model, 'msg
-            when 'runner :> App<'runner, 'model, 'msg>
-                and 'model : not struct and 'msg :> IMsg> =
-    Logic<AppIniter<'model, 'msg>, 'runner, unit, 'model, 'msg>
+and ViewLogic<'model, 'msg when 'model : not struct and 'msg :> IMsg> =
+    Logic<ViewIniter<'model, 'msg>, View<'model, 'msg>, unit, 'model, 'msg>
 
-and Args<'runner, 'model, 'msg
-            when 'runner :> App<'runner, 'model, 'msg>
-                and 'model : not struct and 'msg :> IMsg> = {
-    Logic : AppLogic<'runner, 'model, 'msg>
-    View : AppView<'runner, 'model, 'msg>
-    SetupAsync : IEnv -> Task<unit>
+and Args<'model, 'msg when 'model : not struct and 'msg :> IMsg> = {
+    Logic : ViewLogic<'model, 'msg>
+    Render : Render<'model, 'msg>
     Application : Application
 } with
-    static member Create init update subscribe view setupAsync application =
+    static member Create init update subscribe render application =
         {
             Logic =
                 {
@@ -42,8 +33,7 @@ and Args<'runner, 'model, 'msg
                     Update = update
                     Subscribe = subscribe
                 }
-            View = view
-            SetupAsync = setupAsync
+            Render = render
             Application = application
         }
 
@@ -51,7 +41,7 @@ and Model<'model, 'msg
             when 'model : not struct and 'msg :> IMsg> = {
 
     Round : int
-    mutable App : 'model
+    mutable View : 'model
     Program : Program<'model, 'msg, 'model -> ('msg -> unit) -> Widget>
 }
 
@@ -67,17 +57,15 @@ and Msg<'model, 'msg
     | AppEvt of Evt
 with interface IMsg
 
-and
-    [<AbstractClass>]
-    App<'runner, 'model, 'msg
-            when 'runner :> App<'runner, 'model, 'msg>
-                and 'model : not struct and 'msg :> IMsg> (param) =
-    inherit BaseAgent<'runner, Args<'runner, 'model, 'msg>, Model<'model, 'msg>, Msg<'model, 'msg>, Req, Evt> (param)
+and View<'model, 'msg when 'model : not struct and 'msg :> IMsg> (param) =
+    inherit BaseAgent<View<'model, 'msg>, Args<'model, 'msg>, Model<'model, 'msg>, Msg<'model, 'msg>, Req, Evt> (param)
     let mutable react : ('msg -> unit) option = None
     let mutable formsRunner : obj option = None
-    member this.AsApp = this
+    static member Spawn (param) = new View<'model, 'msg> (param)
+    override this.Runner = this
     member this.Program = this.Actor.State.Program
-    member this.AppState = this.Actor.State.App
+    member this.ViewState = this.Actor.State.View
+    member this.Application = this.Actor.Args.Application
     member _this.SetFormsRunner' runner =
         formsRunner <- Some runner
     member _this.SetReact' react' =
@@ -91,12 +79,3 @@ let castEvt<'model, 'msg when 'model : not struct and 'msg :> IMsg>
     function
     | AppEvt evt -> Some evt
     | _ -> None
-
-let isMockForms () =
-    try
-        Device.Info = null
-    with _ ->
-        true
-
-let isRealForms () =
-    not <| isMockForms ()

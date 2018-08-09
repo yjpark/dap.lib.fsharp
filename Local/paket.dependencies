@@ -8,6 +8,7 @@ storage: none
 nuget FSharp.Core
 
 nuget Dap.Archive
+nuget Dap.Farango
 
 group Build
     source https://nuget.yjpark.org/nuget/dap

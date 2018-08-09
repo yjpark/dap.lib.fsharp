@@ -1,5 +1,5 @@
 [<RequireQualifiedAccess>]
-module Dap.Forms.App.Logic
+module Dap.Forms.View.Logic
 
 open Xamarin.Forms
 open Elmish.XamarinForms
@@ -9,14 +9,12 @@ open Dap.Prelude
 open Dap.Platform
 open Dap.Forms
 
-open Dap.Forms.App.Types
+open Dap.Forms.View.Types
 
-type ActorOperate<'runner, 'model, 'msg
-            when 'runner :> App<'runner, 'model, 'msg>
-                and 'model : not struct and 'msg :> IMsg> =
-    Operate<'runner, Model<'model, 'msg>, Msg<'model, 'msg>>
+type ActorOperate<'model, 'msg when 'model : not struct and 'msg :> IMsg> =
+    Operate<View<'model, 'msg>, Model<'model, 'msg>, Msg<'model, 'msg>>
 
-let private doRun req (callback: Callback<unit>) : ActorOperate<'runner, 'model, 'msg> =
+let private doRun req (callback: Callback<unit>) : ActorOperate<'model, 'msg> =
     fun runner (model, cmd) ->
         if isRealForms () then
             runner.RunUiFunc (fun _ ->
@@ -29,49 +27,47 @@ let private doRun req (callback: Callback<unit>) : ActorOperate<'runner, 'model,
             logError runner "Forms_App" "Is_Mock_Forms" ()
         (model, cmd)
 
-let private handleReq req : ActorOperate<'runner, 'model, 'msg> =
+let private handleReq req : ActorOperate<'model, 'msg> =
     match req with
     | DoRun a -> doRun req a
 
-let private update : ActorUpdate<'runner, Args<'runner, 'model, 'msg>, Model<'model, 'msg>, Msg<'model, 'msg>, Req, Evt> =
+let private update : ActorUpdate<View<'model, 'msg>, Args<'model, 'msg>, Model<'model, 'msg>, Msg<'model, 'msg>, Req, Evt> =
     fun runner model msg ->
         match msg with
         | AppReq req -> handleReq req
         | AppEvt _evt -> noOperation
         <| runner <| (model, [])
 
-let private initProgram (initer : IAgent<Msg<'model, 'msg>>) (args : Args<'runner, 'model, 'msg>) ((initModel, initCmd) : 'model * Cmd<'msg>) =
+let private initProgram (initer : ViewIniter<'model, 'msg>) (args : Args<'model, 'msg>) ((initModel, initCmd) : 'model * Cmd<'msg>) =
     let init = fun () ->
         (initModel, initCmd)
-    let runner = initer :?> 'runner
+    let runner = initer :?> View<'model, 'msg>
     let update = fun (msg : 'msg) (model : 'model) ->
         let (model, cmd) = args.Logic.Update runner model msg
-        runner.Actor.State.App <- model
+        runner.Actor.State.View <- model
         (model, cmd)
     let mutable firstView = true
     let view = fun (model : 'model) (dispatch : 'msg -> unit) ->
         if (firstView) then
             runner.SetReact' dispatch
             firstView <- false
-        args.View runner model
+        args.Render runner model
     let subscribe = fun (model : 'model) ->
         args.Logic.Subscribe runner model
     Program.mkProgram init update view
     |> Program.withSubscription subscribe
 
-let private init : ActorInit<Args<'runner, 'model, 'msg>, Model<'model, 'msg>, Msg<'model, 'msg>> =
+let private init : ActorInit<Args<'model, 'msg>, Model<'model, 'msg>, Msg<'model, 'msg>> =
     fun initer args ->
         let (model, cmd) = args.Logic.Init initer ()
         let program = initProgram initer args (model, cmd)
         ({
             Round = 1
-            App = model
+            View = model
             Program = program
         }, noCmd)
 
-let spec<'runner, 'model, 'msg when 'runner :> App<'runner, 'model, 'msg>
-                and 'model : not struct and 'msg :> IMsg>
-    (spawn : Spawner<'runner>) (args : Args<'runner, 'model, 'msg>) =
-    new ActorSpec<'runner, Args<'runner, 'model, 'msg>, Model<'model, 'msg>, Msg<'model, 'msg>, Req, Evt>
-        (spawn, args, AppReq, castEvt<'model, 'msg>, init, update)
-
+let spec<'model, 'msg when 'model : not struct and 'msg :> IMsg>
+    (args : Args<'model, 'msg>) =
+    new ActorSpec<View<'model, 'msg>, Args<'model, 'msg>, Model<'model, 'msg>, Msg<'model, 'msg>, Req, Evt>
+        (View<'model, 'msg>.Spawn, args, AppReq, castEvt<'model, 'msg>, init, update)

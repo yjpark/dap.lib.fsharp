@@ -13,5 +13,6 @@ let feed : NuGet.Feed = {
 
 let projects =
     !! "src/Dap.Local/*.fsproj"
+    ++ "src/Dap.Local.Farango/*.fsproj"
 
 NuGet.createAndRun NuGet.release feed projects

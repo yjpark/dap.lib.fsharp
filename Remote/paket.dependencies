@@ -7,9 +7,11 @@ framework: auto-detect
 generate_load_scripts: true
 
 nuget Dap.Remote
+nuget Dap.Local.Farango
 
 nuget Microsoft.AspNetCore.WebSockets
 nuget FSharp.Data 3.0.0-beta4
+nuget jose-jwt
 
 group Build
     source https://nuget.yjpark.org/nuget/dap
