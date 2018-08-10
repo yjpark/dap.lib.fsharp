@@ -11,6 +11,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Db.fs" />
+    <Compile Include="Types.fs" />
+    <Compile Include="Util/InitDb.fs" />
     <Compile Include="App/WithDb.fs" />
   </ItemGroup>
   <ItemGroup>

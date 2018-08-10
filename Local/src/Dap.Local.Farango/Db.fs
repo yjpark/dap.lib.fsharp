@@ -18,7 +18,16 @@ type Args = {
 
 type Model = {
     Conn : Connection
-}
+    Logger : ILogger
+} with
+    member this.LogResult (op : string) (res : Result<'a, 'b>) =
+        match res with
+        | Ok res ->
+            logInfo this.Logger "DB_Succeed" op res
+        | Error err ->
+            logError this.Logger "DB_Failed" op res
+    interface ILogger with
+        member this.Log m = this.Logger.Log m
 
 let init (runner : IEnv) (args : Args) : Model =
     let conn =
@@ -31,4 +40,5 @@ let init (runner : IEnv) (args : Args) : Model =
         )|> Result.get |> Result.get
     {
         Conn = conn
+        Logger = runner.Logging.GetLogger "DB"
     }
