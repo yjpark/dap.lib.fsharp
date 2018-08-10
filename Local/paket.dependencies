@@ -9,6 +9,7 @@ nuget FSharp.Core
 
 nuget Dap.Archive
 nuget Dap.Farango
+nuget Fable.Dap.Platform
 
 group Build
     source https://nuget.yjpark.org/nuget/dap

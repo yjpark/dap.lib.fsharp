@@ -6,7 +6,11 @@ open Dap.Prelude
 open Dap.Platform
 
 let newEnv (scope : Scope) (boot : Boot.Model) : IEnv =
+#if FABLE_COMPILER
+    Env.live boot.Logging scope
+#else
     Env.live MailboxPlatform boot.Logging scope
+#endif
 
 type Args = {
     Boot : Boot.Args
@@ -17,9 +21,15 @@ type Args = {
             Boot = boot
             NewEnv = newEnv
         }
+#if FABLE_COMPILER
+    static member Default scope consoleLogLevel =
+        newEnv scope
+        |> Args.Create ^<| Boot.Args.Default ^<| Boot.newLogging consoleLogLevel
+#else
     static member Default scope consoleLogLevel logFile =
         newEnv scope
         |> Args.Create ^<| Boot.Args.Default ^<| Boot.newLogging consoleLogLevel logFile
+#endif
 
 and Model = {
     Args : Args

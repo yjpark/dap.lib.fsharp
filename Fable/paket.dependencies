@@ -6,6 +6,7 @@ storage: none
 framework: auto-detect
 generate_load_scripts: true
 
+nuget Fable.Dap.Local
 nuget Fable.Dap.Remote
 
 nuget Fable.PowerPack

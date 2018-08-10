@@ -38,7 +38,7 @@ let private update : ActorUpdate<View<'model, 'msg>, Args<'model, 'msg>, Model<'
         | AppEvt _evt -> noOperation
         <| runner <| (model, [])
 
-let private initProgram (initer : ViewIniter<'model, 'msg>) (args : Args<'model, 'msg>) ((initModel, initCmd) : 'model * Cmd<'msg>) =
+let private initProgram (initer : Initer<'model, 'msg>) (args : Args<'model, 'msg>) ((initModel, initCmd) : 'model * Cmd<'msg>) =
     let init = fun () ->
         (initModel, initCmd)
     let runner = initer :?> View<'model, 'msg>

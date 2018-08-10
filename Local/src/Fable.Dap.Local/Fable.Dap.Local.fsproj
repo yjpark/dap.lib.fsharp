@@ -6,14 +6,12 @@
     <PackageTags>fsharp;dap;</PackageTags>
     <Authors>YJ Park</Authors>
     <Version>0.6.0</Version>
-    <Description>Dap App on Fable React</Description>
+    <Description>Local Libs on fable</Description>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Types.fs" />
-    <Compile Include="View/Types.fs" />
-    <Compile Include="View/Logic.fs" />
-    <Compile Include="App/WithView.fs" />
+    <Compile Include="Shared/App/Boot.fs" />
+    <Compile Include="Shared/App/Simple.fs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="*.fsproj; **\*.fs; **\*.js" PackagePath="fable" />

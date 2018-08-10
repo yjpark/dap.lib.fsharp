@@ -1,5 +1,5 @@
 [<RequireQualifiedAccess>]
-module Dap.App.React.Logic
+module Dap.React.View.Logic
 
 open Fable.Core
 open Elmish
@@ -11,16 +11,16 @@ open Elmish.HMR
 
 open Dap.Prelude
 open Dap.Platform
+open Dap.React
 
-open Dap.App.React.Types
+open Dap.React.View.Types
 
-type ActorOperate<'runner, 'route, 'model, 'msg
-            when 'runner :> App<'runner, 'route, 'model, 'msg>
-                and 'route :> IRoute
+type ActorOperate<'route, 'model, 'msg
+            when 'route :> IRoute
                 and 'model : not struct and 'msg :> IMsg> =
-    Operate<'runner, Model<'route, 'model, 'msg>, Msg<'route, 'model, 'msg>>
+    Operate<View<'route, 'model, 'msg>, Model<'route, 'model, 'msg>, Msg<'route, 'model, 'msg>>
 
-let [<PassGenericsAttribute>] private handleReq (req : Req<'route>) : ActorOperate<'runner, 'route, 'model, 'msg> =
+let [<PassGenericsAttribute>] private handleReq (req : Req<'route>) : ActorOperate<'route, 'model, 'msg> =
     match req with
     | DoRoute route ->
         let dispatch = fun _ -> ()
@@ -28,7 +28,7 @@ let [<PassGenericsAttribute>] private handleReq (req : Req<'route>) : ActorOpera
         |> List.iter (fun cmd -> cmd dispatch)
         addSubCmd InternalEvt ^<| SetRoute route
 
-let [<PassGenericsAttribute>] private runProgram : ActorOperate<'runner, 'route, 'model, 'msg> =
+let [<PassGenericsAttribute>] private runProgram : ActorOperate<'route, 'model, 'msg> =
     fun runner (model, cmd) ->
         let args = runner.Actor.Args
         if args.UseHMR then
@@ -45,14 +45,14 @@ let [<PassGenericsAttribute>] private runProgram : ActorOperate<'runner, 'route,
                 program |> Program.run
         (model, cmd)
 
-let [<PassGenericsAttribute>] private handleInternalEvt evt : ActorOperate<'runner, 'route, 'model, 'msg> =
+let [<PassGenericsAttribute>] private handleInternalEvt evt : ActorOperate<'route, 'model, 'msg> =
     match evt with
     | SetRoute route ->
         updateModel (fun m -> {m with Route = Some route})
     | RunProgram ->
         runProgram
 
-let [<PassGenericsAttribute>] private update : ActorUpdate<'runner, Args<'runner, 'route, 'model, 'msg>, Model<'route, 'model, 'msg>, Msg<'route, 'model, 'msg>, Req<'route>, Evt> =
+let [<PassGenericsAttribute>] private update : ActorUpdate<View<'route, 'model, 'msg>, Args<'route, 'model, 'msg>, Model<'route, 'model, 'msg>, Msg<'route, 'model, 'msg>, Req<'route>, Evt> =
     fun runner model msg ->
         match msg with
         | AppReq req -> handleReq req
@@ -60,22 +60,22 @@ let [<PassGenericsAttribute>] private update : ActorUpdate<'runner, Args<'runner
         | InternalEvt evt -> handleInternalEvt evt
         <| runner <| (model, [])
 
-let [<PassGenericsAttribute>] private initProgram (initer : IAgent<Msg<'route, 'model, 'msg>>) (args : Args<'runner, 'route, 'model, 'msg>) ((initModel, initCmd) : 'model * Cmd<'msg>) =
+let [<PassGenericsAttribute>] private initProgram (initer : Initer<'route, 'model, 'msg>) (args : Args<'route, 'model, 'msg>) ((initModel, initCmd) : 'model * Cmd<'msg>) =
     let init = fun (route : 'route option) ->
         route
         |> Option.iter (initer.Deliver << InternalEvt << SetRoute)
         (initModel, initCmd)
-    let runner = initer :?> 'runner
+    let runner = initer :?> View<'route, 'model, 'msg>
     let update = fun (msg : 'msg) (model : 'model) ->
         let (model, cmd) = args.Logic.Update runner model msg
-        runner.Actor.State.App <- model
+        runner.Actor.State.View <- model
         (model, cmd)
     let mutable firstView = true
     let view = fun (model : 'model) (dispatch : 'msg -> unit) ->
         if (firstView) then
             runner.SetReact' dispatch
             firstView <- false
-        args.View runner model
+        args.Render runner model
     let subscribe = fun (model : 'model) ->
         args.Logic.Subscribe runner model
     let route = fun (route : 'route option) (model : 'model) ->
@@ -90,25 +90,23 @@ let [<PassGenericsAttribute>] private initProgram (initer : IAgent<Msg<'route, '
     |> Program.toNavigable (parseHash args.Parse) route
     |> Program.withReact args.Root
 
-let [<PassGenericsAttribute>] private init : ActorInit<Args<'runner, 'route, 'model, 'msg>, Model<'route, 'model, 'msg>, Msg<'route, 'model, 'msg>> =
+let [<PassGenericsAttribute>] private init : ActorInit<Args<'route, 'model, 'msg>, Model<'route, 'model, 'msg>, Msg<'route, 'model, 'msg>> =
     fun initer args ->
-        (initer :?> App<'runner, 'route, 'model, 'msg>) .Setup initer
         let (model, cmd) = args.Logic.Init initer ()
         let program = initProgram initer args (model, cmd)
         let model =
             {
                 Route = None
                 Round = 1
-                App = model
+                View = model
                 Program = program
             }
         (initer, model, [])
         |=|> addSubCmd InternalEvt RunProgram
 
-let [<PassGenericsAttribute>] spec<'runner, 'route, 'model, 'msg when 'runner :> App<'runner, 'route, 'model, 'msg>
-                and 'route :> IRoute
+let [<PassGenericsAttribute>] spec<'route, 'model, 'msg when 'route :> IRoute
                 and 'model : not struct and 'msg :> IMsg>
-    (spawn : Spawner<'runner>) (args : Args<'runner, 'route, 'model, 'msg>) =
-    new ActorSpec<'runner, Args<'runner, 'route, 'model, 'msg>, Model<'route, 'model, 'msg>, Msg<'route, 'model, 'msg>, Req<'route>, Evt>
-        (spawn, args, AppReq, castEvt<'route, 'model, 'msg>, init, update)
+    (args : Args<'route, 'model, 'msg>) =
+    new ActorSpec<View<'route, 'model, 'msg>, Args<'route, 'model, 'msg>, Model<'route, 'model, 'msg>, Msg<'route, 'model, 'msg>, Req<'route>, Evt>
+        (View<'route, 'model, 'msg>.Spawn, args, AppReq, castEvt<'route, 'model, 'msg>, init, update)
 

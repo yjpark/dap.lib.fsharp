@@ -10,15 +10,14 @@ open Dap.Platform
 
 type Widget = ViewElement
 
-type ViewIniter<'model, 'msg
-            when 'model : not struct and 'msg :> IMsg> =
+type Initer<'model, 'msg when 'model : not struct and 'msg :> IMsg> =
     IAgent<Msg<'model, 'msg>>
 
 and Render<'model, 'msg when 'model : not struct and 'msg :> IMsg> =
     View<'model, 'msg> -> 'model -> Widget
 
 and ViewLogic<'model, 'msg when 'model : not struct and 'msg :> IMsg> =
-    Logic<ViewIniter<'model, 'msg>, View<'model, 'msg>, unit, 'model, 'msg>
+    Logic<Initer<'model, 'msg>, View<'model, 'msg>, unit, 'model, 'msg>
 
 and Args<'model, 'msg when 'model : not struct and 'msg :> IMsg> = {
     Logic : ViewLogic<'model, 'msg>

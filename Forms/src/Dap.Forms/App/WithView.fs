@@ -13,9 +13,7 @@ open Dap.Local.App
 
 open Dap.Forms
 module ViewTypes = Dap.Forms.View.Types
-
-[<Literal>]
-let Kind = "Forms"
+module ViewService = Dap.Forms.View.Service
 
 [<Literal>]
 let UWP_LogFolderTip = """
@@ -28,7 +26,7 @@ type Args<'model, 'msg, 'parts
             when 'model : not struct and 'msg :> IMsg> = {
     Base : Simple.Args
     NewPartsAsync : Simple.Model -> Task<'parts>
-    NewViewAsync : Simple.Model -> 'parts -> Task<ViewTypes.View<'model, 'msg>>
+    NewViewAsync : 'parts -> Simple.Model -> Task<ViewTypes.View<'model, 'msg>>
 } with
     static member Create (base' : Simple.Args) newPartsAsync newViewAsync =
         {
@@ -58,7 +56,7 @@ let private fixBootLogging () =
     if isRealForms () then
         let device = Device.RuntimePlatform
         if (device = Device.macOS || device = Device.iOS) then
-            Boot.setLogConsole false
+            Boot.setLogToConsole false
         elif device = Device.UWP then
             if Boot.getLogFolder () = Boot.DefaultLogFolder then
                 failWith "Invalid_LogFolder" UWP_LogFolderTip
@@ -75,9 +73,15 @@ let init<'model, 'msg, 'parts
     let app = Simple.init args.Base
     app.Env.RunTask0 ignoreOnFailed (fun runner -> task {
         let! parts = args.NewPartsAsync app
-        let! view = args.NewViewAsync app parts
+        let! view = args.NewViewAsync parts app
         let app = Model<'model, 'msg, 'parts>.Create args app parts view
         let onRun = fun () -> onApp app
         view.Post <| ViewTypes.DoRun ^<| callback app.Env onRun
     })
     app
+
+let newViewAsync<'model, 'msg when 'model : not struct and 'msg :> IMsg>
+        (args : ViewTypes.Args<'model, 'msg>) (app : Simple.Model) = task {
+    let! view = app.Env |> ViewService.addAsync NoKey args
+    return view
+}

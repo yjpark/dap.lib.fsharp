@@ -60,13 +60,15 @@ NUGET
       Fable.Core (>= 1.3.17)
       FSharp.Core (>= 4.3.4)
   remote: https://nuget.yjpark.org/nuget/dap
+    Fable.Dap.Local (0.6.0)
+      Fable.Dap.Platform (>= 0.6.2)
     Fable.Dap.Platform (0.6.2)
       Fable.Dap.Prelude (>= 0.6)
       Fable.Elmish (>= 1.0.3)
     Fable.Dap.Prelude (0.6.0)
       Fable.Core (>= 1.3.17)
       Fable.Import.Browser (>= 1.1.2)
-      Fable.PowerPack (>= 1.5.1)
+      Fable.PowerPack (>= 1.5)
     Fable.Dap.Remote (0.6.0)
       Fable.Dap.Platform (>= 0.6.2)
       Fable.Dap.WebSocket (>= 0.6)
@@ -92,8 +94,8 @@ NUGET
       Fake.IO.Zip (>= 5.1)
       Fake.Net.Http (>= 5.1)
       Fake.Tools.Git (>= 5.1)
+      FSharp.Core (>= 4.5)
   remote: https://www.nuget.org/api/v2
-    dotnet-fake (5.2) - clitool: true
     dotnet-sourcelink (2.8.3) - clitool: true
     Fake.Core.CommandLineParsing (5.2)
       FParsec (>= 1.0.3)
