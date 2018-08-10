@@ -52,7 +52,7 @@ let init<'route, 'model, 'msg, 'parts
     let view = args.NewView parts app
     Model<'route, 'model, 'msg, 'parts>.Create args app parts view
 
-let [<PassGenericsAttribute>] newView<'route, 'model, 'msg, 'parts
+let [<PassGenericsAttribute>] newView<'route, 'model, 'msg
             when 'route :> IRoute and 'model : not struct and 'msg :> IMsg>
             (app : Simple.Model) (args : ViewTypes.Args<'route, 'model, 'msg>) =
     let spec = ViewLogic.spec args
