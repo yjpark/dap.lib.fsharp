@@ -23,9 +23,19 @@ type IndexKind =
 type IndexDef = {
     Fields : string list
     Kind : IndexKind
-}
+} with
+    static member Create fields kind =
+        {
+            Fields = fields
+            Kind = kind
+        }
 
 type CollectionDef = {
     Name : string
     Indexes : IndexDef list
-}
+} with
+    static member Create name indexes =
+        {
+            Name = name
+            Indexes = indexes
+        }

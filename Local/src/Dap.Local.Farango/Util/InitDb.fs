@@ -39,3 +39,15 @@ let createCollectionAsync' (dropFirst : bool) (def : CollectionDef) (db : Db) = 
 
 let createCollectionAsync dropFirst def db =
     Async.StartAsTask <| createCollectionAsync' dropFirst def db
+
+let createCollectionsAsync' (dropFirst : bool) (defs : CollectionDef list) (db : Db) = async {
+    let mutable hasNew = false
+    for def in defs do
+        let! isNew = db |> createCollectionAsync' dropFirst def
+        if isNew then
+            hasNew <- true
+    return hasNew
+}
+
+let createCollectionsAsync dropFirst defs db =
+    Async.StartAsTask <| createCollectionsAsync' dropFirst defs db
