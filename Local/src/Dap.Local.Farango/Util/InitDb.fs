@@ -1,3 +1,4 @@
+[<AutoOpen>]
 [<RequireQualifiedAccess>]
 module Dap.Local.Farango.Util.InitDb
 
