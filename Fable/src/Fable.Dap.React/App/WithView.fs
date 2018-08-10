@@ -56,4 +56,6 @@ let [<PassGenericsAttribute>] newView<'route, 'model, 'msg
             when 'route :> IRoute and 'model : not struct and 'msg :> IMsg>
             (args : ViewTypes.Args<'route, 'model, 'msg>) (app : Simple.Model) =
     let spec = ViewLogic.spec args
-    app.Env |> Env.spawn spec "View" NoKey
+    app.Env
+    |> Env.spawn spec "View" NoKey
+    :?> ViewTypes.View<'route, 'model, 'msg>
