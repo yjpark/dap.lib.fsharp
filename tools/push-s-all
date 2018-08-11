@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+cd `dirname $0`
+cd ../Local ; fake build -t Push -s
+cd ../Remote ; fake build -t Push -s
+cd ../Fable ; fake build -t Push -s
+cd ../Forms ; fake build -t Push -s
+
+
+

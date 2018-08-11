@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+cd `dirname $0`
+cd ../Local ; fake build -t Inject
+cd ../Remote ; fake build -t Inject
+cd ../Fable ; fake build -t Inject
+cd ../Forms ; fake build -t Inject
+
+
+
