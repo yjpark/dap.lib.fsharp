@@ -4,7 +4,6 @@ source https://nuget.yjpark.org/nuget/dap
 source https://www.nuget.org/api/v2
 storage: none
 framework: auto-detect
-generate_load_scripts: true
 
 nuget Fable.Dap.Local
 nuget Fable.Dap.Remote
