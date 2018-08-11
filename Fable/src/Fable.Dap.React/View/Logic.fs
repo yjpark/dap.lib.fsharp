@@ -53,7 +53,7 @@ let [<PassGenericsAttribute>] private handleInternalEvt evt : ActorOperate<'rout
         runProgram
 
 let [<PassGenericsAttribute>] private update : ActorUpdate<View<'route, 'model, 'msg>, Args<'route, 'model, 'msg>, Model<'route, 'model, 'msg>, Msg<'route, 'model, 'msg>, Req<'route>, Evt> =
-    fun runner model msg ->
+    fun runner msg model ->
         match msg with
         | AppReq req -> handleReq req
         | AppEvt _evt -> noOperation
@@ -67,7 +67,7 @@ let [<PassGenericsAttribute>] private initProgram (initer : Initer<'route, 'mode
         (initModel, initCmd)
     let runner = initer :?> View<'route, 'model, 'msg>
     let update = fun (msg : 'msg) (model : 'model) ->
-        let (model, cmd) = args.Logic.Update runner model msg
+        let (model, cmd) = args.Logic.Update runner msg model
         runner.Actor.State.View <- model
         (model, cmd)
     let mutable firstView = true

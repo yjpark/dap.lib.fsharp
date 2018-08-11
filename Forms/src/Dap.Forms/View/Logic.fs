@@ -32,7 +32,7 @@ let private handleReq req : ActorOperate<'model, 'msg> =
     | DoRun a -> doRun req a
 
 let private update : ActorUpdate<View<'model, 'msg>, Args<'model, 'msg>, Model<'model, 'msg>, Msg<'model, 'msg>, Req, Evt> =
-    fun runner model msg ->
+    fun runner msg model ->
         match msg with
         | AppReq req -> handleReq req
         | AppEvt _evt -> noOperation
@@ -43,7 +43,7 @@ let private initProgram (initer : Initer<'model, 'msg>) (args : Args<'model, 'ms
         (initModel, initCmd)
     let runner = initer :?> View<'model, 'msg>
     let update = fun (msg : 'msg) (model : 'model) ->
-        let (model, cmd) = args.Logic.Update runner model msg
+        let (model, cmd) = args.Logic.Update runner msg model
         runner.Actor.State.View <- model
         (model, cmd)
     let mutable firstView = true
