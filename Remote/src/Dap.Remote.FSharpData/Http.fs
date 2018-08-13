@@ -1,5 +1,5 @@
 [<RequireQualifiedAccess>]
-module Dap.Remote.Http
+module Dap.Remote.FSharpData.Http
 
 open System.Net
 open FSharp.Data

@@ -1,4 +1,4 @@
-module Dap.Remote.WebSocketHub
+module Dap.Remote.AspNetCore.WebSocketHub
 
 open FSharp.Control.Tasks
 open System.Threading

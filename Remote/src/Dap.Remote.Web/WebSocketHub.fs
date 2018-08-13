@@ -5,7 +5,7 @@ open Giraffe
 
 open Dap.Prelude
 open Dap.Platform
-open Dap.Remote.WebSocketHub
+open Dap.Remote.AspNetCore.WebSocketHub
 
 let run (port : int) (path : string) (serviceKind : Kind) (env : IEnv) =
     let webRouter = router {
