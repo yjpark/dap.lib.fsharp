@@ -83,6 +83,11 @@ type Part<'actorMsg, 'res when 'actorMsg :> IMsg> (param) =
     inherit BasePart<'actorMsg, Part<'actorMsg, 'res>, Args<'res>, Model<'res>, Msg<'res>, Req, Evt<'res>> (param)
     override this.Runner = this
     static member Spawn (param) = new Part<'actorMsg, 'res> (param)
+    member this.ResumeOrPull callback =
+        if this.Actor.State.Paused then
+            this.Post <| DoResume callback
+        else
+            this.Post <| DoPull callback
 
 type PartOperate<'actorMsg, 'res when 'actorMsg :> IMsg> =
     ActorOperate<Part<'actorMsg, 'res>, Args<'res>, Model<'res>, Msg<'res>, Req, Evt<'res>>

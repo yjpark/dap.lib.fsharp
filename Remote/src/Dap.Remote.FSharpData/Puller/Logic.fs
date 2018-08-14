@@ -1,4 +1,4 @@
-[<AutoOpen>]
+[<RequireQualifiedAccess>]
 module Dap.Remote.FSharpData.Puller.Logic
 
 open Dap.Prelude
