@@ -23,15 +23,11 @@ let private doPull<'actorMsg, 'res when 'actorMsg :> IMsg> (req : IReq) (callbac
     fun runner (model, cmd) ->
         runner.Part.Args.NewRequest ()
         |> Option.map (fun request ->
-            let req : PullReq<'res> = {
-                Index = model.NextIndex
-                Time = runner.Clock.Now
-                Request = request
-            }
+            let index = model.NextIndex
             let callback = fun (res : Http.Response<'res>) ->
-                runner.Deliver <| InternalEvt ^<| OnHttpRes (req, res)
+                runner.Deliver <| InternalEvt ^<| OnHttpRes (index, res)
             Http.handle runner request callback
-            updateModel (fun m -> {m with Waiting = Some req})
+            updateModel (fun m -> {m with Waiting = Some index})
         )|> Option.defaultValue noOperation
         <| runner <| (model, cmd)
 
@@ -61,22 +57,19 @@ let private doInit : PartOperate<'actorMsg, 'res> =
         | false -> addDoPullCmd
         <| runner <| (model, [])
 
-let private onHttpRes ((req, res) : PullReq<'res> * Http.Response<'res>) : PartOperate<'actorMsg, 'res> =
+let private onHttpRes ((index, res) : int * Http.Response<'res>) : PartOperate<'actorMsg, 'res> =
     fun runner (model, cmd) ->
         let waiting =
             model.Waiting
             |> Option.bind (fun waiting ->
-                if waiting.Index <= req.Index then
+                if waiting <= index then
                     None
                 else
                     Some waiting
             )
         let pull : Pull<'res> = {
-            Index = req.Index
-            ReqTime = req.Time
-            Request = req.Request
-            ResTime = runner.Clock.Now
-            Response = res
+            Index = index
+            Base = res
         }
         let history =
             pull :: model.History

@@ -21,31 +21,27 @@ type Args<'res> = {
     HistorySize : int
 }
 
-and PullReq<'res> = {
-    Index : int
-    Time : Instant
-    Request : Http.Request<'res>
-}
-
 and Pull<'res> = {
     Index : int
-    ReqTime : Instant
-    Request : Http.Request<'res>
-    ResTime : Instant
-    Response : Http.Response<'res>
-}
+    Base : Http.Response<'res>
+} with
+    member this.ReqTime = this.Base.ReqTime
+    member this.Request = this.Base.Request
+    member this.ResTime = this.Base.ResTime
+    member this.ResBody = this.Base.ResBody
+    member this.Result = this.Base.Result
 
 and Model<'res> = {
     Paused : bool
-    Waiting : PullReq<'res> option
+    Waiting : int option
     History : Pull<'res> list
 } with
     member this.Latest =
         this.History |> List.tryHead
     member this.NextIndex =
         match this.Waiting with
-        | Some req ->
-            req.Index + 1
+        | Some index ->
+            index + 1
         | None ->
             this.History
             |> List.tryHead
@@ -66,7 +62,7 @@ with interface IEvt
 and InternalEvt<'res> =
     | DoInit
     | OnTick of Instant * Duration
-    | OnHttpRes of PullReq<'res> * Http.Response<'res>
+    | OnHttpRes of int * Http.Response<'res>
 
 and Msg<'res> =
     | InternalEvt of InternalEvt<'res>

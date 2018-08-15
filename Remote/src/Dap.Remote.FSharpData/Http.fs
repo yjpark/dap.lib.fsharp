@@ -9,6 +9,7 @@ open Dap.Prelude
 open Dap.Platform
 open Dap.Remote
 open System.Text
+open System.Text
 
 type Method =
     | Get
@@ -26,7 +27,7 @@ with
 type Error =
     | BadUrl of string
     | NetworkError of WebException
-    | DecodeError of pkt:string * err:string
+    | DecodeError of err:string
     | InternalError of exn
     | BadStatus of HttpResponse
     | BadPayload of HttpResponse * err:string
@@ -49,46 +50,102 @@ type Request<'res> = {
             Body = body
         }
 
-type Response<'res> = Result<'res * string, Error>
+type Response<'res> = {
+    ReqTime : Instant
+    Request : Request<'res>
+    ResTime : Instant
+    ResBody : string
+    Result : Result<'res, Error>
+} with
+    member this.IsOk = this.Result |> Result.isOk
+    member this.IsError = this.Result |> Result.isError
 
-let getKindPayload (kind : string) (res : Response<'res>) =
-    match res with
-    | Ok (_res, pkt) ->
-        (kind, pkt)
+let getReqKindPayload (kind : string) (req : Request<'res>) =
+    new System.Text.StringBuilder()
+    |> fun b -> b.AppendLine <| req.Method.ToHttpMethod ()
+    |> fun b -> b.AppendLine req.Url
+    |> (fun b ->
+        req.Headers
+        |> Option.iter (fun headers ->
+            b.AppendLine "Headers:"
+            |> ignore
+            for (k, v) in headers do
+                b.AppendLine <| sprintf "\t%s = %s" k v
+                |> ignore
+        )
+        b
+    )|> (fun b ->
+        req.Body
+        |> Option.iter (fun body ->
+            match body with
+            | TextRequest text ->
+                b.AppendLine "TextRequest:"
+                |> ignore
+                b.AppendLine text
+                |> ignore
+            | FormValues form ->
+                b.AppendLine "FormValues:"
+                |> ignore
+                for (k, v) in form do
+                    b.AppendLine <| sprintf "\t%s = %s" k v
+                    |> ignore
+            | _ ->
+                b.AppendLine <| sprintf "Body: %A" body
+                |> ignore
+        )
+        b
+    )|> fun b -> (sprintf "%s:Req" kind, b.ToString ())
+
+let getResKindPayload (kind : string) (res : Response<'res>) =
+    match res.Result with
+    | Ok _ ->
+        (sprintf "%s:Ack" kind, res.ResBody)
     | Error err ->
-        (sprintf "%s:Error" kind, sprintf "%A" err)
+        (sprintf "%s:Nak" kind, sprintf "%A" err)
 
-let private tplFailed<'res> : Request<'res> -> Error -> LogEvent =
-    LogEvent.Template3<string, Request<'res>, Error>(LogLevelError, "[{Section}] {Req} ~> Failed: {Error}") "Http"
+let private tplSucceed<'res> =
+    LogEvent.Template4<string, Request<'res>, 'res, string>(AckLogLevel, "[{Section}] {Req} ~> Succeed: {Response} {Body}") "Http"
 
-let handleAsync' (runner : IRunner) (req : Request<'res>) (callback : Response<'res> -> unit) = async {
-    let callback' = fun res ->
-        res
-        |> Result.mapError (fun err ->
-            runner.Log <| tplFailed req err
-            err
-        )|> callback
+let private tplFailed<'res> =
+    LogEvent.Template4<string, Request<'res>, Error, string>(LogLevelError, "[{Section}] {Req} ~> Failed: {Error} {Body}") "Http"
+
+let handleAsync' (runner : IRunner) (req : Request<'res>) (callback : (Response<'res>) -> unit) = async {
+    let reqTime = runner.Clock.Now
+    let callback' = fun ((resTime, resBody, result) : Instant * string * Result<'res, Error>) ->
+        match result with
+        | Ok res ->
+            runner.Log <| tplSucceed<'res> req res resBody
+        | Error err ->
+            runner.Log <| tplFailed<'res> req err resBody
+        {
+            ReqTime = reqTime
+            Request = req
+            ResTime = resTime
+            ResBody = resBody
+            Result = result
+        }|> callback
     try
         let httpMethod = Some <| req.Method.ToHttpMethod ()
         let timeout = req.Timeout |> Option.map (fun t -> t / 1<ms>)
         let! response = FSharp.Data.Http.AsyncRequest (req.Url, ?headers = req.Headers, ?httpMethod = httpMethod, ?body = req.Body, ?timeout = timeout)
+        let resTime = runner.Clock.Now
         match response.Body with
         | Text text ->
             try
                 tryDecodeJson req.Decoder text
-                |> Result.mapError (fun e ->
-                    DecodeError (text, e)
-                )|> Result.map (fun res -> (res, text))
-                |> callback'
+                |> Result.mapError (fun e -> DecodeError e)
+                |> fun res -> callback' (resTime, text, res)
             with e ->
-                callback' <| Error ^<| DecodeError (text, sprintf "Exception_Raised: %s" e.Message)
+                callback' (resTime, text, Error ^<| DecodeError ^<| sprintf "Exception_Raised: %s" e.Message)
         | Binary bytes ->
-            callback' <| Error ^<| BadPayload (response, sprintf "Expecting text, but got a binary response (%d bytes)" bytes.Length)
+            callback' (resTime, "", Error ^<| BadPayload (response, sprintf "Expecting text, but got a binary response (%d bytes)" bytes.Length))
     with
     | :? WebException as e ->
-        callback' <| Error ^<| NetworkError e
+        let resTime = runner.Clock.Now
+        callback' (resTime, "", Error ^<| NetworkError e)
     | e ->
-        callback' <| Error ^<| InternalError e
+        let resTime = runner.Clock.Now
+        callback' (resTime, "", Error ^<| InternalError e)
 }
 
 let handleAsync : AsyncApi<IRunner, Request<'res>, Response<'res>> =
