@@ -21,7 +21,7 @@ let private doResume (req : IReq) (callback : Callback<unit>) : PartOperate<'act
 
 let private doPull<'actorMsg, 'res when 'actorMsg :> IMsg> (req : IReq) (callback : Callback<unit>) : PartOperate<'actorMsg, 'res> =
     fun runner (model, cmd) ->
-        runner.Actor.Args.NewRequest ()
+        runner.Part.Args.NewRequest ()
         |> Option.map (fun request ->
             let req : PullReq<'res> = {
                 Index = model.NextIndex
@@ -50,7 +50,7 @@ let inline addDoPullCmd runner (model, cmd) =
 let private doInit : PartOperate<'actorMsg, 'res> =
     fun runner (model, cmd) ->
         let ident = sprintf "Puller:%s" <| newGuid ()
-        runner.Actor.Args.Ticker.OnEvent.AddWatcher runner ident (fun evt ->
+        runner.Part.Args.Ticker.OnEvent.AddWatcher runner ident (fun evt ->
             match evt with
             | TickerTypes.OnTick (a, b) ->
                 runner.Deliver <| InternalEvt ^<| OnTick (a, b)
@@ -80,7 +80,7 @@ let private onHttpRes ((req, res) : PullReq<'res> * Http.Response<'res>) : PartO
         }
         let history =
             pull :: model.History
-            |> List.truncate runner.Actor.Args.HistorySize
+            |> List.truncate runner.Part.Args.HistorySize
         (runner, model, cmd)
         |-|> updateModel (fun m -> {m with Waiting = waiting ; History = history})
         |=|> addSubCmd PullerEvt ^<| OnPull pull
@@ -94,10 +94,10 @@ let private onTick ((time, delta) : Instant * Duration) : PartOperate<'actorMsg,
             model.Latest
             |> Option.map (fun res ->
                 let interval =
-                    match runner.Actor.Args.Mode with
+                    match runner.Part.Args.Mode with
                     | FromLastReq -> time - res.ReqTime
                     | FromLastRes -> time - res.ResTime
-                if interval < runner.Actor.Args.Interval then
+                if interval < runner.Part.Args.Interval then
                     noOperation
                 else
                     addDoPullCmd

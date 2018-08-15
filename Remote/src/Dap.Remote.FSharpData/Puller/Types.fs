@@ -84,7 +84,7 @@ type Part<'actorMsg, 'res when 'actorMsg :> IMsg> (param) =
     override this.Runner = this
     static member Spawn (param) = new Part<'actorMsg, 'res> (param)
     member this.ResumeOrPull callback =
-        if this.Actor.State.Paused then
+        if this.Part.State.Paused then
             this.Post <| DoResume callback
         else
             this.Post <| DoPull callback
