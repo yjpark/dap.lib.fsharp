@@ -9,7 +9,6 @@ open Dap.Prelude
 open Dap.Platform
 open Dap.Remote
 open System.Text
-open System.Text
 
 type Method =
     | Get
@@ -59,6 +58,24 @@ type Response<'res> = {
 } with
     member this.IsOk = this.Result |> Result.isOk
     member this.IsError = this.Result |> Result.isError
+
+let getReqUrlBody (req : Request<'res>) : string * Json =
+    let body =
+        req.Body
+        |> Option.map (fun body ->
+            match body with
+            | TextRequest text ->
+                E.string text
+            | FormValues form ->
+                form
+                |> List.ofSeq
+                |> List.map (fun (k, v) ->
+                    k, E.string v
+                )|> E.object
+            | _ ->
+                E.string <| sprintf "Body: %A" body
+        )|> Option.defaultValue E.nil
+    (req.Url, body)
 
 let getReqKindPayload (kind : string) (req : Request<'res>) =
     new System.Text.StringBuilder()
