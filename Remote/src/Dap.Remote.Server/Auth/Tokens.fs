@@ -38,7 +38,7 @@ let inline updateTokens (collection : string) (record : ^record) (app : DbApp) :
         |> Async.StartAsTask
 }
 
-let inline addToken (collection : string) (token : Token) (record : ^record) (app : DbApp) : Task<Result< ^record * Token, string>> = task {
+let inline addTokenAsync (collection : string) (token : Token) (record : ^record) (app : DbApp) : Task<Result< ^record * Token, string>> = task {
     let tokens = (^record : (member Tokens : Token list) record)
     let tokens = token :: tokens
     let record = (^record : (member WithTokens : Token list -> ^record) (record, tokens))
@@ -46,7 +46,7 @@ let inline addToken (collection : string) (token : Token) (record : ^record) (ap
     return doc |> Result.map (fun _ -> (record, token))
 }
 
-let inline removeToken (collection : string) (token : Token) (record : ^record) (app : DbApp) : Task<Result< ^record, string>> = task {
+let inline removeTokenAsync (collection : string) (token : Token) (record : ^record) (app : DbApp) : Task<Result< ^record, string>> = task {
     let tokens = (^record : (member Tokens : Token list) record)
     let tokens =
         tokens
@@ -57,7 +57,7 @@ let inline removeToken (collection : string) (token : Token) (record : ^record) 
     |> Result.map (fun _ -> record)
 }
 
-let inline checkToken (token : Token) (record : ^record) (app : DbApp) : Result< ^record * Token, string> =
+let inline checkTokenAsync (token : Token) (record : ^record) (app : DbApp) : Result< ^record * Token, string> =
     let tokens = (^record : (member Tokens : Token list) record)
     try
         tokens

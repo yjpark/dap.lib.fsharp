@@ -46,7 +46,7 @@ type Record = {
     member this.Key = this.UserKey
     member this.WithTokens tokens = {this with Tokens = tokens}
 
-let getByUserKey' (collection : string) (userKey : string) (app : DbApp) : Task<Result<Record, string>> = task {
+let getByUserKeyAsync' (collection : string) (userKey : string) (app : DbApp) : Task<Result<Record, string>> = task {
     let! doc =
         getDocument app.Db.Conn collection userKey
         |> Async.StartAsTask
@@ -54,8 +54,8 @@ let getByUserKey' (collection : string) (userKey : string) (app : DbApp) : Task<
     |> Result.bind (D.decodeString Record.JsonDecoder)
 }
 
-let getByUserKey userKey app = getByUserKey' Collection userKey app
-let addToken token (record : Record) app = Tokens.addToken Collection token record app
-let removeToken token (record : Record) app = Tokens.removeToken Collection token record app
-let checkToken token (record : Record) app = Tokens.checkToken token record app
+let getByUserKeyAsync userKey app = getByUserKeyAsync' Collection userKey app
+let addTokenAsync token (record : Record) app = Tokens.addTokenAsync Collection token record app
+let removeTokenAsync token (record : Record) app = Tokens.removeTokenAsync Collection token record app
+let checkTokenAsync token (record : Record) app = Tokens.checkTokenAsync token record app
 
