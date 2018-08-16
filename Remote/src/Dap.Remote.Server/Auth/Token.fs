@@ -11,14 +11,14 @@ open Dap.Remote
 [<StructuredFormatDisplay("{AsDisplay}")>]
 type Record = {
     Guid : string
-    UserKey : string
+    OwnerKey : string
     CryptoKey : string
     Time : int64
     Expiration : int64
 } with
-    static member Create id userKey cryptoKey time expiration = {
+    static member Create id ownerKey cryptoKey time expiration = {
         Guid = id
-        UserKey = userKey
+        OwnerKey = ownerKey
         CryptoKey = cryptoKey
         Time = time
         Expiration = expiration
@@ -33,20 +33,20 @@ type Record = {
     static member JsonEncoder (this : Record) =
         E.object [
             "jti", E.string this.Guid
-            "sub", E.string this.UserKey
+            "sub", E.string this.OwnerKey
             "key", E.string this.CryptoKey
             "iat", E.long this.Time
             "exp", E.long this.Expiration
         ]
-    member this.AsDisplay = (this.Guid, this.UserKey, this.Time, this.Expiration)
+    member this.AsDisplay = (this.Guid, this.OwnerKey, this.Time, this.Expiration)
     member this.ForPersistent = {this with CryptoKey = ""}
     interface IJson with
         member this.ToJson () = Record.JsonEncoder this
 
-let create (runner : IRunner) (userKey : string) (cryptoKey : string) (validFor : Duration) : Record =
+let create (runner : IRunner) (ownerKey : string) (cryptoKey : string) (validFor : Duration) : Record =
     let now = runner.Clock.Now
     let exp = now + validFor
-    Record.Create (System.Guid.NewGuid().ToString()) userKey cryptoKey (now.ToUnixTimeSeconds()) (exp.ToUnixTimeSeconds())
+    Record.Create (System.Guid.NewGuid().ToString()) ownerKey cryptoKey (now.ToUnixTimeSeconds()) (exp.ToUnixTimeSeconds())
 
 let toJwt (token : Record) =
     JWT.Encode (token.EncodeJson 0, (unbox null), JwsAlgorithm.none)
@@ -62,8 +62,8 @@ let decodeJwt (runner : IRunner) (jwt : string) : Result<Record, string> =
 let check (runner : IRunner) (token : Record) : Result<Record, string> =
     if token.Guid.Trim() = "" then
         Error "Invalid_Guid"
-    elif token.UserKey.Trim() = "" then
-        Error "Invalid_UserKey"
+    elif token.OwnerKey.Trim() = "" then
+        Error "Invalid_OwnerKey"
     else
         let now = runner.Clock.Now
         let exp = Instant.FromUnixTimeSeconds token.Expiration
