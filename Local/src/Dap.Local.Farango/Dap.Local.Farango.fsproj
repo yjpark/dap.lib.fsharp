@@ -10,10 +10,11 @@
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Db.fs" />
     <Compile Include="Types.fs" />
+    <Compile Include="Db.fs" />
     <Compile Include="Util/InitDb.fs" />
     <Compile Include="App/WithDb.fs" />
+    <Compile Include="Alias.fs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Dap.Local\Dap.Local.fsproj" />

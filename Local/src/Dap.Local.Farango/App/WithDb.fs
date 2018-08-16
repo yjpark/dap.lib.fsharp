@@ -11,8 +11,6 @@ open Dap.Local.App
 
 open Dap.Local.Farango
 
-type DbArgs = Db.Args
-
 type Args = {
     Base : Simple.Args
     Db : Db.Args

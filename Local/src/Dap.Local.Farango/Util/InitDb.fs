@@ -8,6 +8,8 @@ open Farango.Collections
 open Dap.Prelude
 open Dap.Local.Farango
 
+type Db = Dap.Local.Farango.Db.Model
+
 let createIndexAsync' (collection : string) (def : IndexDef) (db : Db) = async {
     let! result =
         match def.Kind with

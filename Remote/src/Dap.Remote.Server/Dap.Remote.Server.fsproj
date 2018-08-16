@@ -10,10 +10,12 @@
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Library.fs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Dap.Remote.JoseJwt\Dap.Remote.JoseJwt.fsproj" />
+    <Compile Include="Auth/Types.fs" />
+    <Compile Include="Auth/Token.fs" />
+    <Compile Include="Auth/Crypto.fs" />
+    <Compile Include="Auth/Tokens.fs" />
+    <Compile Include="Auth/UserAuth.fs" />
+    <Compile Include="Auth/Alias.fs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta-62925-02" PrivateAssets="All" />

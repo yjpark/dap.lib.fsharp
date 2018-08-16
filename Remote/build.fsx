@@ -14,7 +14,6 @@ let feed : NuGet.Feed = {
 let projects =
     !! "src/Dap.Remote.FSharpData/*.fsproj"
     ++ "src/Dap.Remote.AspNetCore/*.fsproj"
-    ++ "src/Dap.Remote.JoseJwt/*.fsproj"
     ++ "src/Dap.Remote.Server/*.fsproj"
     ++ "src/Dap.Remote.Web/*.fsproj"
 
