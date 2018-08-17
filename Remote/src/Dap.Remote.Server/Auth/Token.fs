@@ -13,13 +13,15 @@ type Record = {
     Guid : string
     OwnerKey : string
     CryptoKey : string
+    Data : Json
     Time : int64
     Expiration : int64
 } with
-    static member Create id ownerKey cryptoKey time expiration = {
+    static member Create id ownerKey cryptoKey data time expiration = {
         Guid = id
         OwnerKey = ownerKey
         CryptoKey = cryptoKey
+        Data = data
         Time = time
         Expiration = expiration
     }
@@ -28,6 +30,7 @@ type Record = {
         |> D.required "jti" D.string
         |> D.required "sub" D.string
         |> D.required "key" D.string
+        |> D.optional "dat" D.value E.nil
         |> D.required "iat" D.long
         |> D.required "exp" D.long
     static member JsonEncoder (this : Record) =
@@ -35,18 +38,19 @@ type Record = {
             "jti", E.string this.Guid
             "sub", E.string this.OwnerKey
             "key", E.string this.CryptoKey
+            "dat", this.Data
             "iat", E.long this.Time
             "exp", E.long this.Expiration
         ]
-    member this.AsDisplay = (this.Guid, this.OwnerKey, this.Time, this.Expiration)
+    member this.AsDisplay = (this.Guid, this.OwnerKey, this.Time, this.Expiration, this.Data)
     member this.ForPersistent = {this with CryptoKey = ""}
     interface IJson with
         member this.ToJson () = Record.JsonEncoder this
 
-let create (runner : IRunner) (ownerKey : string) (cryptoKey : string) (validFor : Duration) : Record =
+let create (runner : IRunner) (ownerKey : string) (cryptoKey : string) (data : Json) (validFor : Duration) : Record =
     let now = runner.Clock.Now
     let exp = now + validFor
-    Record.Create (System.Guid.NewGuid().ToString()) ownerKey cryptoKey (now.ToUnixTimeSeconds()) (exp.ToUnixTimeSeconds())
+    Record.Create (System.Guid.NewGuid().ToString()) ownerKey cryptoKey data (now.ToUnixTimeSeconds()) (exp.ToUnixTimeSeconds())
 
 let toJwt (token : Record) =
     JWT.Encode (token.EncodeJson 0, (unbox null), JwsAlgorithm.none)

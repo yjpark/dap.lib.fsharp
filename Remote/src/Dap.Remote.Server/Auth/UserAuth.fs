@@ -57,5 +57,5 @@ let getByUserKeyAsync' (collection : string) (userKey : string) (app : DbApp) : 
 let getByUserKeyAsync userKey app = getByUserKeyAsync' Collection userKey app
 let addTokenAsync token (record : Record) app = Tokens.addTokenAsync Collection token record app
 let removeTokenAsync token (record : Record) app = Tokens.removeTokenAsync Collection token record app
-let checkTokenAsync token (record : Record) app = Tokens.checkTokenAsync token record app
+let checkToken token (record : Record) app = Tokens.checkToken token record app
 
