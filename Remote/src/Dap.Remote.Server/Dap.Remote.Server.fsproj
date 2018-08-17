@@ -12,7 +12,6 @@
   <ItemGroup>
     <Compile Include="Auth/Types.fs" />
     <Compile Include="Auth/Token.fs" />
-    <Compile Include="Auth/Crypto.fs" />
     <Compile Include="Auth/Tokens.fs" />
     <Compile Include="Auth/UserAuth.fs" />
     <Compile Include="Auth/Alias.fs" />
