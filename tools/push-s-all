@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 cd `dirname $0`
+cd ../Farango ; fake build -t Push -s
 cd ../Local ; fake build -t Push -s
 cd ../Remote ; fake build -t Push -s
 cd ../Fable ; fake build -t Push -s

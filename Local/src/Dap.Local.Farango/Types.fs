@@ -11,20 +11,7 @@ type IndexIsUnique = bool
 type IndexIsSparse = bool
 type IndexIsDeduplicate = bool
 
-type IndexKind =
-    | Hash of IndexIsUnique * IndexIsSparse * IndexIsDeduplicate
-    | Skiplist of IndexIsUnique * IndexIsSparse * IndexIsDeduplicate
-    | Persistent of IndexIsUnique * IndexIsSparse
-
-type IndexDef = {
-    Fields : string list
-    Kind : IndexKind
-} with
-    static member Create fields kind =
-        {
-            Fields = fields
-            Kind = kind
-        }
+type IndexDef = Farango.Collections.IndexSetting
 
 type CollectionDef = {
     Name : string

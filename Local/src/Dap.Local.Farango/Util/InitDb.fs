@@ -11,15 +11,8 @@ open Dap.Local.Farango
 type Db = Dap.Local.Farango.Db.Model
 
 let createIndexAsync' (collection : string) (def : IndexDef) (db : Db) = async {
-    let! result =
-        match def.Kind with
-        | Hash (unique, sparse, deduplicate) ->
-            createHashIndex' db.Conn collection def.Fields unique sparse deduplicate
-        | Skiplist (unique, sparse, deduplicate) ->
-            createSkiplistIndex' db.Conn collection def.Fields unique sparse deduplicate
-        | Persistent (unique, sparse) ->
-            createPersistentIndex' db.Conn collection def.Fields unique sparse
-    db.LogResult (sprintf "Create_Index: %s - %A" collection def.Fields) result
+    let! result = createIndex db.Conn collection def
+    db.LogResult (sprintf "Create_Index: %A - %A" collection def) result
     return result
 }
 
