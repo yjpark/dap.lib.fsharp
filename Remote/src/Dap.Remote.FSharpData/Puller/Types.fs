@@ -6,7 +6,7 @@ open Dap.Remote
 
 module Http = Dap.Remote.FSharpData.Http
 
-type Ticker = Dap.Platform.Ticker.Types.Ticker
+type Ticker = Dap.Platform.Ticker.Service.Service
 
 type IntervalMode =
     | FromLastReq

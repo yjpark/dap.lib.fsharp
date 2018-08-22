@@ -46,7 +46,7 @@ let inline addDoPullCmd runner (model, cmd) =
 let private doInit : PartOperate<'actorMsg, 'res> =
     fun runner (model, cmd) ->
         let ident = sprintf "Puller:%s" <| newGuid ()
-        runner.Part.Args.Ticker.OnEvent.AddWatcher runner ident (fun evt ->
+        runner.Part.Args.Ticker.Actor.OnEvent.AddWatcher runner ident (fun evt ->
             match evt with
             | TickerTypes.OnTick (a, b) ->
                 runner.Deliver <| InternalEvt ^<| OnTick (a, b)
