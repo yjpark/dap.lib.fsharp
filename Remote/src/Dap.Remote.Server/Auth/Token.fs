@@ -10,7 +10,7 @@ open Dap.Remote
 
 [<StructuredFormatDisplay("{AsDisplay}")>]
 type Record = {
-    Guid : string
+    Guid : Guid
     OwnerKey : string
     CryptoKey : string
     Data : Json

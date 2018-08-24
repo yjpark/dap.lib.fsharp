@@ -17,8 +17,8 @@ let Collection = "user_auth"
 type Token = Token.Record
 
 type Record = {
-    UserKey : string
-    UserGuid : string
+    UserKey : Luid
+    UserGuid : Guid
     PassHash : string
     Tokens : Token list
 } with
