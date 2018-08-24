@@ -12,7 +12,10 @@
   <ItemGroup>
     <Compile Include="Types.fs" />
     <Compile Include="Db.fs" />
+    <Compile Include="Util/Document.fs" />
     <Compile Include="Util/InitDb.fs" />
+    <Compile Include="Collection.fs" />
+    <Compile Include="Query.fs" />
     <Compile Include="App/WithDb.fs" />
     <Compile Include="Alias.fs" />
   </ItemGroup>

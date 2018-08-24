@@ -8,6 +8,9 @@ open Farango.Connection
 open Dap.Prelude
 open Dap.Platform
 
+[<Literal>]
+let DocumentKeyJsonKey = "_key"
+
 type Args = {
     Uri : string
 } with
@@ -20,6 +23,8 @@ type Model = {
     Conn : Connection
     Logger : ILogger
 } with
+    member this.CursorUrl =
+        sprintf "_db/%s/_api/cursor" this.Conn.Database
     member this.LogResult (op : string) (res : Result<'a, 'b>) =
         match res with
         | Ok res ->
