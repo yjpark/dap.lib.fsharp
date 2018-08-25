@@ -9,7 +9,7 @@ open Dap.Prelude
 open Dap.Platform
 
 [<Literal>]
-let DocumentKeyJsonKey = "_key"
+let JK_DocumentKey = "_key"
 
 type Args = {
     Uri : string

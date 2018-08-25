@@ -23,7 +23,7 @@ type Collection = {
             Name = name
         }
     member this.CreateDocumentAsync (json : Json) =
-        let key = castJson (D.field DocumentKeyJsonKey D.string) json
+        let key = castJson (D.field JK_DocumentKey D.string) json
         let body = E.encode 0 json
         this.Db |> Document.createAsync this.Name key body
     member inline this.ReplyCreateDocumentAsync'<'runner, 'res when 'runner :> IRunner> (json : Json) (newRes : string -> 'res) : GetReplyTask<'runner, 'res> =
