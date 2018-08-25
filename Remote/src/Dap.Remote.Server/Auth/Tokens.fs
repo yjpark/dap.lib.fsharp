@@ -7,8 +7,7 @@ open FSharp.Control.Tasks.V2
 open Farango.Documents
 
 open Dap.Prelude
-open Dap.Platform
-open Dap.Remote
+open Dap.Context
 open Dap.Local.Farango
 
 type Token = Token.Record

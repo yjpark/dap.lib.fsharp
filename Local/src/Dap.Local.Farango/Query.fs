@@ -7,7 +7,7 @@ module Connection = Farango.Connection
 module Cursor = Farango.Cursor
 
 open Dap.Prelude
-open Dap.Remote
+open Dap.Context
 open Dap.Local.Farango
 
 type Db = Dap.Local.Farango.Db.Model

@@ -1,6 +1,7 @@
 [<AutoOpen>]
 module Dap.Remote.Server.Auth.Types
 
+open Dap.Context
 open Dap.Remote
 
 type AuthReq = JsonString

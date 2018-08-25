@@ -7,8 +7,8 @@ open FSharp.Control.Tasks.V2
 open Farango.Documents
 
 open Dap.Prelude
+open Dap.Context
 open Dap.Platform
-open Dap.Remote
 open Dap.Local.Farango
 
 [<Literal>]

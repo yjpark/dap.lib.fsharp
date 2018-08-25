@@ -6,9 +6,8 @@ open FSharp.Data
 open FSharp.Control.Tasks.V2
 
 open Dap.Prelude
+open Dap.Context
 open Dap.Platform
-open Dap.Remote
-open System.Text
 
 type Method =
     | Get
