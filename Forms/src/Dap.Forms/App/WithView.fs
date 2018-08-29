@@ -8,6 +8,7 @@ open Xamarin.Forms
 open Elmish.XamarinForms.DynamicViews
 
 open Dap.Prelude
+open Dap.Context
 open Dap.Platform
 open Dap.Local.App
 

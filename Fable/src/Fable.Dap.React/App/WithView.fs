@@ -5,6 +5,7 @@ module Dap.React.App.WithView
 open Fable.Core
 
 open Dap.Prelude
+open Dap.Context
 open Dap.Platform
 open Dap.Local.App
 
