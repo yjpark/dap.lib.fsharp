@@ -29,9 +29,8 @@ let compile segments =
         G.File (segments, ["Shared" ; "Gui" ; "_Gen" ; "Builder.fs"],
             G.BuilderModule ("Dap.Local.Gui.Builder",
                 [
-                    [
-                        "open Dap.Local.Gui.Types"
-                    ]
+                    "open Dap.Local.Gui.Types"
+                ], [
                     G.Builder ("Label", label)
                     G.Builder ("Button", button)
                 ]
