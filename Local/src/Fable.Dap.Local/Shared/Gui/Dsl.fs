@@ -7,7 +7,13 @@ open Dap.Context.Generator
 
 let label =
     combo {
-        string "text" "" None
+        string "text" ""
+    }
+
+let button =
+    combo {
+        string "text" ""
+        bool "clickable" true
     }
 
 let compile segments =
@@ -15,8 +21,8 @@ let compile segments =
         G.File (segments, ["Shared" ; "Gui" ; "_Gen" ; "Types.fs"],
             G.Module ("Dap.Local.Gui.Types",
                 [
-                    G.LooseJsonRecord ("Label", label)
-                    G.BaseClass ("LabelProperty", label)
+                    G.BaseClass ("Label", label)
+                    G.BaseClass ("Button", button)
                 ]
             )
         )
@@ -26,7 +32,8 @@ let compile segments =
                     [
                         "open Dap.Local.Gui.Types"
                     ]
-                    G.Builder ("label", "LabelProperty", label)
+                    G.Builder ("Label", label)
+                    G.Builder ("Button", button)
                 ]
             )
         )
