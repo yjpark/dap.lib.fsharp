@@ -12,6 +12,7 @@
   <ItemGroup>
     <Compile Include="Shared/App/Boot.fs" />
     <Compile Include="Shared/App/Simple.fs" />
+    <Compile Include="Shared/Gui/Dsl.fs" />
     <Compile Include="Shared/Gui/_Gen/Types.fs" />
   </ItemGroup>
   <ItemGroup>

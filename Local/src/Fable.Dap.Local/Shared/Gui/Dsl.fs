@@ -11,11 +11,23 @@ let label =
     }
 
 let compile segments =
-    G.File (segments, ["Shared" ; "Gui" ; "_Gen" ; "Types.fs"],
-        G.Module ("Dap.Local.Gui.Types",
-            [
-                G.LooseJsonRecord ("Label", label)
-                G.BaseClass ("LabelProperty", label)
-            ]
+    [
+        G.File (segments, ["Shared" ; "Gui" ; "_Gen" ; "Types.fs"],
+            G.Module ("Dap.Local.Gui.Types",
+                [
+                    G.LooseJsonRecord ("Label", label)
+                    G.BaseClass ("LabelProperty", label)
+                ]
+            )
         )
-    )
+        G.File (segments, ["Shared" ; "Gui" ; "_Gen" ; "Builder.fs"],
+            G.BuilderModule ("Dap.Local.Gui.Builder",
+                [
+                    [
+                        "open Dap.Local.Gui.Types"
+                    ]
+                    G.Builder ("label", "LabelProperty", label)
+                ]
+            )
+        )
+    ]
