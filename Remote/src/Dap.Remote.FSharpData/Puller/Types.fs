@@ -35,6 +35,7 @@ and Model<'res> = {
     Paused : bool
     Waiting : int option
     History : Pull<'res> list
+    WatcherOwner : IOwner
 } with
     member this.Latest =
         this.History |> List.tryHead

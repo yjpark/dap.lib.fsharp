@@ -2,6 +2,7 @@
 module Dap.Remote.FSharpData.Puller.Logic
 
 open Dap.Prelude
+open Dap.Context
 open Dap.Platform
 open Dap.Remote
 
@@ -46,7 +47,7 @@ let inline addDoPullCmd runner (model, cmd) =
 let private doInit : PartOperate<'actorMsg, 'res> =
     fun runner (model, cmd) ->
         let ident = sprintf "Puller:%s" <| newGuid ()
-        runner.Part.Args.Ticker.Actor.OnEvent.AddWatcher runner ident (fun evt ->
+        runner.Part.Args.Ticker.Actor.OnEvent.AddWatcher model.WatcherOwner ident (fun evt ->
             match evt with
             | TickerTypes.OnTick (a, b) ->
                 runner.Deliver <| InternalEvt ^<| OnTick (a, b)
@@ -119,6 +120,7 @@ let private init : ActorInit<Args<'res>, Model<'res>, Msg<'res>> =
             Paused = not args.AutoStart
             Waiting = None
             History = []
+            WatcherOwner = IOwner.Create (sprintf "%s:Puller" <| runner.Ident.ToLuid ())
         }, [])
         |=|> addSubCmd InternalEvt DoInit
 
