@@ -4,7 +4,17 @@ module Dap.Local.Gui.Types
 open Dap.Context
 
 (*
- * Generated: Class<Label>
+ * Generated: [ComboInterface] <IText>
+    {
+        "text": ""
+    }
+ *)
+type IText =
+    abstract Text : IVarProperty<string> with get
+
+(*
+ * Generated: [Class] <Label>
+ *     IText
     {
         "text": ""
     }
@@ -21,10 +31,13 @@ type Label (owner : IOwner, key : Key) =
     override this.Self = this
     override __.Spawn o k = Label.Create o k
     override __.SyncTo t = target.SyncTo t.Target
-    member __.Text = text
+    member __.Text : IVarProperty<string> = text
+    interface IText with
+        member this.Text = this.Text
 
 (*
- * Generated: Class<Button>
+ * Generated: [Class] <Button>
+ *     IText
     {
         "clickable": true,
         "text": ""
@@ -43,5 +56,7 @@ type Button (owner : IOwner, key : Key) =
     override this.Self = this
     override __.Spawn o k = Button.Create o k
     override __.SyncTo t = target.SyncTo t.Target
-    member __.Clickable = clickable
-    member __.Text = text
+    member __.Clickable : IVarProperty<bool> = clickable
+    member __.Text : IVarProperty<string> = text
+    interface IText with
+        member this.Text = this.Text

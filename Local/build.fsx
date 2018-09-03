@@ -23,9 +23,10 @@ let projects =
 
 NuGet.create NuGet.release feed projects
 
-DotNet.createPrepares (fun _ ->
-    Dap.Local.Gui.Dsl.compile ["src" ; "Fable.Dap.Local"]
-    |> List.iter trace
-) ["Fable.Dap.Local" ; "Dap.Local"]
+DotNet.createPrepares [
+    ["Fable.Dap.Local" ; "Dap.Local"], fun _ ->
+        Dap.Local.Gui.Dsl.compile ["src" ; "Fable.Dap.Local"]
+        |> List.iter trace
+]
 
 Target.runOrDefault DotNet.Build

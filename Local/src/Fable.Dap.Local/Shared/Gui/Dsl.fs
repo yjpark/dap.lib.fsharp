@@ -5,14 +5,17 @@ open Dap.Context
 open Dap.Context.Builder
 open Dap.Context.Generator
 
-let label =
+let text =
     combo {
         string "text" ""
     }
 
+let IText = Interface.CreateCombo "IText" text
+
+let label = text
+
 let button =
-    combo {
-        string "text" ""
+    extend text {
         bool "clickable" true
     }
 
@@ -21,8 +24,9 @@ let compile segments =
         G.File (segments, ["Shared" ; "Gui" ; "_Gen" ; "Types.fs"],
             G.Module ("Dap.Local.Gui.Types",
                 [
-                    G.BaseClass ("Label", label)
-                    G.BaseClass ("Button", button)
+                    G.Interface (IText)
+                    G.BaseClass ("Label", [IText], label)
+                    G.BaseClass ("Button", [IText], button)
                 ]
             )
         )

@@ -6,7 +6,7 @@ open Dap.Context.Builder
 open Dap.Local.Gui.Types
 
 (*
- * Generated: Builder<LabelBuilder>
+ * Generated: [Builder] <LabelBuilder>
     {
         "text": ""
     }
@@ -22,7 +22,7 @@ type LabelBuilder () =
 let label = LabelBuilder ()
 
 (*
- * Generated: Builder<ButtonBuilder>
+ * Generated: [Builder] <ButtonBuilder>
     {
         "clickable": true,
         "text": ""
