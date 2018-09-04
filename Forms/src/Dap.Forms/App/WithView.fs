@@ -4,8 +4,6 @@ module Dap.Forms.App.WithView
 
 open System.Threading.Tasks
 open FSharp.Control.Tasks.V2
-open Xamarin.Forms
-open Elmish.XamarinForms.DynamicViews
 
 open Dap.Prelude
 open Dap.Context
@@ -13,17 +11,9 @@ open Dap.Platform
 open Dap.Local.App
 
 open Dap.Forms
+module FileSystem = Dap.Forms.Provider.FileSystem
 module ViewTypes = Dap.Forms.View.Types
 module ViewService = Dap.Forms.View.Service
-
-[<Literal>]
-let UWP_LogFolderTip = """
-For UWP, need to change the log folder before init:
-    var cacheFolder = Windows.Storage.ApplicationData.Current.LocalCacheFolder.Path;
-    Dap.Local.App.Boot.setLogFolder(cacheFolder + "/log");
-    var localFolder = Windows.Storage.ApplicationData.Current.LocalFolder.Path;
-    Dap.Local.App.Boot.setDocFolder(localFolder + "/doc");
-"""
 
 type Args<'model, 'msg, 'parts
             when 'model : not struct and 'msg :> IMsg> = {
@@ -55,15 +45,6 @@ and Model<'model, 'msg, 'parts
     member this.Boot = this.Base.Boot
     member this.Env = this.Base.Env
 
-let private fixBootLogging () =
-    if isRealForms () then
-        let device = Device.RuntimePlatform
-        if (device = Device.macOS || device = Device.iOS) then
-            Boot.setLogToConsole false
-        elif device = Device.UWP then
-            if Boot.getLogFolder () = Boot.DefaultLogFolder then
-                failWith "Invalid_LogFolder" UWP_LogFolderTip
-
 (*
     Have to run the async logic in RunTask, otherwise might block
     if calling form UI thread
@@ -72,7 +53,8 @@ let init<'model, 'msg, 'parts
             when 'model : not struct and 'msg :> IMsg>
         (args : Args<'model, 'msg, 'parts>)
         (onApp : Model<'model, 'msg, 'parts> -> unit) : Simple.Model =
-    fixBootLogging ()
+    FileSystem.fixBootFolders ()
+    FileSystem.fixBootLogging ()
     let app = Simple.init args.Base
     app.Env.RunTask0 ignoreOnFailed (fun runner -> task {
         let! parts = args.NewPartsAsync app

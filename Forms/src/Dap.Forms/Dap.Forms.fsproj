@@ -11,6 +11,7 @@
   <ItemGroup>
     <Compile Include="Util.fs" />
     <Compile Include="Runner.fs" />
+    <Compile Include="Provider/FileSystem.fs" />
     <Compile Include="Provider/Preferences.fs" />
     <Compile Include="Provider/SecureStorage.fs" />
     <Compile Include="View/Types.fs" />
