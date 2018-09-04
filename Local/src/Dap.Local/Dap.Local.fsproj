@@ -11,10 +11,17 @@
   <ItemGroup>
     <Compile Include="Runtime.fs" />
     <Compile Include="Shell.fs" />
+    <Compile Include="FileSystem.fs" />
     <Compile Include="../Fable.Dap.Local/Shared/App/Boot.fs" />
     <Compile Include="../Fable.Dap.Local/Shared/App/Simple.fs" />
     <Compile Include="../Fable.Dap.Local/Shared/Gui/Dsl.fs" />
     <Compile Include="../Fable.Dap.Local/Shared/Gui/_Gen/Types.fs" />
+    <Compile Include="Storage/Base/Types.fs" />
+    <Compile Include="Storage/Base/Tasks.fs" />
+    <Compile Include="Storage/Base/Logic.fs" />
+    <Compile Include="Storage/Text/Service.fs" />
+    <Compile Include="Storage/Json/Service.fs" />
+    <Compile Include="Provider/TextFile.fs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta-62925-02" PrivateAssets="All" />

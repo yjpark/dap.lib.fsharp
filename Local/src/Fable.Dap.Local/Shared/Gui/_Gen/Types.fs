@@ -22,7 +22,7 @@ type IText =
 type Label (owner : IOwner, key : Key) =
     inherit WrapProperties<Label, IComboProperty> ("Label")
     let target = Properties.combo owner key
-    let text = target.AddString "text" "" None
+    let text = target.AddString ("text", "", None)
     do (
         base.Setup (target)
     )
@@ -46,8 +46,8 @@ type Label (owner : IOwner, key : Key) =
 type Button (owner : IOwner, key : Key) =
     inherit WrapProperties<Button, IComboProperty> ("Button")
     let target = Properties.combo owner key
-    let clickable = target.AddBool "clickable" true None
-    let text = target.AddString "text" "" None
+    let clickable = target.AddBool ("clickable", true, None)
+    let text = target.AddString ("text", "", None)
     do (
         base.Setup (target)
     )

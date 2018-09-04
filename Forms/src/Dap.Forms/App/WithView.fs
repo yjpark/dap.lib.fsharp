@@ -21,6 +21,8 @@ let UWP_LogFolderTip = """
 For UWP, need to change the log folder before init:
     var cacheFolder = Windows.Storage.ApplicationData.Current.LocalCacheFolder.Path;
     Dap.Local.App.Boot.setLogFolder(cacheFolder + "/log");
+    var localFolder = Windows.Storage.ApplicationData.Current.LocalFolder.Path;
+    Dap.Local.App.Boot.setDocFolder(localFolder + "/doc");
 """
 
 type Args<'model, 'msg, 'parts

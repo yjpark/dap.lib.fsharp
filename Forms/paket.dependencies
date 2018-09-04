@@ -12,6 +12,7 @@ nuget Dap.Local
 nuget Elmish.XamarinForms
 
 nuget Xamarin.Forms
+nuget Xamarin.Essentials
 
 group Build
     source https://nuget.yjpark.org/nuget/dap

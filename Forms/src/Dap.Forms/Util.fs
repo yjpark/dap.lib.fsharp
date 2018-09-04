@@ -18,6 +18,14 @@ let isMockForms () =
 let isRealForms () =
     not <| isMockForms ()
 
+let hasEssential () =
+    if isRealForms () then
+        Device.RuntimePlatform = Device.iOS
+            || Device.RuntimePlatform = Device.Android
+            || Device.RuntimePlatform = Device.UWP
+    else
+        false
+
 let newApplication () =
     if isRealForms () then
         let application = new Application ()

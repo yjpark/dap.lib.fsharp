@@ -10,6 +10,9 @@ open Dap.Platform
 let DefaultLogFolder = "log"
 
 [<Literal>]
+let DefaultDocFolder = "doc"
+
+[<Literal>]
 let DefaultLogToConsole = true
 
 [<Literal>]
@@ -27,10 +30,17 @@ let setLogToFile v =
 
 let mutable private logFolder = DefaultLogFolder
 
+let mutable private docFolder = DefaultDocFolder
+
 let getLogFolder () = logFolder
+
+let getDocFolder () = docFolder
 
 let setLogFolder v =
     logFolder <- v
+
+let setDocFolder v =
+    docFolder <- v
 #endif
 
 let calcIdent (time : Instant) =
