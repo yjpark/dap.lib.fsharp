@@ -45,7 +45,7 @@ let decrypt (content : string) : string option =
     Des.decrypt (getLogger ()) secret content
 
 let getAsync (luid : Luid) = task {
-    if hasEssential () then
+    if hasEssentials () then
         let! content = SecureStorage.GetAsync (luid)
         if System.String.IsNullOrEmpty (content) then
             return None
@@ -58,14 +58,14 @@ let getAsync (luid : Luid) = task {
 }
 
 let setAsync (luid : Luid) (v : string) = task {
-    if hasEssential () then
+    if hasEssentials () then
         do! SecureStorage.SetAsync (luid, v)
     else
         TextFile.save (getPath luid) (encrypt v)
 }
 
 let hasAsync (luid : Luid) = task {
-    if hasEssential () then
+    if hasEssentials () then
         let! content = getAsync luid
         return content.IsSome
     else
@@ -73,13 +73,13 @@ let hasAsync (luid : Luid) = task {
 }
 
 let remove (luid : Luid) : bool =
-    if hasEssential () then
+    if hasEssentials () then
         SecureStorage.Remove luid
     else
         FileSystem.deleteFile <| getPath luid
 
 let removeAll () : unit =
-    if hasEssential () then
+    if hasEssentials () then
         SecureStorage.RemoveAll ()
     else
         FileSystem.deleteFolder <| getRoot ()

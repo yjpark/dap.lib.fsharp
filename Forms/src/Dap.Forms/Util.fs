@@ -2,6 +2,7 @@
 module Dap.Forms.Util
 
 open System.Threading.Tasks
+open Xamarin.Essentials
 open Xamarin.Forms
 open Elmish.XamarinForms
 open Elmish.XamarinForms.DynamicViews
@@ -18,7 +19,7 @@ let isMockForms () =
 let isRealForms () =
     not <| isMockForms ()
 
-let hasEssential () =
+let hasEssentials () =
     if isRealForms () then
         Device.RuntimePlatform = Device.iOS
             || Device.RuntimePlatform = Device.Android
@@ -35,3 +36,9 @@ let newApplication () =
         application
     else
         failWith "newApplication" "Is_Not_Real_Forms"
+
+let getDeviceName () =
+    if hasEssentials () then
+        DeviceInfo.Name
+    else
+        System.Environment.MachineName

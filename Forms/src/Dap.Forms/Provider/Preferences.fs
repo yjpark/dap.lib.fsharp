@@ -25,36 +25,36 @@ let getRoot () =
     root' |> Option.get
 
 let getPath (luid : Luid) =
-    Path.Combine (getRoot (), luid)
+    Path.Combine (getRoot (), luid + ".json")
 
 let has (luid : Luid) =
-    if hasEssential () then
+    if hasEssentials () then
         Preferences.ContainsKey luid
     else
         FileSystem.fileExists <| getPath luid
 
 let get (luid : Luid) =
-    if hasEssential () then
+    if hasEssentials () then
         Preferences.Get (luid, "")
     else
         TextFile.load <| getPath luid
         |> Option.defaultValue ""
 
 let set (luid : Luid) (v : string) =
-    if hasEssential () then
+    if hasEssentials () then
         Preferences.Set (luid, v)
     else
         TextFile.save (getPath luid) v
 
 let remove (luid : Luid) : unit =
-    if hasEssential () then
+    if hasEssentials () then
         Preferences.Remove luid
     else
         FileSystem.deleteFile <| getPath luid
         |> ignore
 
 let clear () : unit =
-    if hasEssential () then
+    if hasEssentials () then
         Preferences.Clear ()
     else
         FileSystem.deleteFolder <| getRoot ()
