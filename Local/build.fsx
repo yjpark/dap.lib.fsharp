@@ -26,7 +26,7 @@ NuGet.create NuGet.release feed projects
 DotNet.createPrepares [
     ["Fable.Dap.Local" ; "Dap.Local"], fun _ ->
         Dap.Local.Gui.Dsl.compile ["src" ; "Fable.Dap.Local"]
-        |> List.iter trace
+        |> List.iter traceSuccess
 ]
 
 Target.runOrDefault DotNet.Build
