@@ -2,21 +2,21 @@ module Dap.Local.Gui.Dsl
 
 open Dap.Prelude
 open Dap.Context
-open Dap.Context.Builder
+open Dap.Context.Meta
 open Dap.Context.Generator
 
-let text =
+let Text =
     combo {
-        string "text" ""
+        var (M.string "text")
     }
 
-let IText = Interface.CreateCombo "IText" text
+let IText = Interface.CreateCombo "IText" Text
 
-let label = text
+let Label = Text
 
-let button =
-    extend text {
-        bool "clickable" true
+let Button =
+    extend [ <@ Text @> ] {
+        var (M.bool ("clickable", "true"))
     }
 
 let compile segments =
@@ -25,8 +25,8 @@ let compile segments =
             G.Module ("Dap.Local.Gui.Types",
                 [
                     G.Interface (IText)
-                    G.BaseClass ("Label", [IText], label)
-                    G.BaseClass ("Button", [IText], button)
+                    G.BaseClass (<@ Label @>, [IText])
+                    G.BaseClass (<@ Button @>, [IText])
                 ]
             )
         )
@@ -35,8 +35,8 @@ let compile segments =
                 [
                     "open Dap.Local.Gui.Types"
                 ], [
-                    G.Builder ("Label", label)
-                    G.Builder ("Button", button)
+                    G.Builder <@ Label @>
+                    G.Builder <@ Button @>
                 ]
             )
         )
