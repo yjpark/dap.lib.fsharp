@@ -22,8 +22,7 @@ let JsonEncoder (forPersistent : bool) (this : Token List) =
             t.ForPersistent
         else
             t
-    )|> List.map Token.JsonEncoder
-    |> E.list
+    )|> E.list Token.JsonEncoder
 
 let inline updateTokens (collection : string) (record : ^record) (app : DbApp) : Task<Result<string, string>> = task {
     let key = (^record : (member Key : string) record)
