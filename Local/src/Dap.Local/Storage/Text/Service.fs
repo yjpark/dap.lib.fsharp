@@ -20,18 +20,3 @@ let TryLoad = BaseTypes.TryLoad
 let DoLoad = BaseTypes.DoLoad
 let DoSave = BaseTypes.DoSave
 let DoSaveNew = BaseTypes.DoSaveNew
-
-let addAsync' kind key provider =
-    let args : Args =
-        {
-            Provider = provider
-            Encode = id
-            Decode = id
-        }
-    Env.addServiceAsync (Logic.spec args) kind key
-
-let get' kind key env =
-    env |> Env.getService kind key :?> Service
-
-let addAsync key = addAsync' Kind key
-let get key = get' Kind key

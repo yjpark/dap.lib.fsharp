@@ -10,8 +10,6 @@ open Dap.Prelude
 open Dap.Context
 open Dap.Local.Farango
 
-type Db = Dap.Local.Farango.Db.Model
-
 type Query = {
     Query : string
     BatchSize : int option
@@ -71,7 +69,7 @@ let executeAsync query db =
     Async.StartAsTask <| executeAsync' query db
 
 
-type Dap.Local.Farango.Db.Model with
+type Db.Model with
     member this.GetCollection name = Collection.Create this name
     member this.ExecuteQueryAsync query = executeAsync query this
 

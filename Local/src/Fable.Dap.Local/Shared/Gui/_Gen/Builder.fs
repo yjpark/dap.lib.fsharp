@@ -1,36 +1,35 @@
 module Dap.Local.Gui.Builder
 
+open Dap.Prelude
 open Dap.Context
 open Dap.Context.Builder
 
-open Dap.Local.Gui.Types
-
 (*
- * Generated: <Builder>
+ * Generated: <ComboBuilder>
  *)
 type LabelBuilder () =
     inherit ObjBuilder<Label> ()
-    override __.Zero () = Label.Empty ()
+    override __.Zero () = Label.Default ()
     [<CustomOperation("text")>]
-    member __.Text (target : Label, v) =
-        target.Text.SetValue v
+    member __.Text (target : Label, text : string) =
+        target.Text.SetValue text
         target
 
 let label = LabelBuilder ()
 
 (*
- * Generated: <Builder>
+ * Generated: <ComboBuilder>
  *)
 type ButtonBuilder () =
     inherit ObjBuilder<Button> ()
-    override __.Zero () = Button.Empty ()
+    override __.Zero () = Button.Default ()
     [<CustomOperation("text")>]
-    member __.Text (target : Button, v) =
-        target.Text.SetValue v
+    member __.Text (target : Button, text : string) =
+        target.Text.SetValue text
         target
     [<CustomOperation("clickable")>]
-    member __.Clickable (target : Button, v) =
-        target.Clickable.SetValue v
+    member __.Clickable (target : Button, clickable : bool) =
+        target.Clickable.SetValue clickable
         target
 
 let button = ButtonBuilder ()

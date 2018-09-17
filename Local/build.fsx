@@ -1,6 +1,8 @@
 #r "paket: groupref Build //"
 #load ".fake/build.fsx/intellisense.fsx"
 #load "src/Fable.Dap.Local/Shared/Gui/Dsl.fs"
+#load "src/Dap.Local/Dsl.fs"
+#load "src/Dap.Local.Farango/Dsl.fs"
 
 open Fake.Core
 open Fake.Core.TargetOperators
@@ -24,8 +26,14 @@ let projects =
 NuGet.create NuGet.release feed projects
 
 DotNet.createPrepares [
-    ["Fable.Dap.Local" ; "Dap.Local"], fun _ ->
+    ["Fable.Dap.Local"], fun _ ->
         Dap.Local.Gui.Dsl.compile ["src" ; "Fable.Dap.Local"]
+        |> List.iter traceSuccess
+    ["Dap.Local"], fun _ ->
+        Dap.Local.Dsl.compile ["src" ; "Dap.Local"]
+        |> List.iter traceSuccess
+    ["Dap.Local.Farango"], fun _ ->
+        Dap.Local.Farango.Dsl.compile ["src" ; "Dap.Local.Farango"]
         |> List.iter traceSuccess
 ]
 

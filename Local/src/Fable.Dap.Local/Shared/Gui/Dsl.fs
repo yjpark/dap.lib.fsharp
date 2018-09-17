@@ -16,13 +16,13 @@ let Label = Text
 
 let Button =
     extend [ <@ Text @> ] {
-        var (M.bool ("clickable", "true"))
+        var (M.bool ("clickable", true))
     }
 
 let compile segments =
     [
         G.File (segments, ["Shared" ; "Gui" ; "_Gen" ; "Types.fs"],
-            G.Module ("Dap.Local.Gui.Types",
+            G.AutoOpenModule ("Dap.Local.Gui.Types",
                 [
                     G.Interface (IText)
                     G.BaseClass (<@ Label @>, [IText])
@@ -33,10 +33,8 @@ let compile segments =
         G.File (segments, ["Shared" ; "Gui" ; "_Gen" ; "Builder.fs"],
             G.BuilderModule ("Dap.Local.Gui.Builder",
                 [
-                    "open Dap.Local.Gui.Types"
-                ], [
-                    G.Builder <@ Label @>
-                    G.Builder <@ Button @>
+                    G.ComboBuilder <@ Label @>
+                    G.ComboBuilder <@ Button @>
                 ]
             )
         )

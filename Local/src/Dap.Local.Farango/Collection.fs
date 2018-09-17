@@ -12,8 +12,6 @@ open Dap.Remote
 open Dap.Local.Farango
 open Dap.Local.Farango.Util
 
-type Db = Dap.Local.Farango.Db.Model
-
 type Collection = {
     Db : Db
     Name : string
@@ -38,7 +36,7 @@ type Collection = {
     member inline this.ReplyCreateDocumentAsync<'runner when 'runner :> IRunner> (json : Json) : GetReplyTask<'runner, unit> =
         this.ReplyCreateDocumentAsync' json ignore
 
-type Dap.Local.Farango.Db.Model with
+type Db.Model with
     member this.GetCollection name = Collection.Create this name
 
 type IJson with

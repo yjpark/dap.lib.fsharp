@@ -1,6 +1,7 @@
 [<AutoOpen>]
 module Dap.Local.Gui.Types
 
+open Dap.Prelude
 open Dap.Context
 
 (*
@@ -21,7 +22,7 @@ type Label (owner : IOwner, key : Key) =
         base.Setup (target)
     )
     static member Create o k = new Label (o, k)
-    static member Empty () = Label.Create noOwner NoKey
+    static member Default () = Label.Create noOwner NoKey
     static member AddToCombo key (combo : IComboProperty) =
         combo.AddCustom<Label>(Label.Create, key)
     override this.Self = this
@@ -44,7 +45,7 @@ type Button (owner : IOwner, key : Key) =
         base.Setup (target)
     )
     static member Create o k = new Button (o, k)
-    static member Empty () = Button.Create noOwner NoKey
+    static member Default () = Button.Create noOwner NoKey
     static member AddToCombo key (combo : IComboProperty) =
         combo.AddCustom<Button>(Button.Create, key)
     override this.Self = this

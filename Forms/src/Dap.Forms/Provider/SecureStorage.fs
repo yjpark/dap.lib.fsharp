@@ -10,22 +10,27 @@ open Dap.Context
 open Dap.Platform
 open Dap.Local
 open Dap.Local.Storage.Base.Types
+module BaseTypes = Dap.Local.Storage.Base.Types
 module JsonStorage = Dap.Local.Storage.Json.Service
 module TextFile = Dap.Local.Provider.TextFile
 
 open Dap.Forms
 
 [<Literal>]
+let Kind = "SecureStorage"
+
+type Args<'v when 'v :> IJson> = BaseTypes.Args<string, 'v>
+type Req<'v when 'v :> IJson> = BaseTypes.Req<'v>
+type Evt<'v when 'v :> IJson> = BaseTypes.Evt<'v>
+type Service<'v when 'v :> IJson> = BaseTypes.Agent<string, 'v>
+
+[<Literal>]
 let RootFolder = "secure_storage"
 
-let mutable private root' = None
-let getRoot () =
-    if root'.IsNone then
-        root' <- Some <| Path.Combine (Dap.Local.App.Boot.getDocFolder (), RootFolder)
-    root' |> Option.get
+let root = Path.Combine (FileSystem.getAppDataFolder (), RootFolder)
 
 let getPath (luid : Luid) =
-    Path.Combine (getRoot (), luid + ".bytes")
+    Path.Combine (root, luid + ".bytes")
 
 let mutable private secret = "Iemohwai9iiY2phojael2och7quiex6Thohneothaek7eeghaebeewohghie9shu"
 
@@ -82,7 +87,7 @@ let removeAll () : unit =
     if hasEssentials () then
         SecureStorage.RemoveAll ()
     else
-        FileSystem.deleteFolder <| getRoot ()
+        FileSystem.deleteFolder root
         |> ignore
 
 type Provider = Provider with
@@ -96,15 +101,4 @@ type Provider = Provider with
             return not exist
         }
 
-module Service =
-    [<Literal>]
-    let Kind = "SecureStorage"
-
-    let addAsync'<'v when 'v :> IJson> kind key indent encoder decoder =
-        JsonStorage.addAsync'<'v> kind key Provider indent encoder decoder
-
-    let get'<'v when 'v :> IJson> kind key env =
-        JsonStorage.get'<'v> kind key env
-
-    let addAsync<'v when 'v :> IJson> key = addAsync'<'v> Kind key
-    let get<'v when 'v :> IJson> key = get'<'v> Kind key
+let args<'v when 'v :> IJson> encoder decoder = JsonStorage.args<'v> Provider 4 encoder decoder

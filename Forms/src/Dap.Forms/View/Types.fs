@@ -7,21 +7,25 @@ open Elmish.XamarinForms.DynamicViews
 
 open Dap.Prelude
 open Dap.Platform
+open Dap.Local
+
+[<Literal>]
+let Kind = "FormsView"
 
 type Widget = ViewElement
 
 type Initer<'model, 'msg when 'model : not struct and 'msg :> IMsg> =
     IAgent<Msg<'model, 'msg>>
 
-and Render<'model, 'msg when 'model : not struct and 'msg :> IMsg> =
-    View<'model, 'msg> -> 'model -> Widget
+and Render<'pack, 'model, 'msg when 'model : not struct and 'msg :> IMsg> =
+    View<'pack, 'model, 'msg> -> 'model -> Widget
 
-and ViewLogic<'model, 'msg when 'model : not struct and 'msg :> IMsg> =
-    Logic<Initer<'model, 'msg>, View<'model, 'msg>, unit, 'model, 'msg>
+and ViewLogic<'pack, 'model, 'msg when 'model : not struct and 'msg :> IMsg> =
+    Logic<Initer<'model, 'msg>, View<'pack, 'model, 'msg>, unit, 'model, 'msg>
 
-and Args<'model, 'msg when 'model : not struct and 'msg :> IMsg> = {
-    Logic : ViewLogic<'model, 'msg>
-    Render : Render<'model, 'msg>
+and Args<'pack, 'model, 'msg when 'model : not struct and 'msg :> IMsg> = {
+    Logic : ViewLogic<'pack, 'model, 'msg>
+    Render : Render<'pack, 'model, 'msg>
     Application : Application
 } with
     static member Create init update subscribe render application =
@@ -56,11 +60,11 @@ and Msg<'model, 'msg
     | AppEvt of Evt
 with interface IMsg
 
-and View<'model, 'msg when 'model : not struct and 'msg :> IMsg> (param) =
-    inherit BaseAgent<View<'model, 'msg>, Args<'model, 'msg>, Model<'model, 'msg>, Msg<'model, 'msg>, Req, Evt> (param)
+and View<'pack, 'model, 'msg when 'model : not struct and 'msg :> IMsg> (pack : 'pack, param) =
+    inherit PackAgent<'pack, View<'pack, 'model, 'msg>, Args<'pack, 'model, 'msg>, Model<'model, 'msg>, Msg<'model, 'msg>, Req, Evt> (pack, param)
     let mutable react : ('msg -> unit) option = None
     let mutable formsRunner : obj option = None
-    static member Spawn (param) = new View<'model, 'msg> (param)
+    static member Spawn pack' param' = new View<'pack, 'model, 'msg> (pack', param')
     override this.Runner = this
     member this.Program = this.Actor.State.Program
     member this.ViewState = this.Actor.State.View

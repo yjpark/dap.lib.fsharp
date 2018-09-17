@@ -46,9 +46,9 @@ type Record = {
     member this.Key = this.UserKey
     member this.WithTokens tokens = {this with Tokens = tokens}
 
-let getByUserKeyAsync' (collection : string) (userKey : string) (app : DbApp) : Task<Result<Record, string>> = task {
+let getByUserKeyAsync' (collection : string) (userKey : string) (pack : IDbPack) : Task<Result<Record, string>> = task {
     let! doc =
-        getDocument app.Db.Conn collection userKey
+        getDocument pack.Conn collection userKey
         |> Async.StartAsTask
     return doc
     |> Result.bind (D.decodeString Record.JsonDecoder)

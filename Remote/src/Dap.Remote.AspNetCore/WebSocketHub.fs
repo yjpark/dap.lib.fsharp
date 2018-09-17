@@ -9,7 +9,7 @@ open Microsoft.AspNetCore.Builder
 
 open Dap.Prelude
 open Dap.Platform
-module WebSocketService = Dap.Remote.WebSocketService.Types
+module GatewayTypes = Dap.Remote.WebSocketGateway.Types
 
 type Args = {
     Path : PathString
@@ -23,8 +23,8 @@ let handleWebSocket' (args : Args) (context : HttpContext) = task {
     let guid = System.Guid.NewGuid().ToString()
     let ident = sprintf "%s_%s" address guid
     let! (agent, _) = args.Env.HandleAsync <| DoGetAgent args.ServiceKind ident
-    let agent = agent :?> IAsyncPoster<WebSocketService.Req>
-    let! doProcess = agent.PostAsync <| WebSocketService.DoAttach CancellationToken.None socket
+    let agent = agent :?> IAsyncPoster<GatewayTypes.Req>
+    let! doProcess = agent.PostAsync <| GatewayTypes.DoAttach CancellationToken.None socket
     do! doProcess
 }
 

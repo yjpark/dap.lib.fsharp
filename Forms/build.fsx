@@ -1,10 +1,12 @@
 #r "paket: groupref Build //"
 #load ".fake/build.fsx/intellisense.fsx"
+#load "../Local/src/Dap.Local/Dsl.fs"
+#load "src/Dap.Forms/Dsl.fs"
 
 open Fake.Core
 open Fake.IO.Globbing.Operators
 
-module NuGet = Dap.Build.NuGet
+open Dap.Build
 
 let feed : NuGet.Feed = {
     NuGet.Source = "https://nuget.yjpark.org/nuget/dap"
@@ -14,4 +16,12 @@ let feed : NuGet.Feed = {
 let projects =
     !! "src/Dap.Forms/*.fsproj"
 
-NuGet.createAndRun NuGet.release feed projects
+NuGet.create NuGet.release feed projects
+
+DotNet.createPrepares [
+    ["Dap.Forms"], fun _ ->
+        Dap.Forms.Dsl.compile ["src" ; "Dap.Forms"]
+        |> List.iter traceSuccess
+]
+
+Target.runOrDefault DotNet.Build

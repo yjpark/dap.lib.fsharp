@@ -4,9 +4,10 @@ open Dap.Prelude
 open Dap.Platform
 open Dap.Remote
 
+module TickerTypes = Dap.Platform.Ticker.Types
 module Http = Dap.Remote.FSharpData.Http
 
-type Ticker = Dap.Platform.Ticker.Service.Service
+type Ticker = IAgent<TickerTypes.Req, TickerTypes.Evt>
 
 type IntervalMode =
     | FromLastReq

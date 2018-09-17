@@ -21,6 +21,8 @@ group Build
     framework: netstandard2.0
 
     nuget Dap.Build
+    nuget Dap.Context
+    nuget Dap.Platform
 
     clitool dotnet-sourcelink
     nuget Microsoft.SourceLink.GitHub 1.0.0-beta-62925-02

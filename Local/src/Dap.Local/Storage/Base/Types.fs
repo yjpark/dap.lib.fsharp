@@ -30,7 +30,13 @@ type Args<'content, 'v> = {
     Provider : IProvider<'content>
     Encode : 'v -> 'content
     Decode : 'content -> 'v
-}
+} with
+    static member Create provider encode decode =
+        {
+            Provider = provider
+            Encode = encode
+            Decode = decode
+        }
 
 and Model = NoModel
 
