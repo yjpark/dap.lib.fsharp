@@ -16,13 +16,13 @@ type Widget = ViewElement
 type Initer<'model, 'msg when 'model : not struct and 'msg :> IMsg> =
     IAgent<Msg<'model, 'msg>>
 
-and Render<'pack, 'model, 'msg when 'model : not struct and 'msg :> IMsg> =
+and Render<'pack, 'model, 'msg when 'pack :> IPack and 'model : not struct and 'msg :> IMsg> =
     View<'pack, 'model, 'msg> -> 'model -> Widget
 
-and ViewLogic<'pack, 'model, 'msg when 'model : not struct and 'msg :> IMsg> =
+and ViewLogic<'pack, 'model, 'msg when 'pack :> IPack and 'model : not struct and 'msg :> IMsg> =
     Logic<Initer<'model, 'msg>, View<'pack, 'model, 'msg>, unit, 'model, 'msg>
 
-and Args<'pack, 'model, 'msg when 'model : not struct and 'msg :> IMsg> = {
+and Args<'pack, 'model, 'msg when 'pack :> IPack and 'model : not struct and 'msg :> IMsg> = {
     Logic : ViewLogic<'pack, 'model, 'msg>
     Render : Render<'pack, 'model, 'msg>
     Application : Application
@@ -59,7 +59,7 @@ and Msg<'model, 'msg
     | AppEvt of Evt
 with interface IMsg
 
-and View<'pack, 'model, 'msg when 'model : not struct and 'msg :> IMsg> (pack : 'pack, param) =
+and View<'pack, 'model, 'msg when 'pack :> IPack and 'model : not struct and 'msg :> IMsg> (pack : 'pack, param) =
     inherit PackAgent<'pack, View<'pack, 'model, 'msg>, Args<'pack, 'model, 'msg>, Model<'model, 'msg>, Msg<'model, 'msg>, Req, Evt> (pack, param)
     let mutable react : ('msg -> unit) option = None
     let mutable formsRunner : obj option = None

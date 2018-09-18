@@ -16,7 +16,6 @@ type IDbPackArgs =
     abstract FarangoDb : FarangoDb.Args with get
 
 type IDbPack =
-    inherit ILogger
-    abstract Env : IEnv with get
+    inherit IPack
     abstract Args : IDbPackArgs with get
     abstract FarangoDb : FarangoDb.Agent with get

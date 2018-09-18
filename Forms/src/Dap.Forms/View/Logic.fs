@@ -11,7 +11,7 @@ open Dap.Forms
 
 open Dap.Forms.View.Types
 
-type ActorOperate<'pack, 'model, 'msg when 'model : not struct and 'msg :> IMsg> =
+type ActorOperate<'pack, 'model, 'msg when 'pack :> IPack and 'model : not struct and 'msg :> IMsg> =
     Operate<View<'pack, 'model, 'msg>, Model<'model, 'msg>, Msg<'model, 'msg>>
 
 let private doRun req (callback: Callback<unit>) : ActorOperate<'pack, 'model, 'msg> =
@@ -70,7 +70,7 @@ let private init : ActorInit<Args<'pack, 'model, 'msg>, Model<'model, 'msg>, Msg
             Program = program
         }, noCmd)
 
-let spec<'pack, 'model, 'msg when 'model : not struct and 'msg :> IMsg>
+let spec<'pack, 'model, 'msg when 'pack :> IPack and 'model : not struct and 'msg :> IMsg>
     (pack : 'pack) (args : Args<'pack, 'model, 'msg>) =
     new ActorSpec<View<'pack, 'model, 'msg>, Args<'pack, 'model, 'msg>, Model<'model, 'msg>, Msg<'model, 'msg>, Req, Evt>
         (View<'pack, 'model, 'msg>.Spawn pack, args, AppReq, castEvt<'model, 'msg>, init, update)

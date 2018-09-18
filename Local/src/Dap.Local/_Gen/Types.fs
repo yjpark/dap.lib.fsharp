@@ -46,6 +46,5 @@ type ILocalPackArgs =
     abstract FileSystem : FileSystemArgs with get
 
 type ILocalPack =
-    inherit ILogger
-    abstract Env : IEnv with get
+    inherit IPack
     abstract Args : ILocalPackArgs with get
