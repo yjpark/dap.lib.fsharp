@@ -14,5 +14,7 @@ type IFormsPackArgs =
     abstract Temp : FileSystemArgs with get
 
 type IFormsPack =
+    inherit ILogger
     inherit ILocalPack
+    abstract Env : IEnv with get
     abstract Args : IFormsPackArgs with get

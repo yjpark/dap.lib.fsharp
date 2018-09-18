@@ -21,8 +21,6 @@ type LoggingArgs with
         let consoleSink = ConsoleSinkArgs.Default ()
         let fileSink = FileSinkArgs.LocalDefault (FileSystemArgs.LocalDefault ()) filename
         LoggingArgs.Create (Some consoleSink) <| Some fileSink
-
-let createLocalLogging logFile consoleLogLevel =
-    LoggingArgs.LocalDefault logFile
-    |> fun l -> l.WithConsoleMinLevel consoleLogLevel
-    |> fun l -> l.CreateLogging ()
+    static member LocalCreate (filename : string, consoleLogLevel : LogLevel) =
+        LoggingArgs.LocalDefault filename
+        |> fun l -> l.WithConsoleMinLevel consoleLogLevel

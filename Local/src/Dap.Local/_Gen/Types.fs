@@ -3,6 +3,7 @@ module Dap.Local.Types
 
 open Dap.Prelude
 open Dap.Context
+open Dap.Platform
 
 (*
  * Generated: <Record>
@@ -45,4 +46,6 @@ type ILocalPackArgs =
     abstract FileSystem : FileSystemArgs with get
 
 type ILocalPack =
+    inherit ILogger
+    abstract Env : IEnv with get
     abstract Args : ILocalPackArgs with get

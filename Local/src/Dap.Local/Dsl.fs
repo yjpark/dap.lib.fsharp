@@ -7,6 +7,7 @@ open Dap.Context.Generator
 open Dap.Platform
 open Dap.Platform.Meta
 open Dap.Platform.Generator
+open Dap.Platform.Dsl
 
 let FileSystemArgs =
     combo {
@@ -24,6 +25,7 @@ let compile segments =
         G.File (segments, ["_Gen"; "Types.fs"],
             G.AutoOpenModule ("Dap.Local.Types",
                 [
+                    G.PlatformOpens
                     G.LooseJsonRecord (<@ FileSystemArgs @>, [])
                     G.PackInterface <@ ILocalPack @>
                 ]
@@ -32,6 +34,7 @@ let compile segments =
         G.File (segments, ["_Gen"; "Builder.fs"],
             G.BuilderModule ("Dap.Local.Builder",
                 [
+                    G.PlatformOpens
                     G.ValueBuilder <@ FileSystemArgs @>
                 ]
             )

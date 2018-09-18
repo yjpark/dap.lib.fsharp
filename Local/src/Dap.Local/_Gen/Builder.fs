@@ -1,8 +1,9 @@
 module Dap.Local.Builder
 
+open Dap.Context.Builder
 open Dap.Prelude
 open Dap.Context
-open Dap.Context.Builder
+open Dap.Platform
 
 (*
  * Generated: <ValueBuilder>

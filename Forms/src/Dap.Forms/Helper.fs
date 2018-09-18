@@ -31,8 +31,6 @@ type LoggingArgs with
         let consoleSink = ConsoleSinkArgs.FormsDefault ()
         let fileSink = FileSinkArgs.LocalDefault (FileSystemArgs.FormsDefault ()) filename
         LoggingArgs.Create consoleSink <| Some fileSink
-
-let createFormsLogging logFile consoleLogLevel =
-    LoggingArgs.FormsDefault logFile
-    |> fun l -> l.WithConsoleMinLevel consoleLogLevel
-    |> fun l -> l.CreateLogging ()
+    static member FormsCreate (filename : string, consoleLogLevel : LogLevel) =
+        LoggingArgs.FormsDefault filename
+        |> fun l -> l.WithConsoleMinLevel consoleLogLevel

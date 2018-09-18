@@ -17,14 +17,17 @@ type ActorOperate<'pack, 'model, 'msg when 'model : not struct and 'msg :> IMsg>
 let private doRun req (callback: Callback<unit>) : ActorOperate<'pack, 'model, 'msg> =
     fun runner (model, cmd) ->
         if isRealForms () then
-            runner.RunUiFunc (fun _ ->
-                model.Program
-                |> Program.runWithDynamicView runner.Actor.Args.Application
-                |> runner.SetFormsRunner'
-                reply runner callback <| ack req ()
-            )
+            if runner.HasFormsRunner then
+                reply runner callback <| nak req "Already_Running" ()
+            else
+                runner.RunUiFunc (fun _ ->
+                    model.Program
+                    |> Program.runWithDynamicView runner.Actor.Args.Application
+                    |> runner.SetFormsRunner'
+                    reply runner callback <| ack req ()
+                )
         else
-            logError runner "Forms_App" "Is_Mock_Forms" ()
+            reply runner callback <| nak req "Is_Mock_Forms" ()
         (model, cmd)
 
 let private handleReq req : ActorOperate<'pack, 'model, 'msg> =
