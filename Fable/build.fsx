@@ -13,5 +13,6 @@ let feed : NuGet.Feed = {
 
 let projects =
     !! "src/Fable.Dap.React/*.fsproj"
+    ++ "src/Fable.Dap.React.Dsl/*.fsproj"
 
 NuGet.createAndRun NuGet.release feed projects

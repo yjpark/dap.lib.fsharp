@@ -7,6 +7,7 @@ framework: auto-detect
 
 nuget Fable.Dap.Local
 nuget Fable.Dap.Remote
+nuget Fable.Dap.Dsl
 
 nuget Fable.PowerPack
 nuget Fable.Import.Browser
