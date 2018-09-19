@@ -11,6 +11,9 @@ open Dap.Prelude
 open Dap.Platform
 open Dap.React
 
+[<Literal>]
+let Kind = "ReactView"
+
 type Initer<'route, 'model, 'msg when 'route :> IRoute
                 and 'model : not struct and 'msg :> IMsg> =
     IAgent<Msg<'route, 'model, 'msg>>

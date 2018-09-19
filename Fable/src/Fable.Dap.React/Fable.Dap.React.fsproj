@@ -13,6 +13,7 @@
     <Compile Include="Types.fs" />
     <Compile Include="View/Types.fs" />
     <Compile Include="View/Logic.fs" />
+    <Compile Include="Meta.fs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="*.fsproj; **\*.fs; **\*.js" PackagePath="fable" />
