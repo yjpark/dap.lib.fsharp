@@ -16,13 +16,16 @@ type Widget = ViewElement
 type Initer<'model, 'msg when 'model : not struct and 'msg :> IMsg> =
     IAgent<Msg<'model, 'msg>>
 
-and Render<'pack, 'model, 'msg when 'pack :> IPack and 'model : not struct and 'msg :> IMsg> =
+and Render<'pack, 'model, 'msg
+            when 'pack :> IPack and 'model : not struct and 'msg :> IMsg> =
     View<'pack, 'model, 'msg> -> 'model -> Widget
 
-and ViewLogic<'pack, 'model, 'msg when 'pack :> IPack and 'model : not struct and 'msg :> IMsg> =
+and ViewLogic<'pack, 'model, 'msg
+            when 'pack :> IPack and 'model : not struct and 'msg :> IMsg> =
     Logic<Initer<'model, 'msg>, View<'pack, 'model, 'msg>, unit, 'model, 'msg>
 
-and Args<'pack, 'model, 'msg when 'pack :> IPack and 'model : not struct and 'msg :> IMsg> = {
+and Args<'pack, 'model, 'msg
+            when 'pack :> IPack and 'model : not struct and 'msg :> IMsg> = {
     Logic : ViewLogic<'pack, 'model, 'msg>
     Render : Render<'pack, 'model, 'msg>
     Application : Application

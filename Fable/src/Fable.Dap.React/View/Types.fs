@@ -15,21 +15,22 @@ type Initer<'route, 'model, 'msg when 'route :> IRoute
                 and 'model : not struct and 'msg :> IMsg> =
     IAgent<Msg<'route, 'model, 'msg>>
 
-and Render<'route, 'model, 'msg when 'route :> IRoute
+and Render<'pack, 'route, 'model, 'msg
+            when 'pack :> IPack and 'route :> IRoute
                 and 'model : not struct and 'msg :> IMsg> =
-    View<'route, 'model, 'msg> -> 'model -> Widget
+    View<'pack, 'route, 'model, 'msg> -> 'model -> Widget
 
-and ViewLogic<'route, 'model, 'msg
-            when 'route :> IRoute
+and ViewLogic<'pack, 'route, 'model, 'msg
+            when 'pack :> IPack and 'route :> IRoute
                 and 'model : not struct and 'msg :> IMsg> =
-    Logic<Initer<'route, 'model, 'msg>, View<'route, 'model, 'msg>, unit, 'model, 'msg>
+    Logic<Initer<'route, 'model, 'msg>, View<'pack, 'route, 'model, 'msg>, unit, 'model, 'msg>
 
-and Args<'route, 'model, 'msg
-            when 'route :> IRoute
+and Args<'pack, 'route, 'model, 'msg
+            when 'pack :> IPack and 'route :> IRoute
                 and 'model : not struct and 'msg :> IMsg> = {
     Parse : Parser<'route -> 'route, 'route>
-    Logic : ViewLogic<'route, 'model, 'msg>
-    Render : Render<'route, 'model, 'msg>
+    Logic : ViewLogic<'pack, 'route, 'model, 'msg>
+    Render : Render<'pack, 'route, 'model, 'msg>
     Root : string
     UseHMR : bool
     UseDebugger : bool
@@ -82,12 +83,13 @@ and Msg<'route, 'model, 'msg when 'route :> IRoute and 'model : not struct and '
     | InternalEvt of InternalEvt<'route>
 with interface IMsg
 
-and View<'route, 'model, 'msg
-            when 'route :> IRoute
-                and 'model : not struct and 'msg :> IMsg> (param) =
-    inherit BaseAgent<View<'route, 'model, 'msg>, Args<'route, 'model, 'msg>, Model<'route, 'model, 'msg>, Msg<'route, 'model, 'msg>, Req<'route>, Evt> (param)
+and View<'pack, 'route, 'model, 'msg
+            when 'pack :> IPack
+                and 'route :> IRoute
+                and 'model : not struct and 'msg :> IMsg> (pack, param) =
+    inherit PackAgent<'pack, View<'pack, 'route, 'model, 'msg>, Args<'pack, 'route, 'model, 'msg>, Model<'route, 'model, 'msg>, Msg<'route, 'model, 'msg>, Req<'route>, Evt> (pack, param)
     let mutable react : ('msg -> unit) option = None
-    static member Spawn (param) = new View<'route, 'model, 'msg> (param)
+    static member Spawn k m = new View<'pack, 'route, 'model, 'msg> (k, m)
     override this.Runner = this
     member this.Program = this.Actor.State.Program
     member this.ViewState = this.Actor.State.View
