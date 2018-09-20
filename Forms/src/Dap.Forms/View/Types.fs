@@ -81,7 +81,7 @@ and View<'pack, 'model, 'msg when 'pack :> IPack and 'model : not struct and 'ms
     member _this.React (msg : 'msg) =
         react
         |> Option.iter (fun d -> d msg)
-    member this.StartAsync : Task<unit> = task {
+    member this.StartAsync () : Task<unit> = task {
         do! this.PostAsync DoRun
     }
 
