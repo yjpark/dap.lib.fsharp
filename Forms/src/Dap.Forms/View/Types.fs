@@ -1,5 +1,7 @@
 module Dap.Forms.View.Types
 
+open System.Threading.Tasks
+open FSharp.Control.Tasks.V2
 open Xamarin.Forms
 open Elmish.XamarinForms
 open Elmish.XamarinForms.DynamicViews
@@ -79,9 +81,10 @@ and View<'pack, 'model, 'msg when 'pack :> IPack and 'model : not struct and 'ms
     member _this.React (msg : 'msg) =
         react
         |> Option.iter (fun d -> d msg)
-    member this.Run (app : 'app) (onAppStart : 'app -> unit) : unit =
-        let onRun = fun () -> onAppStart app
-        this.Post <| DoRun (callback this onRun)
+    member this.StartAsync (app : 'app) : Task<'app> = task {
+            do! this.PostAsync DoRun
+            return app
+        }
 
 let castEvt<'model, 'msg when 'model : not struct and 'msg :> IMsg>
                 : CastEvt<Msg<'model, 'msg>, Evt> =
