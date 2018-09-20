@@ -81,10 +81,9 @@ and View<'pack, 'model, 'msg when 'pack :> IPack and 'model : not struct and 'ms
     member _this.React (msg : 'msg) =
         react
         |> Option.iter (fun d -> d msg)
-    member this.StartAsync (app : 'app) : Task<'app> = task {
-            do! this.PostAsync DoRun
-            return app
-        }
+    member this.StartAsync : Task<unit> = task {
+        do! this.PostAsync DoRun
+    }
 
 let castEvt<'model, 'msg when 'model : not struct and 'msg :> IMsg>
                 : CastEvt<Msg<'model, 'msg>, Evt> =
