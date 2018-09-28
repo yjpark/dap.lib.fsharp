@@ -5,14 +5,23 @@ module Dap.Console.Client.Prefab.InputField
 open Dap.Prelude
 open Dap.Context
 open Dap.Context.Helper
+open Dap.Gui
 open Eto.Forms
 open Dap.Eto
 open Dap.Eto.Prefab
 
 module LayoutConst = Dap.Eto.Layout.Const
 
+[<Literal>]
+let Kind = "InputField"
+
 let InputFieldJson = parseJson """
 {
+    "prefab": "input_field",
+    "styles": [
+        "style3"
+    ],
+    "layout": "horizontal_stack",
     "children": {
         "label": {
             "prefab": "",
@@ -20,32 +29,32 @@ let InputFieldJson = parseJson """
             "text": "Label"
         },
         "value": {
-            "disabled": false,
             "prefab": "",
             "styles": [],
+            "disabled": false,
             "text": ""
         }
-    },
-    "layout": "horizontal_stack",
-    "prefab": "input_field",
-    "styles": [
-        "style3"
-    ]
+    }
 }
 """
 
-type Prefab (owner : IOwner, key : Key) as this =
-    inherit Stack.Prefab (owner, key)
-    let label = Label.Prefab.AddToCombo "label" this.Children
-    let value = TextField.Prefab.AddToCombo "value" this.Children
+type Model = Stack.Model
+type Widget = Stack.Model
+
+type Prefab (logging : ILogging) =
+    inherit Stack.Prefab (logging)
+    let label = Label.Prefab.AddToGroup logging "label" base.Model
+    let value = TextField.Prefab.AddToGroup logging "value" base.Model
     do (
-        this.AsProperty.WithJson InputFieldJson |> ignore
-        this.AddChild (label.Widget)
-        this.AddChild (value.Widget)
+        base.Model.AsProperty.WithJson InputFieldJson |> ignore
+        base.AddChild (label.Widget)
+        base.AddChild (value.Widget)
     )
-    static member Create o k = new Prefab (o, k)
-    static member Default () = Prefab.Create noOwner NoKey
-    static member AddToCombo key (combo : IComboProperty) =
-        combo.AddCustom<Prefab> (Prefab.Create, key)
+    static member Create l = new Prefab (l)
+    static member Create () = new Prefab (getLogging ())
+    static member AddToGroup l key (group : IGroup) =
+        let prefab = Prefab.Create l
+        group.Children.AddLink<Model> (prefab.Model, key) |> ignore
+        prefab
     member __.Label : Label.Prefab = label
     member __.Value : TextField.Prefab = value

@@ -5,22 +5,34 @@ module Dap.Console.Client.Prefab.LoginForm
 open Dap.Prelude
 open Dap.Context
 open Dap.Context.Helper
+open Dap.Gui
 open Eto.Forms
 open Dap.Eto
 open Dap.Eto.Prefab
 
 module LayoutConst = Dap.Eto.Layout.Const
 
+[<Literal>]
+let Kind = "LoginForm"
+
 let LoginFormJson = parseJson """
 {
+    "prefab": "login",
+    "styles": [
+        "style1",
+        "style2"
+    ],
+    "layout": "vertical_stack",
     "children": {
-        "login": {
-            "disabled": false,
+        "title": {
             "prefab": "",
             "styles": [],
-            "text": "Login"
+            "text": "Login with your credential"
         },
         "name": {
+            "prefab": "input_field",
+            "styles": [],
+            "layout": "horizontal_stack",
             "children": {
                 "label": {
                     "prefab": "",
@@ -28,17 +40,17 @@ let LoginFormJson = parseJson """
                     "text": "User Name"
                 },
                 "value": {
-                    "disabled": false,
                     "prefab": "",
                     "styles": [],
+                    "disabled": false,
                     "text": ""
                 }
-            },
-            "layout": "horizontal_stack",
-            "prefab": "input_field",
-            "styles": []
+            }
         },
         "password": {
+            "prefab": "input_field",
+            "styles": [],
+            "layout": "horizontal_stack",
             "children": {
                 "label": {
                     "prefab": "",
@@ -46,49 +58,46 @@ let LoginFormJson = parseJson """
                     "text": "Password"
                 },
                 "value": {
-                    "disabled": false,
                     "prefab": "",
                     "styles": [],
+                    "disabled": false,
                     "text": ""
                 }
-            },
-            "layout": "horizontal_stack",
-            "prefab": "input_field",
-            "styles": []
+            }
         },
-        "title": {
+        "login": {
             "prefab": "",
             "styles": [],
-            "text": "Login with your credential"
+            "disabled": false,
+            "text": "Login"
         }
-    },
-    "layout": "vertical_stack",
-    "prefab": "login",
-    "styles": [
-        "style1",
-        "style2"
-    ]
+    }
 }
 """
 
-type Prefab (owner : IOwner, key : Key) as this =
-    inherit Stack.Prefab (owner, key)
-    let login = Button.Prefab.AddToCombo "login" this.Children
-    let name = InputField.Prefab.AddToCombo "name" this.Children
-    let password = InputField.Prefab.AddToCombo "password" this.Children
-    let title = Label.Prefab.AddToCombo "title" this.Children
+type Model = Stack.Model
+type Widget = Stack.Model
+
+type Prefab (logging : ILogging) =
+    inherit Stack.Prefab (logging)
+    let title = Label.Prefab.AddToGroup logging "title" base.Model
+    let name = InputField.Prefab.AddToGroup logging "name" base.Model
+    let password = InputField.Prefab.AddToGroup logging "password" base.Model
+    let login = Button.Prefab.AddToGroup logging "login" base.Model
     do (
-        this.AsProperty.WithJson LoginFormJson |> ignore
-        this.AddChild (login.Widget)
-        this.AddChild (name.Widget)
-        this.AddChild (password.Widget)
-        this.AddChild (title.Widget)
+        base.Model.AsProperty.WithJson LoginFormJson |> ignore
+        base.AddChild (title.Widget)
+        base.AddChild (name.Widget)
+        base.AddChild (password.Widget)
+        base.AddChild (login.Widget)
     )
-    static member Create o k = new Prefab (o, k)
-    static member Default () = Prefab.Create noOwner NoKey
-    static member AddToCombo key (combo : IComboProperty) =
-        combo.AddCustom<Prefab> (Prefab.Create, key)
-    member __.Login : Button.Prefab = login
+    static member Create l = new Prefab (l)
+    static member Create () = new Prefab (getLogging ())
+    static member AddToGroup l key (group : IGroup) =
+        let prefab = Prefab.Create l
+        group.Children.AddLink<Model> (prefab.Model, key) |> ignore
+        prefab
+    member __.Title : Label.Prefab = title
     member __.Name : InputField.Prefab = name
     member __.Password : InputField.Prefab = password
-    member __.Title : Label.Prefab = title
+    member __.Login : Button.Prefab = login

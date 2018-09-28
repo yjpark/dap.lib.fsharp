@@ -52,7 +52,7 @@ let compile segments =
         G.File (segments, ["Shared" ; "_Gen" ; "Widgets.fs"],
             G.AutoOpenModule ("Dap.Gui.Widgets",
                 [
-                    G.ComboInterface (<@ IWidget @>, ["IProperties"])
+                    G.ComboInterface (<@ IWidget @>, ["ICustomProperties"])
                     G.ComboInterface (<@ IControl @>)
                     G.ComboInterface (<@ IGroup @>)
                     G.ComboInterface (<@ IText @>)

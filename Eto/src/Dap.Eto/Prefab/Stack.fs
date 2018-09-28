@@ -12,15 +12,21 @@ open Dap.Gui
 
 module LayoutConst = Dap.Eto.Layout.Const
 
+[<Literal>]
+let Kind = "Stack"
+
 type Model = Dap.Gui.Widgets.Group
 type Widget = Eto.Forms.StackLayout
 
-type Prefab (owner : IOwner, key : Key) =
-    inherit Model (owner, key)
-    let widget : Widget = new Widget ()
-    do (
-        let watcher = IOwner.Create "Stack"
-        base.Layout.OnValueChanged.AddWatcher watcher "Prefab" (fun evt ->
+//SILP: PREFAB_HEADER
+type Prefab (logging : ILogging) =                                    //__SILP__
+    inherit BasePrefab<Prefab, Model, Widget>                         //__SILP__
+        (logging, Kind, Model.Create, new Widget ())                  //__SILP__
+    do (                                                              //__SILP__
+        let owner = base.AsOwner                                      //__SILP__
+        let model = base.Model                                        //__SILP__
+        let widget = base.Widget                                      //__SILP__
+        model.Layout.OnValueChanged.AddWatcher owner Kind (fun evt ->
             match evt.New with
             | LayoutConst.Horizontal_Stack ->
                 widget.Orientation <- Orientation.Horizontal
@@ -30,17 +36,16 @@ type Prefab (owner : IOwner, key : Key) =
                 logError owner "Stack" "Invalid_Layout" evt.New
         )
     )
-    member __.AddChild (child : Control, expand : bool) =
-        widget.Items.Add <| new StackLayoutItem (child, expand)
-    member __.AddChild (child : Control) =
-        widget.Items.Add <| new StackLayoutItem (child)
-    //SILP: PREFAB_MIXIN
-    static member Create o k = new Prefab (o, k)                      //__SILP__
-    static member Default () = Prefab.Create noOwner NoKey            //__SILP__
-    static member AddToCombo key (combo : IComboProperty) =           //__SILP__
-        combo.AddCustom<Prefab> (Prefab.Create, key)                  //__SILP__
-    member __.Widget = widget                                         //__SILP__
-    member __.Widget' = widget :> Control                             //__SILP__
-    interface IPrefab<Widget> with                                    //__SILP__
-        member this.Widget = this.Widget                              //__SILP__
-    member this.AsPrefab = this :> IPrefab<Widget>                    //__SILP__
+    member this.AddChild (child : Control, expand : bool) =
+        this.Widget.Items.Add <| new StackLayoutItem (child, expand)
+    member this.AddChild (child : Control) =
+        this.Widget.Items.Add <| new StackLayoutItem (child)
+    //SILP: PREFAB_FOOTER
+    static member Create l = new Prefab (l)                           //__SILP__
+    static member Create () = new Prefab (getLogging ())              //__SILP__
+    static member AddToGroup l key (group : IGroup) =                 //__SILP__
+        let prefab = Prefab.Create l                                  //__SILP__
+        group.Children.AddLink<Model> (prefab.Model, key) |> ignore   //__SILP__
+        prefab                                                        //__SILP__
+    override this.Self = this                                         //__SILP__
+    override __.Spawn l = Prefab.Create l                             //__SILP__

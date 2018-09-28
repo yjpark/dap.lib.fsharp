@@ -7,10 +7,10 @@ open Dap.Context.Helper
 
 (*
  * Generated: <ComboInterface>
- *     IProperties
+ *     ICustomProperties
  *)
 type IWidget =
-    inherit IProperties
+    inherit ICustomProperties
     abstract Prefab : IVarProperty<string> with get
     abstract Styles : IListProperty<IVarProperty<string>> with get
 

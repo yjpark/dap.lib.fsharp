@@ -21,6 +21,11 @@ type Generator (gui : IGui, meta : IWidget) =
         |> List.map (fun alias ->
             sprintf "module %s = %s" (fst alias) (snd alias)
         )
+    let getKind (param : PrefabParam) =
+        [
+            sprintf "[<Literal>]"
+            sprintf "let Kind = \"%s\"" param.Name
+        ]
     let getJson (param : PrefabParam) =
         [
             sprintf "let %sJson = parseJson \"\"\"" param.Name
@@ -28,21 +33,25 @@ type Generator (gui : IGui, meta : IWidget) =
             sprintf "\"\"\""
         ]
     let getClassHeader (param : PrefabParam) =
+        let parent = getParentPrefab ()
         [
-            sprintf "type Prefab (owner : IOwner, key : Key) as this ="
-            sprintf "    inherit %s.Prefab (owner, key)" <| getParentPrefab ()
+            sprintf "type Model = %s.Model" parent
+            sprintf "type Widget = %s.Model" parent
+            sprintf ""
+            sprintf "type Prefab (logging : ILogging) ="
+            sprintf "    inherit %s.Prefab (logging)" parent
         ]
     let getChildAdder (key : string) (child : IWidget) =
         let prefab = getChildPrefab child
-        sprintf "    let %s = %s.Prefab.AddToCombo \"%s\" this.Children" key.AsCodeVariableName prefab key
+        sprintf "    let %s = %s.Prefab.AddToGroup logging \"%s\" base.Model" key.AsCodeVariableName prefab key
     let getClassFields (param : PrefabParam) =
         [
             match meta with
             | :? IGroup as group ->
-                for kv in group.Children.Value do
-                    match kv.Value with
+                for (key, prop) in group.Children.Value do
+                    match prop with
                     | :? IWidget as prop ->
-                        yield getChildAdder kv.Key prop
+                        yield getChildAdder key prop
                     | _ ->
                         ()
             | _ ->
@@ -50,17 +59,17 @@ type Generator (gui : IGui, meta : IWidget) =
         ]
     let getChildSetup (key : string) (child : IWidget) =
         let prefab = getChildPrefab child
-        sprintf "        this.AddChild (%s.Widget)" key.AsCodeVariableName
+        sprintf "        base.AddChild (%s.Widget)" key.AsCodeVariableName
     let getClassSetup (param : PrefabParam) =
         [
-            yield "    do ("
-            yield sprintf "        this.AsProperty.WithJson %sJson |> ignore" param.Name
+            yield sprintf "    do ("
+            yield sprintf "        base.Model.AsProperty.WithJson %sJson |> ignore" param.Name
             match meta with
             | :? IGroup as group ->
-                for kv in group.Children.Value do
-                    match kv.Value with
+                for (key, prop) in group.Children.Value do
+                    match prop with
                     | :? IWidget as prop ->
-                        yield getChildSetup kv.Key prop
+                        yield getChildSetup key prop
                     | _ ->
                         ()
             | _ ->
@@ -69,10 +78,13 @@ type Generator (gui : IGui, meta : IWidget) =
         ]
     let getClassMiddle (param : PrefabParam) =
         [
-            "    static member Create o k = new Prefab (o, k)"
-            "    static member Default () = Prefab.Create noOwner NoKey"
-            "    static member AddToCombo key (combo : IComboProperty) ="
-            "        combo.AddCustom<Prefab> (Prefab.Create, key)"
+            "    static member Create l = new Prefab (l)"
+            "    static member Create () = new Prefab (getLogging ())"
+            "    static member AddToGroup l key (group : IGroup) ="
+            "        let prefab = Prefab.Create l"
+            "        group.Children.AddLink<Model> (prefab.Model, key) |> ignore"
+            "        prefab"
+
         ]
     let getChildMember (key : string) (child : IWidget) =
         let prefab = getChildPrefab child
@@ -81,10 +93,10 @@ type Generator (gui : IGui, meta : IWidget) =
         [
             match meta with
             | :? IGroup as group ->
-                for kv in group.Children.Value do
-                    match kv.Value with
+                for (key, prop) in group.Children.Value do
+                    match prop with
                     | :? IWidget as prop ->
-                        yield getChildMember kv.Key prop
+                        yield getChildMember key prop
                     | _ ->
                         ()
             | _ ->
@@ -93,8 +105,11 @@ type Generator (gui : IGui, meta : IWidget) =
     interface IGenerator<PrefabParam> with
         member this.Generate param =
             [
+                ["open Dap.Gui"]
                 gui.Opens
                 getAliases param
+                [""]
+                getKind param
                 [""]
                 getJson param
                 [""]

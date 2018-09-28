@@ -10,33 +10,38 @@ open Dap.Context
 open Dap.Context.Helper
 open Dap.Gui
 
+[<Literal>]
+let Kind = "TextField"
+
 type Model = Dap.Gui.Widgets.TextField
 type Widget = Eto.Forms.TextBox
 
-type Prefab (owner : IOwner, key : Key) as this =
-    inherit Model (owner, key)
-    let widget : Widget = new Widget ()
-    do (
-        let watcher = IOwner.Create "TextField"
+//SILP: PREFAB_HEADER
+type Prefab (logging : ILogging) =                                    //__SILP__
+    inherit BasePrefab<Prefab, Model, Widget>                         //__SILP__
+        (logging, Kind, Model.Create, new Widget ())                  //__SILP__
+    do (                                                              //__SILP__
+        let owner = base.AsOwner                                      //__SILP__
+        let model = base.Model                                        //__SILP__
+        let widget = base.Widget                                      //__SILP__
         widget.TextBinding.Bind (
             Func<_> (fun () ->
-                this.Text.Value
+                model.Text.Value
             ),
             Action<_> (fun v ->
-                this.Text.SetValue v
+                model.Text.SetValue v
             )
         )|> ignore
-        this.Text.OnValueChanged.AddWatcher watcher "Prefab" (fun evt ->
+        model.Text.OnValueChanged.AddWatcher owner Kind (fun evt ->
             widget.Text <- evt.New
         )
     )
-    //SILP: PREFAB_MIXIN
-    static member Create o k = new Prefab (o, k)                      //__SILP__
-    static member Default () = Prefab.Create noOwner NoKey            //__SILP__
-    static member AddToCombo key (combo : IComboProperty) =           //__SILP__
-        combo.AddCustom<Prefab> (Prefab.Create, key)                  //__SILP__
-    member __.Widget = widget                                         //__SILP__
-    member __.Widget' = widget :> Control                             //__SILP__
-    interface IPrefab<Widget> with                                    //__SILP__
-        member this.Widget = this.Widget                              //__SILP__
-    member this.AsPrefab = this :> IPrefab<Widget>                    //__SILP__
+    //SILP: PREFAB_FOOTER
+    static member Create l = new Prefab (l)                           //__SILP__
+    static member Create () = new Prefab (getLogging ())              //__SILP__
+    static member AddToGroup l key (group : IGroup) =                 //__SILP__
+        let prefab = Prefab.Create l                                  //__SILP__
+        group.Children.AddLink<Model> (prefab.Model, key) |> ignore   //__SILP__
+        prefab                                                        //__SILP__
+    override this.Self = this                                         //__SILP__
+    override __.Spawn l = Prefab.Create l                             //__SILP__
