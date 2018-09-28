@@ -15,7 +15,7 @@ module LayoutConst = Dap.Eto.Layout.Const
 [<Literal>]
 let Kind = "LoginForm"
 
-let LoginFormJson = parseJson """
+let Json = parseJson """
 {
     "prefab": "login",
     "styles": [
@@ -85,7 +85,7 @@ type Prefab (logging : ILogging) =
     let password = InputField.Prefab.AddToGroup logging "password" base.Model
     let login = Button.Prefab.AddToGroup logging "login" base.Model
     do (
-        base.Model.AsProperty.WithJson LoginFormJson |> ignore
+        base.Model.AsProperty.WithJson Json |> ignore
         base.AddChild (title.Widget)
         base.AddChild (name.Widget)
         base.AddChild (password.Widget)

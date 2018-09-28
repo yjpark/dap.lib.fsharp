@@ -15,7 +15,7 @@ module LayoutConst = Dap.Eto.Layout.Const
 [<Literal>]
 let Kind = "InputField"
 
-let InputFieldJson = parseJson """
+let Json = parseJson """
 {
     "prefab": "input_field",
     "styles": [
@@ -46,7 +46,7 @@ type Prefab (logging : ILogging) =
     let label = Label.Prefab.AddToGroup logging "label" base.Model
     let value = TextField.Prefab.AddToGroup logging "value" base.Model
     do (
-        base.Model.AsProperty.WithJson InputFieldJson |> ignore
+        base.Model.AsProperty.WithJson Json |> ignore
         base.AddChild (label.Widget)
         base.AddChild (value.Widget)
     )

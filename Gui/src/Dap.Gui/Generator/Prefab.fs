@@ -28,7 +28,7 @@ type Generator (gui : IGui, meta : IWidget) =
         ]
     let getJson (param : PrefabParam) =
         [
-            sprintf "let %sJson = parseJson \"\"\"" param.Name
+            sprintf "let Json = parseJson \"\"\""
             E.encodeJson 4 meta
             sprintf "\"\"\""
         ]
@@ -63,7 +63,7 @@ type Generator (gui : IGui, meta : IWidget) =
     let getClassSetup (param : PrefabParam) =
         [
             yield sprintf "    do ("
-            yield sprintf "        base.Model.AsProperty.WithJson %sJson |> ignore" param.Name
+            yield sprintf "        base.Model.AsProperty.WithJson Json |> ignore"
             match meta with
             | :? IGroup as group ->
                 for (key, prop) in group.Children.Value do
