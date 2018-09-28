@@ -26,7 +26,7 @@ let compile segments =
             G.AutoOpenModule ("Dap.Local.Types",
                 [
                     G.PlatformOpens
-                    G.LooseJsonRecord (<@ FileSystemArgs @>, [])
+                    G.LooseJsonRecord (<@ FileSystemArgs @>)
                     G.PackInterface <@ ILocalPack @>
                 ]
             )

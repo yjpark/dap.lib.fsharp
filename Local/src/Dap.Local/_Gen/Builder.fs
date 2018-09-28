@@ -1,5 +1,6 @@
 module Dap.Local.Builder
 
+open Dap.Context.Helper
 open Dap.Context.Builder
 open Dap.Prelude
 open Dap.Context
@@ -12,10 +13,10 @@ type FileSystemArgsBuilder () =
     inherit ObjBuilder<FileSystemArgs> ()
     override __.Zero () = FileSystemArgs.Default ()
     [<CustomOperation("app_data")>]
-    member __.AppData (target : FileSystemArgs, appData : string) =
+    member __.AppData (target : FileSystemArgs, (* FileSystemArgs *) appData : string) =
         target.WithAppData appData
     [<CustomOperation("app_cache")>]
-    member __.AppCache (target : FileSystemArgs, appCache : string) =
+    member __.AppCache (target : FileSystemArgs, (* FileSystemArgs *) appCache : string) =
         target.WithAppCache appCache
 
-let fileSystemArgs = FileSystemArgsBuilder ()
+let file_system_args = FileSystemArgsBuilder ()

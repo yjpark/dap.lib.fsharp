@@ -10,9 +10,6 @@
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Shared/Gui/Dsl.fs" />
-    <Compile Include="Shared/Gui/_Gen/Types.fs" />
-    <Compile Include="Shared/Gui/_Gen/Builder.fs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="*.fsproj; **\*.fs; **\*.js" PackagePath="fable" />

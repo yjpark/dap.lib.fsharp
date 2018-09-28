@@ -43,7 +43,7 @@ let compile segments =
         G.File (segments, ["_Gen"; "Types.fs"],
             G.AutoOpenModule ("Dap.Local.Farango.Types",
                 [
-                    G.LooseJsonRecord (<@ DbArgs @>, [])
+                    G.LooseJsonRecord (<@ DbArgs @>)
                 ]
             )
         )

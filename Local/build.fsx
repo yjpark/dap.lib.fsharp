@@ -1,7 +1,7 @@
 #r "paket: groupref Build //"
 #load ".fake/build.fsx/intellisense.fsx"
-#load "src/Fable.Dap.Local/Shared/Gui/Dsl.fs"
 #load "src/Dap.Local/Dsl.fs"
+#load "src/Dap.Local.Console/Dsl.fs"
 #load "src/Dap.Local.Farango/Dsl.fs"
 
 open Fake.Core
@@ -21,16 +21,17 @@ let feed : NuGet.Feed = {
 let projects =
     !! "src/Fable.Dap.Local/*.fsproj"
     ++ "src/Dap.Local/*.fsproj"
+    ++ "src/Dap.Local.Console/*.fsproj"
     ++ "src/Dap.Local.Farango/*.fsproj"
 
 NuGet.create NuGet.release feed projects
 
 DotNet.createPrepares [
-    ["Fable.Dap.Local"], fun _ ->
-        Dap.Local.Gui.Dsl.compile ["src" ; "Fable.Dap.Local"]
-        |> List.iter traceSuccess
     ["Dap.Local"], fun _ ->
         Dap.Local.Dsl.compile ["src" ; "Dap.Local"]
+        |> List.iter traceSuccess
+    ["Dap.Local.Console"], fun _ ->
+        Dap.Local.Console.Dsl.compile ["src" ; "Dap.Local.Console"]
         |> List.iter traceSuccess
     ["Dap.Local.Farango"], fun _ ->
         Dap.Local.Farango.Dsl.compile ["src" ; "Dap.Local.Farango"]

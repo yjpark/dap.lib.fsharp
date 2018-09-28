@@ -1,4 +1,4 @@
-version 5.172.4
+version 5.181.1
 
 source https://nuget.yjpark.org/nuget/dap
 source https://www.nuget.org/api/v2
@@ -7,6 +7,7 @@ framework: auto-detect
 
 nuget Dap.Remote
 nuget Dap.Local.Farango
+nuget Dap.Local.Console
 
 nuget Microsoft.AspNetCore.WebSockets
 nuget FSharp.Data 3.0.0-beta4

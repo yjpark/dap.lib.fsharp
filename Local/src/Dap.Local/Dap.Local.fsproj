@@ -6,7 +6,6 @@
     <Authors>YJ Park</Authors>
     <Version>0.6.0</Version>
     <Description>Local Libs</Description>
-    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Dsl.fs" />
@@ -15,9 +14,6 @@
     <Compile Include="Runtime.fs" />
     <Compile Include="Shell.fs" />
     <Compile Include="FileSystem.fs" />
-    <Compile Include="../Fable.Dap.Local/Shared/Gui/Dsl.fs" />
-    <Compile Include="../Fable.Dap.Local/Shared/Gui/_Gen/Types.fs" />
-    <Compile Include="../Fable.Dap.Local/Shared/Gui/_Gen/Builder.fs" />
     <Compile Include="Storage/Base/Types.fs" />
     <Compile Include="Storage/Base/Tasks.fs" />
     <Compile Include="Storage/Base/Logic.fs" />

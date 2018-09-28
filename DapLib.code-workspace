@@ -7,6 +7,15 @@
 			"path": "Remote"
 		},
 		{
+			"path": "Gui"
+		},
+		{
+			"path": "Eto"
+		},
+		{
+			"path": "Avalonia"
+		},
+		{
 			"path": "Forms"
 		},
 		{
@@ -15,6 +24,9 @@
 		{
 			"path": "Farango"
 		}
+		{
+			"path": "Console"
+		},
 		{
             "name": "Farango (External)",
 			"path": "External/Farango"
