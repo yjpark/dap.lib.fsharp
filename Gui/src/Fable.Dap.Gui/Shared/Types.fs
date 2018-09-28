@@ -9,9 +9,8 @@ type IPrefab =
 
 type IPrefab<'model when 'model :> IWidget> =
     inherit IPrefab
-    inherit IContext<'model>
+    abstract Model : 'model with get
 
 type IPrefab<'model, 'widget when 'model :> IWidget> =
     inherit IPrefab<'model>
-    abstract Model : 'model with get
     abstract Widget : 'widget with get
