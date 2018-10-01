@@ -19,7 +19,7 @@ type DbArgs = {
         }
     static member Default () =
         DbArgs.Create
-            (* DbArgs *) (* uri *) ""
+            "" (* DbArgs *) (* uri *)
     static member SetUri ((* DbArgs *) uri : string) (this : DbArgs) =
         {this with Uri = uri}
     static member UpdateUri ((* DbArgs *) update : string -> string) (this : DbArgs) =
@@ -27,7 +27,7 @@ type DbArgs = {
     static member JsonEncoder : JsonEncoder<DbArgs> =
         fun (this : DbArgs) ->
             E.object [
-                (* DbArgs *) "uri", E.string this.Uri
+                "uri", E.string (* DbArgs *) this.Uri
             ]
     static member JsonDecoder : JsonDecoder<DbArgs> =
         D.decode DbArgs.Create

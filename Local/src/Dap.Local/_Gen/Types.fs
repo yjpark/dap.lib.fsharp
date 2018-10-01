@@ -22,8 +22,8 @@ type FileSystemArgs = {
         }
     static member Default () =
         FileSystemArgs.Create
-            (* FileSystemArgs *) (* appData *) ""
-            (* FileSystemArgs *) (* appCache *) ""
+            "" (* FileSystemArgs *) (* appData *)
+            "" (* FileSystemArgs *) (* appCache *)
     static member SetAppData ((* FileSystemArgs *) appData : string) (this : FileSystemArgs) =
         {this with AppData = appData}
     static member SetAppCache ((* FileSystemArgs *) appCache : string) (this : FileSystemArgs) =
@@ -35,8 +35,8 @@ type FileSystemArgs = {
     static member JsonEncoder : JsonEncoder<FileSystemArgs> =
         fun (this : FileSystemArgs) ->
             E.object [
-                (* FileSystemArgs *) "app_data", E.string this.AppData
-                (* FileSystemArgs *) "app_cache", E.string this.AppCache
+                "app_data", E.string (* FileSystemArgs *) this.AppData
+                "app_cache", E.string (* FileSystemArgs *) this.AppCache
             ]
     static member JsonDecoder : JsonDecoder<FileSystemArgs> =
         D.decode FileSystemArgs.Create
