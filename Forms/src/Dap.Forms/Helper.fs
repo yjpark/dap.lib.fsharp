@@ -16,10 +16,7 @@ type ConsoleSinkArgs with
     static member FormsDefault () =
         if isRealForms () then
             let device = Device.RuntimePlatform
-            if (device = Device.macOS || device = Device.iOS || device = Device.Android) then
-                false
-            else
-                true
+            not (device = Device.macOS || device = Device.iOS || device = Device.Android)
         else
             true
         |> function
