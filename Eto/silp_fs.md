@@ -3,6 +3,19 @@
 type Prefab (logging : ILogging) =
     inherit BasePrefab<Prefab, Model, Widget>
         (logging, Kind, Model.Create, new Widget ())
+```
+
+# PREFAB_MIDDLE #
+```F#
+do (
+    let owner = base.AsOwner
+    let model = base.Model
+    let widget = base.Widget
+```
+
+# PREFAB_HEADER_MIDDLE #
+```F#
+//SILP: PREFAB_HEADER
     do (
         let owner = base.AsOwner
         let model = base.Model

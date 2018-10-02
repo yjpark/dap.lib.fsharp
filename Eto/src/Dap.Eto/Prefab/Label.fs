@@ -7,6 +7,7 @@ open Eto.Forms
 open Dap.Prelude
 open Dap.Context
 open Dap.Gui
+open Dap.Gui.Internal
 
 [<Literal>]
 let Kind = "Label"
@@ -14,7 +15,7 @@ let Kind = "Label"
 type Model = Dap.Gui.Widgets.Label
 type Widget = Eto.Forms.Label
 
-//SILP: PREFAB_HEADER
+//SILP: PREFAB_HEADER_MIDDLE
 type Prefab (logging : ILogging) =                                    //__SILP__
     inherit BasePrefab<Prefab, Model, Widget>                         //__SILP__
         (logging, Kind, Model.Create, new Widget ())                  //__SILP__
@@ -22,7 +23,7 @@ type Prefab (logging : ILogging) =                                    //__SILP__
         let owner = base.AsOwner                                      //__SILP__
         let model = base.Model                                        //__SILP__
         let widget = base.Widget                                      //__SILP__
-        model.Text.OnValueChanged.AddWatcher owner Kind (fun evt ->
+        model.Text.OnChanged.AddWatcher owner Kind (fun evt ->
             widget.Text <- evt.New
         )
     )

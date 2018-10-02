@@ -1,5 +1,5 @@
 [<AutoOpen>]
-module Dap.Gui.BasePrefab
+module Dap.Gui.Internal.BasePrefab
 
 open Dap.Prelude
 open Dap.Context

@@ -7,8 +7,8 @@ open Eto.Forms
 
 open Dap.Prelude
 open Dap.Context
-open Dap.Context.Helper
 open Dap.Gui
+open Dap.Gui.Internal
 
 [<Literal>]
 let Kind = "TextField"
@@ -16,7 +16,7 @@ let Kind = "TextField"
 type Model = Dap.Gui.Widgets.TextField
 type Widget = Eto.Forms.TextBox
 
-//SILP: PREFAB_HEADER
+//SILP: PREFAB_HEADER_MIDDLE
 type Prefab (logging : ILogging) =                                    //__SILP__
     inherit BasePrefab<Prefab, Model, Widget>                         //__SILP__
         (logging, Kind, Model.Create, new Widget ())                  //__SILP__
@@ -32,7 +32,7 @@ type Prefab (logging : ILogging) =                                    //__SILP__
                 model.Text.SetValue v
             )
         )|> ignore
-        model.Text.OnValueChanged.AddWatcher owner Kind (fun evt ->
+        model.Text.OnChanged.AddWatcher owner Kind (fun evt ->
             widget.Text <- evt.New
         )
     )

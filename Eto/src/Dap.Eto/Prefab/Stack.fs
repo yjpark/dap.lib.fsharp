@@ -7,8 +7,8 @@ open Eto.Forms
 
 open Dap.Prelude
 open Dap.Context
-open Dap.Context.Helper
 open Dap.Gui
+open Dap.Gui.Internal
 
 module LayoutConst = Dap.Eto.Layout.Const
 
@@ -18,7 +18,7 @@ let Kind = "Stack"
 type Model = Dap.Gui.Widgets.Group
 type Widget = Eto.Forms.StackLayout
 
-//SILP: PREFAB_HEADER
+//SILP: PREFAB_HEADER_MIDDLE
 type Prefab (logging : ILogging) =                                    //__SILP__
     inherit BasePrefab<Prefab, Model, Widget>                         //__SILP__
         (logging, Kind, Model.Create, new Widget ())                  //__SILP__
@@ -26,7 +26,7 @@ type Prefab (logging : ILogging) =                                    //__SILP__
         let owner = base.AsOwner                                      //__SILP__
         let model = base.Model                                        //__SILP__
         let widget = base.Widget                                      //__SILP__
-        model.Layout.OnValueChanged.AddWatcher owner Kind (fun evt ->
+        model.Layout.OnChanged.AddWatcher owner Kind (fun evt ->
             match evt.New with
             | LayoutConst.Horizontal_Stack ->
                 widget.Orientation <- Orientation.Horizontal

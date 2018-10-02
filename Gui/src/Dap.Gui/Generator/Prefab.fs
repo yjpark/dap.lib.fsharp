@@ -41,23 +41,25 @@ type Generator (gui : IGui, meta : IWidget) =
             sprintf "type Prefab (logging : ILogging) ="
             sprintf "    inherit %s.Prefab (logging)" parent
         ]
-    let getChildAdder (key : string) (child : IWidget) =
+    let getChildAdder (child : IWidget) =
+        let key = child.Spec.Key
         let prefab = getChildPrefab child
         sprintf "    let %s = %s.Prefab.AddToGroup logging \"%s\" base.Model" key.AsCodeVariableName prefab key
     let getClassFields (param : PrefabParam) =
         [
             match meta with
             | :? IGroup as group ->
-                for (key, prop) in group.Children.Value do
+                for prop in group.Children.Value do
                     match prop with
                     | :? IWidget as prop ->
-                        yield getChildAdder key prop
+                        yield getChildAdder prop
                     | _ ->
                         ()
             | _ ->
                 ()
         ]
-    let getChildSetup (key : string) (child : IWidget) =
+    let getChildSetup (child : IWidget) =
+        let key = child.Spec.Key
         let prefab = getChildPrefab child
         sprintf "        base.AddChild (%s.Widget)" key.AsCodeVariableName
     let getClassSetup (param : PrefabParam) =
@@ -66,10 +68,10 @@ type Generator (gui : IGui, meta : IWidget) =
             yield sprintf "        base.Model.AsProperty.WithJson Json |> ignore"
             match meta with
             | :? IGroup as group ->
-                for (key, prop) in group.Children.Value do
+                for prop in group.Children.Value do
                     match prop with
                     | :? IWidget as prop ->
-                        yield getChildSetup key prop
+                        yield getChildSetup prop
                     | _ ->
                         ()
             | _ ->
@@ -86,17 +88,18 @@ type Generator (gui : IGui, meta : IWidget) =
             "        prefab"
 
         ]
-    let getChildMember (key : string) (child : IWidget) =
+    let getChildMember (child : IWidget) =
+        let key = child.Spec.Key
         let prefab = getChildPrefab child
         sprintf "    member __.%s : %s.Prefab = %s" key.AsCodeMemberName prefab key.AsCodeVariableName
     let getClassMembers (param : PrefabParam) =
         [
             match meta with
             | :? IGroup as group ->
-                for (key, prop) in group.Children.Value do
+                for prop in group.Children.Value do
                     match prop with
                     | :? IWidget as prop ->
-                        yield getChildMember key prop
+                        yield getChildMember prop
                     | _ ->
                         ()
             | _ ->
