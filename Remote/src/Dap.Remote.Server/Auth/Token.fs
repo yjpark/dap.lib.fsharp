@@ -26,13 +26,17 @@ type Record = {
         Expiration = expiration
     }
     static member JsonDecoder =
-        D.decode Record.Create
-        |> D.required "jti" D.string
-        |> D.required "sub" D.string
-        |> D.required "key" D.string
-        |> D.optional "dat" D.value E.nil
-        |> D.required "iat" D.long
-        |> D.required "exp" D.long
+        D.object (fun get ->
+            {
+                Guid = get.Required.Field "jti" D.string
+                OwnerKey = get.Required.Field "sub" D.string
+                CryptoKey = get.Required.Field "key" D.string
+                Data = get.Optional.Field "dat" D.value
+                    |> Option.defaultValue E.nil
+                Time = get.Required.Field "iat" D.long
+                Expiration = get.Required.Field "exp" D.long
+            }
+        )
     static member JsonEncoder (this : Record) =
         E.object [
             "jti", E.string this.Guid
@@ -58,7 +62,7 @@ let toJwt (token : Record) =
 let decodeJwt (runner : IRunner) (jwt : string) : Result<Record, string> =
     try
         JWT.Decode (jwt, (unbox null), JwsAlgorithm.none)
-        |> D.decodeString Record.JsonDecoder
+        |> D.fromString Record.JsonDecoder
     with e ->
         logError runner "JWT" "Decode_Failed" e
         Error e.Message

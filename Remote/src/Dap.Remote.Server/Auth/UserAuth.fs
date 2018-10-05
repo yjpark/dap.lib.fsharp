@@ -29,11 +29,15 @@ type Record = {
         Tokens = tokens
     }
     static member JsonDecoder =
-        D.decode Record.Create
-        |> D.required "_key" D.string
-        |> D.required "user_guid" D.string
-        |> D.required "pass_hash" D.string
-        |> D.optional "tokens" Tokens.JsonDecoder []
+        D.object (fun get ->
+            {
+                UserKey = get.Required.Field "_key" D.string
+                UserGuid = get.Required.Field "user_guid" D.string
+                PassHash = get.Required.Field "pass_hash" D.string
+                Tokens = get.Optional.Field "tokens" Tokens.JsonDecoder
+                    |> Option.defaultValue []
+            }
+        )
     static member JsonEncoder (this : Record) =
         E.object [
             "_key", E.string this.UserKey
@@ -51,7 +55,7 @@ let getByUserKeyAsync' (collection : string) (userKey : string) (pack : IDbPack)
         getDocument pack.Conn collection userKey
         |> Async.StartAsTask
     return doc
-    |> Result.bind (D.decodeString Record.JsonDecoder)
+    |> Result.bind (D.fromString Record.JsonDecoder)
 }
 
 let getByUserKeyAsync userKey app = getByUserKeyAsync' Collection userKey app

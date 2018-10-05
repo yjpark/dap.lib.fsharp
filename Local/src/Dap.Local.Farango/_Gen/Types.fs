@@ -30,11 +30,14 @@ type DbArgs = {
                 "uri", E.string (* DbArgs *) this.Uri
             ]
     static member JsonDecoder : JsonDecoder<DbArgs> =
-        D.decode DbArgs.Create
-        |> D.optional (* DbArgs *) "uri" D.string ""
+        D.object (fun get ->
+            {
+                Uri = get.Optional.Field (* DbArgs *) "uri" D.string
+                    |> Option.defaultValue ""
+            }
+        )
     static member JsonSpec =
-        FieldSpec.Create<DbArgs>
-            DbArgs.JsonEncoder DbArgs.JsonDecoder
+        FieldSpec.Create<DbArgs> DbArgs.JsonEncoder DbArgs.JsonDecoder
     interface IJson with
         member this.ToJson () = DbArgs.JsonEncoder this
     interface IObj

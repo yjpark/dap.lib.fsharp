@@ -40,10 +40,13 @@ type Query = {
             BindVars = v
         }
     static member JsonDecoder : JsonDecoder<Query> =
-        D.decode Query.Create
-        |> D.required "query" D.string
-        |> D.required "batchSize" (D.option D.int)
-        |> D.required "bindVars" (D.option D.value)
+        D.object (fun get ->
+            {
+                Query = get.Required.Field "query" D.string
+                BatchSize = get.Required.Field "batchSize" (D.option D.int)
+                BindVars = get.Required.Field "bindVars" (D.option D.value)
+            }
+        )
     static member JsonEncoder : JsonEncoder<Query> =
         fun this ->
             E.object [

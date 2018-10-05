@@ -39,12 +39,16 @@ type FileSystemArgs = {
                 "app_cache", E.string (* FileSystemArgs *) this.AppCache
             ]
     static member JsonDecoder : JsonDecoder<FileSystemArgs> =
-        D.decode FileSystemArgs.Create
-        |> D.optional (* FileSystemArgs *) "app_data" D.string ""
-        |> D.optional (* FileSystemArgs *) "app_cache" D.string ""
+        D.object (fun get ->
+            {
+                AppData = get.Optional.Field (* FileSystemArgs *) "app_data" D.string
+                    |> Option.defaultValue ""
+                AppCache = get.Optional.Field (* FileSystemArgs *) "app_cache" D.string
+                    |> Option.defaultValue ""
+            }
+        )
     static member JsonSpec =
-        FieldSpec.Create<FileSystemArgs>
-            FileSystemArgs.JsonEncoder FileSystemArgs.JsonDecoder
+        FieldSpec.Create<FileSystemArgs> FileSystemArgs.JsonEncoder FileSystemArgs.JsonDecoder
     interface IJson with
         member this.ToJson () = FileSystemArgs.JsonEncoder this
     interface IObj
