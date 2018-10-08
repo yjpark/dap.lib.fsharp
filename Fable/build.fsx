@@ -8,7 +8,7 @@ module NuGet = Dap.Build.NuGet
 
 let feed : NuGet.Feed = {
     NuGet.Source = "https://nuget.yjpark.org/nuget/dap"
-    NuGet.ApiKey = NuGet.Plain "wnHZEG9N_OrmO3XKoAGT"
+    NuGet.ApiKey = NuGet.Environment "API_KEY_nuget_yjpark_org"
 }
 
 let projects =
