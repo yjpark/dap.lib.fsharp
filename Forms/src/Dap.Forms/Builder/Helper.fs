@@ -1,5 +1,5 @@
 [<AutoOpen>]
-module Dap.Eto.Builder.Helper
+module Dap.Forms.Builder.Helper
 
 open Dap.Prelude
 open Dap.Context

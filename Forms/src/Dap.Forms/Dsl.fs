@@ -27,8 +27,8 @@ let compile segments =
                 ]
             )
         )
-        G.File (segments, ["_Gen"; "Builder.fs"],
-            G.BuilderModule ("Dap.Forms.Builder",
+        G.File (segments, ["_Gen"; "Builder/Types.fs"],
+            G.AutoOpenModule ("Dap.Forms.Builder.Types",
                 [
                     //G.ValueBuilder <@ FileSystemArgs @>
                 ]

@@ -12,6 +12,8 @@ nuget Dap.Remote.Console
 nuget Dap.Remote.Web
 
 nuget Dap.Local.Console
+nuget Dap.Gui
+nuget Dap.Forms
 nuget Dap.Eto
 nuget Dap.Eto.Gtk
 
@@ -26,6 +28,7 @@ group Build
     nuget Dap.Platform
     nuget Dap.Gui
     nuget Dap.Eto
+    nuget Dap.Forms
 
     clitool dotnet-sourcelink
     nuget Microsoft.SourceLink.GitHub 1.0.0-beta-62925-02

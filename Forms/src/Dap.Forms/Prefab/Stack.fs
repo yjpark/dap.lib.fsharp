@@ -1,9 +1,8 @@
 [<AutoOpen>]
 [<RequireQualifiedAccess>]
-module Dap.Eto.Prefab.Stack
+module Dap.Forms.Prefab.Stack
 
-open System
-open Eto.Forms
+open Xamarin.Forms
 
 open Dap.Prelude
 open Dap.Context
@@ -11,10 +10,10 @@ open Dap.Gui
 open Dap.Gui.Internal
 
 [<Literal>]
-let Kind = "Stack"
+let Kind = "Label"
 
 type Model = Dap.Gui.Widgets.Group
-type Widget = Eto.Forms.StackLayout
+type Widget = Xamarin.Forms.StackLayout
 
 //SILP: PREFAB_HEADER_MIDDLE
 type Prefab (logging : ILogging) =                                    //__SILP__
@@ -27,17 +26,15 @@ type Prefab (logging : ILogging) =                                    //__SILP__
         model.Layout.OnChanged.AddWatcher owner Kind (fun evt ->
             match evt.New with
             | LayoutConst.Horizontal_Stack ->
-                widget.Orientation <- Orientation.Horizontal
+                widget.Orientation <- StackOrientation.Horizontal
             | LayoutConst.Vertical_Stack ->
-                widget.Orientation <- Orientation.Vertical
+                widget.Orientation <- StackOrientation.Vertical
             | _ ->
                 logError owner "Stack" "Invalid_Layout" evt.New
         )
     )
-    member this.AddChild (child : Control, expand : bool) =
-        this.Widget.Items.Add <| new StackLayoutItem (child, expand)
-    member this.AddChild (child : Control) =
-        this.Widget.Items.Add <| new StackLayoutItem (child)
+    member this.AddChild (child : View) =
+        this.Widget.Children.Add child
     //SILP: PREFAB_FOOTER
     static member Create l = new Prefab (l)                           //__SILP__
     static member Create () = new Prefab (getLogging ())              //__SILP__

@@ -1,4 +1,4 @@
-module Dap.Eto.Generator.Gui
+module Dap.Forms.Generator.Gui
 
 open Dap.Prelude
 open Dap.Context.Generator
@@ -10,9 +10,9 @@ with
     interface IGui with
         member __.Opens =
             [
-                "open Eto.Forms"
-                "open Dap.Eto"
-                "open Dap.Eto.Prefab"
+                "open Xamarin.Forms"
+                "open Dap.Forms"
+                "open Dap.Forms.Prefab"
             ]
         member __.Aliases =
             [

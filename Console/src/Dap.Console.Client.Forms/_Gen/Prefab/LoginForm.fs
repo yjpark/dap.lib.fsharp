@@ -6,11 +6,9 @@ open Dap.Prelude
 open Dap.Context
 open Dap.Context.Helper
 open Dap.Gui
-open Eto.Forms
-open Dap.Eto
-open Dap.Eto.Prefab
-
-module LayoutConst = Dap.Eto.Layout.Const
+open Xamarin.Forms
+open Dap.Forms
+open Dap.Forms.Prefab
 
 [<Literal>]
 let Kind = "LoginForm"

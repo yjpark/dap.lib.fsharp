@@ -8,6 +8,7 @@ framework: auto-detect
 nuget FSharp.Core
 
 nuget Dap.Local
+nuget Dap.Gui
 
 nuget Elmish.XamarinForms
 

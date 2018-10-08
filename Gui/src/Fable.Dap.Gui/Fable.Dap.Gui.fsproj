@@ -13,6 +13,7 @@
     <Compile Include="Shared/_Gen/Widgets.fs" />
     <Compile Include="Shared/_Gen/Builder/Widgets.fs" />
     <Compile Include="Shared/_Gen/Builder/Internal/Base.fs" />
+    <Compile Include="Shared/LayoutConst.fs" />
     <Compile Include="Shared/Builder/Helper.fs" />
     <Compile Include="Shared/Types.fs" />
     <Compile Include="Shared/Internal/BasePrefab.fs" />

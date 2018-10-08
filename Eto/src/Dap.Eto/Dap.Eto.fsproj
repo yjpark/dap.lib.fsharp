@@ -8,7 +8,6 @@
     <Description>Dap with Eto</Description>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Layout/Const.fs" />
     <Compile Include="Builder/Helper.fs" />
     <Compile Include="Prefab/Label.fs" />
     <Compile Include="Prefab/Button.fs" />

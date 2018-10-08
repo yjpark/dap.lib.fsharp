@@ -10,8 +10,6 @@ open Eto.Forms
 open Dap.Eto
 open Dap.Eto.Prefab
 
-module LayoutConst = Dap.Eto.Layout.Const
-
 [<Literal>]
 let Kind = "InputField"
 

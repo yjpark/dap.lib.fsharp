@@ -7,8 +7,6 @@ open Dap.Context.Generator
 open Dap.Platform
 open Dap.Platform.Meta
 open Dap.Platform.Generator
-open Dap.Gui.Dsl
-open Dap.Gui.Builder
 
 (*
 let Login =

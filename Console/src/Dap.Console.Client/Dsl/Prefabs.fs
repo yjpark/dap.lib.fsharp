@@ -7,8 +7,6 @@ open Dap.Context.Generator
 open Dap.Platform
 open Dap.Gui
 open Dap.Gui.Builder
-open Dap.Eto.Builder
-open Dap.Eto.Generator
 
 let inputField labelText =
     h_stack {
@@ -45,13 +43,3 @@ let LoginForm =
             }
         )
     }
-
-let compile segments =
-    [
-        G.PrefabFile (segments, ["_Gen" ; "Prefab" ; "InputField.fs"],
-            "Dap.Console.Client.Prefab.InputField", <@ InputField @>
-        )
-        G.PrefabFile (segments, ["_Gen" ; "Prefab" ; "LoginForm.fs"],
-            "Dap.Console.Client.Prefab.LoginForm", <@ LoginForm @>
-        )
-    ]

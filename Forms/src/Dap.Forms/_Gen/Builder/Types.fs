@@ -1,6 +1,6 @@
-module Dap.Forms.Builder
+[<AutoOpen>]
+module Dap.Forms.Builder.Types
 
 open Dap.Prelude
 open Dap.Context
 open Dap.Context.Helper
-open Dap.Context.Builder
