@@ -52,7 +52,7 @@ let inline handleInternalEvt evt : ActorOperate<'pack, 'route, 'model, 'msg> =
     | RunProgram ->
         runProgram ()
 
-let inline update () : ActorUpdate<View<'pack, 'route, 'model, 'msg>, Args<'pack, 'route, 'model, 'msg>, Model<'route, 'model, 'msg>, Msg<'route, 'model, 'msg>, Req<'route>, Evt> =
+let inline update () : Update<View<'pack, 'route, 'model, 'msg>, Model<'route, 'model, 'msg>, Msg<'route, 'model, 'msg>> =
     fun runner msg model ->
         match msg with
         | AppReq req -> handleReq req

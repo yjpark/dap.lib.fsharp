@@ -1,4 +1,4 @@
-﻿namespace SuperClip.macOS
+﻿namespace Dap.Console.Client
 open System
 open Foundation
 open AppKit

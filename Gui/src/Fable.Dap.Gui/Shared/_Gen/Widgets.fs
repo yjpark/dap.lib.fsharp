@@ -3,7 +3,6 @@ module Dap.Gui.Widgets
 
 open Dap.Prelude
 open Dap.Context
-open Dap.Context.Helper
 
 (*
  * Generated: <ComboInterface>
@@ -52,7 +51,7 @@ type Group (owner : IOwner, key : Key) =
     static member Create o k = new Group (o, k)
     static member Default () = Group.Create noOwner NoKey
     static member AddToCombo key (combo : IComboProperty) =
-        combo.AddCustom<Group>(Group.Create, key)
+        combo.AddCustom<Group> (Group.Create, key)
     override this.Self = this
     override __.Spawn o k = Group.Create o k
     override __.SyncTo t = target.SyncTo t.Target
@@ -86,7 +85,7 @@ type Label (owner : IOwner, key : Key) =
     static member Create o k = new Label (o, k)
     static member Default () = Label.Create noOwner NoKey
     static member AddToCombo key (combo : IComboProperty) =
-        combo.AddCustom<Label>(Label.Create, key)
+        combo.AddCustom<Label> (Label.Create, key)
     override this.Self = this
     override __.Spawn o k = Label.Create o k
     override __.SyncTo t = target.SyncTo t.Target
@@ -119,7 +118,7 @@ type Button (owner : IOwner, key : Key) =
     static member Create o k = new Button (o, k)
     static member Default () = Button.Create noOwner NoKey
     static member AddToCombo key (combo : IComboProperty) =
-        combo.AddCustom<Button>(Button.Create, key)
+        combo.AddCustom<Button> (Button.Create, key)
     override this.Self = this
     override __.Spawn o k = Button.Create o k
     override __.SyncTo t = target.SyncTo t.Target
@@ -156,7 +155,7 @@ type TextField (owner : IOwner, key : Key) =
     static member Create o k = new TextField (o, k)
     static member Default () = TextField.Create noOwner NoKey
     static member AddToCombo key (combo : IComboProperty) =
-        combo.AddCustom<TextField>(TextField.Create, key)
+        combo.AddCustom<TextField> (TextField.Create, key)
     override this.Self = this
     override __.Spawn o k = TextField.Create o k
     override __.SyncTo t = target.SyncTo t.Target

@@ -34,7 +34,7 @@ let private handleReq req : ActorOperate<'pack, 'model, 'msg> =
     match req with
     | DoRun a -> doRun req a
 
-let private update : ActorUpdate<View<'pack, 'model, 'msg>, Args<'pack, 'model, 'msg>, Model<'model, 'msg>, Msg<'model, 'msg>, Req, Evt> =
+let private update : Update<View<'pack, 'model, 'msg>, Model<'model, 'msg>, Msg<'model, 'msg>> =
     fun runner msg model ->
         match msg with
         | AppReq req -> handleReq req

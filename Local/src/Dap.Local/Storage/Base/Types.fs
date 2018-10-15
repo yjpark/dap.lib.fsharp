@@ -79,4 +79,4 @@ type Agent<'content, 'v> (param) =
     override this.Runner = this
     static member Spawn (param) = new Agent<'content, 'v> (param)
 
-type ActorOperate<'content, 'v> = ActorOperate<Agent<'content, 'v>, Args<'content, 'v>, Model, Msg<'v>, Req<'v>, Evt<'v>>
+type ActorOperate<'content, 'v> = Operate<Agent<'content, 'v>, Model, Msg<'v>>

@@ -2,11 +2,10 @@
 [<RequireQualifiedAccess>]
 module Dap.Console.Client.Prefab.LoginForm
 
+open Xamarin.Forms
 open Dap.Prelude
 open Dap.Context
-open Dap.Context.Helper
 open Dap.Gui
-open Xamarin.Forms
 open Dap.Forms
 open Dap.Forms.Prefab
 

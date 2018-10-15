@@ -4,7 +4,6 @@ module Dap.Console.Client.Prefab.InputField
 
 open Dap.Prelude
 open Dap.Context
-open Dap.Context.Helper
 open Dap.Gui
 open Eto.Forms
 open Dap.Eto

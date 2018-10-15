@@ -3,7 +3,6 @@ module Dap.Gui.Builder.Widgets
 
 open Dap.Prelude
 open Dap.Context
-open Dap.Context.Helper
 open Dap.Context.Builder
 open Dap.Gui
 

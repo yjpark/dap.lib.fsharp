@@ -88,4 +88,4 @@ type Part<'actorMsg, 'res when 'actorMsg :> IMsg> (param) =
             this.Post <| DoPull callback
 
 type PartOperate<'actorMsg, 'res when 'actorMsg :> IMsg> =
-    ActorOperate<Part<'actorMsg, 'res>, Args<'res>, Model<'res>, Msg<'res>, Req, Evt<'res>>
+    Operate<Part<'actorMsg, 'res>, Model<'res>, Msg<'res>>

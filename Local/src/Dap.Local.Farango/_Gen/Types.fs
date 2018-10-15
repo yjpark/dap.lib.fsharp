@@ -3,7 +3,6 @@ module Dap.Local.Farango.Types
 
 open Dap.Prelude
 open Dap.Context
-open Dap.Context.Helper
 
 (*
  * Generated: <Record>
@@ -37,7 +36,7 @@ type DbArgs = {
             }
         )
     static member JsonSpec =
-        FieldSpec.Create<DbArgs> DbArgs.JsonEncoder DbArgs.JsonDecoder
+        FieldSpec.Create<DbArgs> (DbArgs.JsonEncoder, DbArgs.JsonDecoder)
     interface IJson with
         member this.ToJson () = DbArgs.JsonEncoder this
     interface IObj

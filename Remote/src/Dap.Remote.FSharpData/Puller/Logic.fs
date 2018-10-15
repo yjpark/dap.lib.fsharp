@@ -106,7 +106,7 @@ let private handleInternalEvt evt : PartOperate<'actorMsg, 'res> =
         | DoInit -> doInit
         <| runner <| (model, [])
 
-let private update : ActorUpdate<Part<'actorMsg, 'res>, Args<'res>, Model<'res>, Msg<'res>, Req, Evt<'res>> =
+let private update : Update<Part<'actorMsg, 'res>, Model<'res>, Msg<'res>> =
     fun runner msg model ->
         match msg with
         | InternalEvt evt -> handleInternalEvt evt

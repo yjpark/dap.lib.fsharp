@@ -2,7 +2,6 @@
 module Dap.Gui.Builder.Helper
 
 open Dap.Context
-open Dap.Context.Helper
 open Dap.Gui
 module Base = Dap.Gui.Builder.Internal.Base
 

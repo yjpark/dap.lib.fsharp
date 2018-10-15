@@ -1,7 +1,6 @@
 [<AutoOpen>]
 module Dap.Local.Types
 
-open Dap.Context.Helper
 open Dap.Prelude
 open Dap.Context
 open Dap.Platform
@@ -48,7 +47,7 @@ type FileSystemArgs = {
             }
         )
     static member JsonSpec =
-        FieldSpec.Create<FileSystemArgs> FileSystemArgs.JsonEncoder FileSystemArgs.JsonDecoder
+        FieldSpec.Create<FileSystemArgs> (FileSystemArgs.JsonEncoder, FileSystemArgs.JsonDecoder)
     interface IJson with
         member this.ToJson () = FileSystemArgs.JsonEncoder this
     interface IObj
