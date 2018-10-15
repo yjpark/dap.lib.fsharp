@@ -42,7 +42,7 @@ type Generator (gui : IGui, meta : IWidget) =
             sprintf "    inherit %s.Prefab (logging)" parent
         ]
     let getChildAdder (child : IWidget) =
-        let key = child.Spec.Key
+        let key = child.Spec0.Key
         let prefab = getChildPrefab child
         sprintf "    let %s = %s.Prefab.AddToGroup logging \"%s\" base.Model" key.AsCodeVariableName prefab key
     let getClassFields (param : PrefabParam) =
@@ -59,7 +59,7 @@ type Generator (gui : IGui, meta : IWidget) =
                 ()
         ]
     let getChildSetup (child : IWidget) =
-        let key = child.Spec.Key
+        let key = child.Spec0.Key
         let prefab = getChildPrefab child
         sprintf "        base.AddChild (%s.Widget)" key.AsCodeVariableName
     let getClassSetup (param : PrefabParam) =
@@ -89,7 +89,7 @@ type Generator (gui : IGui, meta : IWidget) =
 
         ]
     let getChildMember (child : IWidget) =
-        let key = child.Spec.Key
+        let key = child.Spec0.Key
         let prefab = getChildPrefab child
         sprintf "    member __.%s : %s.Prefab = %s" key.AsCodeMemberName prefab key.AsCodeVariableName
     let getClassMembers (param : PrefabParam) =
