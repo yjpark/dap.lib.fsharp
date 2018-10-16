@@ -90,6 +90,9 @@ let inline initProgram (initer : Initer<'route, 'model, 'msg>) (args : Args<'pac
     |> Program.withSubscription subscribe
     |> Program.toNavigable (parseHash args.Parse) route
     |> Program.withReact args.Root
+    |> Program.withErrorHandler (fun (text, e) ->
+        logException runner "Program" "Error" text e
+    )
 
 let inline init () : ActorInit<Args<'pack, 'route, 'model, 'msg>, Model<'route, 'model, 'msg>, Msg<'route, 'model, 'msg>> =
     fun initer args ->
