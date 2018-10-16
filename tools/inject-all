@@ -3,13 +3,13 @@
 echo -en \\0033c
 
 cd `dirname $0`
-cd ../Farango ; fake build -t Inject
-cd ../Local ; fake build -t Inject
-cd ../Remote ; fake build -t Inject
-cd ../Fable ; fake build -t Inject
-cd ../Gui ; fake build -t Inject
-cd ../Eto ; fake build -t Inject
-cd ../Forms ; fake build -t Inject
+cd ../Farango && fake build -t Inject && \
+cd ../Local && fake build -t Inject && \
+cd ../Remote && fake build -t Inject && \
+cd ../Fable && fake build -t Inject && \
+cd ../Gui && fake build -t Inject && \
+cd ../Eto && fake build -t Inject && \
+cd ../Forms && fake build -t Inject
 
 
 

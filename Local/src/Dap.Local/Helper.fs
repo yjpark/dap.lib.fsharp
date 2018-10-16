@@ -6,7 +6,7 @@ open Dap.Platform
 
 type FileSystemArgs with
     static member LocalDefault () =
-        FileSystemArgs.Create "" ""
+        FileSystemArgs.Create ("", "")
 
 
 type FileSinkArgs with
@@ -14,13 +14,13 @@ type FileSinkArgs with
         let timestamp = getNow' () |> instantToText
         let timestamp = timestamp.Replace (":", "_")
         let path = System.IO.Path.Combine (args.AppCache, "log", timestamp, filename)
-        FileSinkArgs.Create LogLevelInformation path (Some RollingInterval.Daily)
+        FileSinkArgs.Create (LogLevelInformation, path, Some RollingInterval.Daily)
 
 type LoggingArgs with
     static member LocalDefault (filename : string) =
         let consoleSink = ConsoleSinkArgs.Default ()
         let fileSink = FileSinkArgs.LocalDefault (FileSystemArgs.LocalDefault ()) filename
-        LoggingArgs.Create (Some consoleSink) <| Some fileSink
+        LoggingArgs.Create (Some consoleSink, Some fileSink)
     static member LocalCreate (filename : string, consoleLogLevel : LogLevel) =
         LoggingArgs.LocalDefault filename
         |> fun l -> l.WithConsoleMinLevel consoleLogLevel

@@ -11,14 +11,18 @@ open Dap.Context
 type DbArgs = {
     Uri : (* DbArgs *) string
 } with
-    static member Create uri
-            : DbArgs =
+    static member Create
+        (
+            ?uri : string
+        ) : DbArgs =
         {
             Uri = (* DbArgs *) uri
+                |> Option.defaultWith (fun () -> "")
         }
     static member Default () =
-        DbArgs.Create
+        DbArgs.Create (
             "" (* DbArgs *) (* uri *)
+        )
     static member SetUri ((* DbArgs *) uri : string) (this : DbArgs) =
         {this with Uri = uri}
     static member UpdateUri ((* DbArgs *) update : string -> string) (this : DbArgs) =

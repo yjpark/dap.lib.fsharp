@@ -13,16 +13,22 @@ type FileSystemArgs = {
     AppData : (* FileSystemArgs *) string
     AppCache : (* FileSystemArgs *) string
 } with
-    static member Create appData appCache
-            : FileSystemArgs =
+    static member Create
+        (
+            ?appData : string,
+            ?appCache : string
+        ) : FileSystemArgs =
         {
             AppData = (* FileSystemArgs *) appData
+                |> Option.defaultWith (fun () -> "")
             AppCache = (* FileSystemArgs *) appCache
+                |> Option.defaultWith (fun () -> "")
         }
     static member Default () =
-        FileSystemArgs.Create
-            "" (* FileSystemArgs *) (* appData *)
+        FileSystemArgs.Create (
+            "", (* FileSystemArgs *) (* appData *)
             "" (* FileSystemArgs *) (* appCache *)
+        )
     static member SetAppData ((* FileSystemArgs *) appData : string) (this : FileSystemArgs) =
         {this with AppData = appData}
     static member SetAppCache ((* FileSystemArgs *) appCache : string) (this : FileSystemArgs) =

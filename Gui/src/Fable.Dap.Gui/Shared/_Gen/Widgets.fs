@@ -40,7 +40,7 @@ type IText =
  *)
 type Group (owner : IOwner, key : Key) =
     inherit WrapProperties<Group, IComboProperty> ()
-    let target = Properties.combo owner key
+    let target = Properties.combo (owner, key)
     let prefab = target.AddVar<(* IWidget *) string> (E.string, D.string, "prefab", "", None)
     let styles = target.AddList<(* IWidget *) string> (E.string, D.string, "styles", "", None)
     let layout = target.AddVar<(* IGroup *) string> (E.string, D.string, "layout", "", None)
@@ -48,12 +48,12 @@ type Group (owner : IOwner, key : Key) =
     do (
         base.Setup (target)
     )
-    static member Create o k = new Group (o, k)
-    static member Default () = Group.Create noOwner NoKey
+    static member Create (o, k) = new Group (o, k)
+    static member Default () = Group.Create (noOwner, NoKey)
     static member AddToCombo key (combo : IComboProperty) =
         combo.AddCustom<Group> (Group.Create, key)
     override this.Self = this
-    override __.Spawn o k = Group.Create o k
+    override __.Spawn (o, k) = Group.Create (o, k)
     override __.SyncTo t = target.SyncTo t.Target
     member __.Prefab (* IWidget *) : IVarProperty<string> = prefab
     member __.Styles (* IWidget *) : IListProperty<IVarProperty<string>> = styles
@@ -74,7 +74,7 @@ type Group (owner : IOwner, key : Key) =
  *)
 type Label (owner : IOwner, key : Key) =
     inherit WrapProperties<Label, IComboProperty> ()
-    let target = Properties.combo owner key
+    let target = Properties.combo (owner, key)
     let prefab = target.AddVar<(* IWidget *) string> (E.string, D.string, "prefab", "", None)
     let styles = target.AddList<(* IWidget *) string> (E.string, D.string, "styles", "", None)
     let text = target.AddVar<(* IText *) string> (E.string, D.string, "text", "", None)
@@ -82,12 +82,12 @@ type Label (owner : IOwner, key : Key) =
         target.SealCombo ()
         base.Setup (target)
     )
-    static member Create o k = new Label (o, k)
-    static member Default () = Label.Create noOwner NoKey
+    static member Create (o, k) = new Label (o, k)
+    static member Default () = Label.Create (noOwner, NoKey)
     static member AddToCombo key (combo : IComboProperty) =
         combo.AddCustom<Label> (Label.Create, key)
     override this.Self = this
-    override __.Spawn o k = Label.Create o k
+    override __.Spawn (o, k) = Label.Create (o, k)
     override __.SyncTo t = target.SyncTo t.Target
     member __.Prefab (* IWidget *) : IVarProperty<string> = prefab
     member __.Styles (* IWidget *) : IListProperty<IVarProperty<string>> = styles
@@ -106,7 +106,7 @@ type Label (owner : IOwner, key : Key) =
  *)
 type Button (owner : IOwner, key : Key) =
     inherit WrapProperties<Button, IComboProperty> ()
-    let target = Properties.combo owner key
+    let target = Properties.combo (owner, key)
     let prefab = target.AddVar<(* IWidget *) string> (E.string, D.string, "prefab", "", None)
     let styles = target.AddList<(* IWidget *) string> (E.string, D.string, "styles", "", None)
     let disabled = target.AddVar<(* IControl *) bool> (E.bool, D.bool, "disabled", false, None)
@@ -115,12 +115,12 @@ type Button (owner : IOwner, key : Key) =
         target.SealCombo ()
         base.Setup (target)
     )
-    static member Create o k = new Button (o, k)
-    static member Default () = Button.Create noOwner NoKey
+    static member Create (o, k) = new Button (o, k)
+    static member Default () = Button.Create (noOwner, NoKey)
     static member AddToCombo key (combo : IComboProperty) =
         combo.AddCustom<Button> (Button.Create, key)
     override this.Self = this
-    override __.Spawn o k = Button.Create o k
+    override __.Spawn (o, k) = Button.Create (o, k)
     override __.SyncTo t = target.SyncTo t.Target
     member __.Prefab (* IWidget *) : IVarProperty<string> = prefab
     member __.Styles (* IWidget *) : IListProperty<IVarProperty<string>> = styles
@@ -143,7 +143,7 @@ type Button (owner : IOwner, key : Key) =
  *)
 type TextField (owner : IOwner, key : Key) =
     inherit WrapProperties<TextField, IComboProperty> ()
-    let target = Properties.combo owner key
+    let target = Properties.combo (owner, key)
     let prefab = target.AddVar<(* IWidget *) string> (E.string, D.string, "prefab", "", None)
     let styles = target.AddList<(* IWidget *) string> (E.string, D.string, "styles", "", None)
     let disabled = target.AddVar<(* IControl *) bool> (E.bool, D.bool, "disabled", false, None)
@@ -152,12 +152,12 @@ type TextField (owner : IOwner, key : Key) =
         target.SealCombo ()
         base.Setup (target)
     )
-    static member Create o k = new TextField (o, k)
-    static member Default () = TextField.Create noOwner NoKey
+    static member Create (o, k) = new TextField (o, k)
+    static member Default () = TextField.Create (noOwner, NoKey)
     static member AddToCombo key (combo : IComboProperty) =
         combo.AddCustom<TextField> (TextField.Create, key)
     override this.Self = this
-    override __.Spawn o k = TextField.Create o k
+    override __.Spawn (o, k) = TextField.Create (o, k)
     override __.SyncTo t = target.SyncTo t.Target
     member __.Prefab (* IWidget *) : IVarProperty<string> = prefab
     member __.Styles (* IWidget *) : IListProperty<IVarProperty<string>> = styles

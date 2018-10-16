@@ -10,7 +10,7 @@ open Dap.Forms.Provider
 
 type FileSystemArgs with
     static member FormsDefault () =
-        FileSystemArgs.Create (FileSystem.getAppDataFolder ()) (FileSystem.getCacheFolder ())
+        FileSystemArgs.Create (FileSystem.getAppDataFolder (), FileSystem.getCacheFolder ())
 
 type ConsoleSinkArgs with
     static member FormsDefault () =
@@ -27,7 +27,7 @@ type LoggingArgs with
     static member FormsDefault (filename : string) =
         let consoleSink = ConsoleSinkArgs.FormsDefault ()
         let fileSink = FileSinkArgs.LocalDefault (FileSystemArgs.FormsDefault ()) filename
-        LoggingArgs.Create consoleSink <| Some fileSink
+        LoggingArgs.Create (consoleSink, Some fileSink)
     static member FormsCreate (filename : string, consoleLogLevel : LogLevel) =
         LoggingArgs.FormsDefault filename
         |> fun l -> l.WithConsoleMinLevel consoleLogLevel
