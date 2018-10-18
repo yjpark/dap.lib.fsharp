@@ -1146,7 +1146,6 @@ NUGET
     Thoth.Json.Net (2.1)
       FSharp.Core (>= 4.5.2)
       Newtonsoft.Json (>= 11.0.2)
-  remote: https://nuget.yjpark.org/nuget/dap
     Dap.Build (0.6.5
       Fake.Core.Process (>= 5.7.2)
       Fake.Core.ReleaseNotes (>= 5.7.2)
@@ -1158,6 +1157,7 @@ NUGET
       Fake.IO.Zip (>= 5.7.2)
       Fake.Net.Http (>= 5.7.2)
       Fake.Tools.Git (>= 5.7.2)
+  remote: https://nuget.yjpark.org/nuget/dap
     Dap.Context (0.6.0)
       Dap.Prelude (>= 0.6)
       Thoth.Json.Net (>= 1.0)

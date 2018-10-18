@@ -722,7 +722,6 @@ NUGET
       System.Xml.ReaderWriter (>= 4.3)
       System.Xml.XmlDocument (>= 4.3)
       System.Xml.XPath (>= 4.3)
-  remote: https://nuget.yjpark.org/nuget/dap
     Dap.Build (0.6.5)
       Fake.Core.Process (>= 5.7.2)
       Fake.Core.ReleaseNotes (>= 5.7.2)
