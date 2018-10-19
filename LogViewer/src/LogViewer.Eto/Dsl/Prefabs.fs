@@ -1,4 +1,4 @@
-module LogViewer.Eto.Dsl
+module LogViewer.Eto.Dsl.Prefabs
 
 open Dap.Prelude
 open Dap.Context
@@ -14,9 +14,6 @@ open LogViewer.Dsl.Prefabs
 
 let compile segments =
     [
-        G.PrefabFile (segments, ["_Gen" ; "Prefab" ; "InputField.fs"],
-            "LogViewer.Prefab.InputField", <@ InputField @>
-        )
         G.PrefabFile (segments, ["_Gen" ; "Prefab" ; "LoginForm.fs"],
             "LogViewer.Prefab.LoginForm", <@ LoginForm @>
         )

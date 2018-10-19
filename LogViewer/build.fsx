@@ -1,7 +1,7 @@
 #r "paket: groupref Build //"
 #load ".fake/build.fsx/intellisense.fsx"
 #load "src/LogViewer.Dsl/Prefabs.fs"
-#load "src/LogViewer.Eto/Dsl.fs"
+#load "src/LogViewer.Eto/Dsl/Prefabs.fs"
 
 open Fake.Core
 open Fake.IO.Globbing.Operators
@@ -18,7 +18,7 @@ DotNet.create DotNet.release projects
 
 DotNet.createPrepares [
     ["LogViewer.Eto"], fun _ ->
-        LogViewer.Eto.Dsl.compile ["src" ; "LogViewer.Eto"]
+        LogViewer.Eto.Dsl.Prefabs.compile ["src" ; "LogViewer.Eto"]
         |> List.iter traceSuccess
 ]
 

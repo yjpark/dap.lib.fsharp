@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Dsl.fs" />
+    <Compile Include="Dsl/Prefabs.fs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LogViewer.Dsl\LogViewer.Dsl.fsproj" />
