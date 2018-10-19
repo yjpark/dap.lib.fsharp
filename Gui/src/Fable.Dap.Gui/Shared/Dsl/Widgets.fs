@@ -1,4 +1,4 @@
-module Dap.Gui.Dsl
+module Dap.Gui.Dsl.Widgets
 
 open Dap.Prelude
 open Dap.Context

@@ -1182,3 +1182,5 @@ NUGET
       Serilog.Sinks.File (>= 4.0)
       Serilog.Sinks.Seq (>= 4.0)
       TaskBuilder.fs (>= 2.1)
+    Dap.Gui (0.6.0)
+      Dap.Platform (>= 0.6.4)

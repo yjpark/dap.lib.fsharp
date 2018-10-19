@@ -5,10 +5,10 @@
     <PackageTags>fsharp;dap;</PackageTags>
     <Authors>YJ Park</Authors>
     <Version>0.6.0</Version>
-    <Description>Local Libs</Description>
+    <Description>Gui Libs</Description>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="../Fable.Dap.Gui/Shared/Dsl.fs" />
+    <Compile Include="../Fable.Dap.Gui/Shared/Dsl/Widgets.fs" />
     <Compile Include="../Fable.Dap.Gui/Shared/_Gen/Widgets.fs" />
     <Compile Include="../Fable.Dap.Gui/Shared/_Gen/Builder/Widgets.fs" />
     <Compile Include="../Fable.Dap.Gui/Shared/_Gen/Builder/Internal/Base.fs" />
@@ -20,6 +20,7 @@
     <Compile Include="Generator/Types.fs" />
     <Compile Include="Generator/Prefab.fs" />
     <Compile Include="Generator/Helper.fs" />
+    <Compile Include="Dsl/Prefab/InputField.fs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta-62925-02" PrivateAssets="All" />

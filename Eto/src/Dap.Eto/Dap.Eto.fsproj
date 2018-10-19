@@ -13,6 +13,7 @@
     <Compile Include="Prefab/Button.fs" />
     <Compile Include="Prefab/TextField.fs" />
     <Compile Include="Prefab/Stack.fs" />
+    <Compile Include="_Gen/Prefab/InputField.fs" />
     <Compile Include="Generator/Gui.fs" />
     <Compile Include="Generator/Helper.fs" />
   </ItemGroup>
