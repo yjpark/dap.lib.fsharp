@@ -25,6 +25,9 @@
 			"path": "Console"
 		},
 		{
+			"path": "LogViewer"
+		},
+		{
             "name": "Farango (External)",
 			"path": "External/Farango"
 		}
