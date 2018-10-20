@@ -7,26 +7,11 @@
 			"path": "Remote"
 		},
 		{
-			"path": "Gui"
-		},
-		{
-			"path": "Eto"
-		},
-		{
-			"path": "Forms"
-		},
-		{
 			"path": "Fable"
 		},
 		{
 			"path": "Farango"
 		}
-		{
-			"path": "Console"
-		},
-		{
-			"path": "LogViewer"
-		},
 		{
             "name": "Farango (External)",
 			"path": "External/Farango"

@@ -20,6 +20,7 @@
     <Compile Include="Storage/Text/Service.fs" />
     <Compile Include="Storage/Json/Service.fs" />
     <Compile Include="Provider/TextFile.fs" />
+    <Compile Include="EmbeddedResource.fs" />
     <Compile Include="Helper.fs" />
   </ItemGroup>
   <ItemGroup>
