@@ -6,7 +6,7 @@ cd `dirname $0`
 cd ../Farango && fake build -t Inject && \
 cd ../Local && fake build -t Inject && \
 cd ../Remote && fake build -t Inject && \
-cd ../Fable && fake build -t Inject && \
+cd ../Fable && fake build -t Inject
 
 
 

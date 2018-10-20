@@ -4,6 +4,6 @@ cd `dirname $0`
 cd ../Farango && fake build -t Fetch && \
 cd ../Local && fake build -t Fetch && \
 cd ../Remote && fake build -t Fetch && \
-cd ../Fable && fake build -t Fetch && \
+cd ../Fable && fake build -t Fetch
 
 
