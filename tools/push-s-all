@@ -5,9 +5,6 @@ cd ../Farango ; fake build -t Push -s
 cd ../Local ; fake build -t Push -s
 cd ../Remote ; fake build -t Push -s
 cd ../Fable ; fake build -t Push -s
-cd ../Gui ; fake build -t Push -s
-cd ../Eto ; fake build -t Push -s
-cd ../Forms ; fake build -t Push -s
 
 
 
