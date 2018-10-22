@@ -792,7 +792,7 @@ NUGET
       System.Xml.ReaderWriter (>= 4.3)
       System.Xml.XmlDocument (>= 4.3)
       System.Xml.XPath (>= 4.3)
-    Dap.Build (0.6.5)
+    Dap.Build (0.6.6)
       Fake.Core.Process (>= 5.7.2)
       Fake.Core.ReleaseNotes (>= 5.7.2)
       Fake.Core.String (>= 5.7.2)

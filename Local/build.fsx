@@ -13,10 +13,11 @@ open Dap.Build
 [<Literal>]
 let Prepare = "Prepare"
 
-let feed : NuGet.Feed = {
-    NuGet.Source = "https://nuget.yjpark.org/nuget/dap"
-    NuGet.ApiKey = NuGet.Environment "API_KEY_nuget_yjpark_org"
-}
+let feed =
+    NuGet.Feed.Create (
+        server = NuGet.ProGet "https://nuget.yjpark.org/nuget/dap",
+        apiKey = NuGet.Environment "API_KEY_nuget_yjpark_org"
+    )
 
 let projects =
     !! "src/Fable.Dap.Local/*.fsproj"

@@ -1168,7 +1168,7 @@ NUGET
     Thoth.Json.Net (2.1)
       FSharp.Core (>= 4.5.2)
       Newtonsoft.Json (>= 11.0.2)
-    Dap.Build (0.6.5)
+    Dap.Build (0.6.6)
       Fake.Core.Process (>= 5.7.2)
       Fake.Core.ReleaseNotes (>= 5.7.2)
       Fake.Core.String (>= 5.7.2)

@@ -1826,7 +1826,7 @@ NUGET
     Xamarin.Essentials (0.10.0-preview)
       System.Numerics.Vectors (>= 4.5)
     Xamarin.Forms (3.2.0.871581)
-    Dap.Build (0.6.5)
+    Dap.Build (0.6.6)
       Fake.Core.Process (>= 5.7.2)
       Fake.Core.ReleaseNotes (>= 5.7.2)
       Fake.Core.String (>= 5.7.2)
