@@ -62,7 +62,7 @@ type Query = {
 let executeAsync' (query : Query) (db : Db) = async {
     query.FailIfInvalid ()
     let! firstResult =
-        E.encodeJson 0 query
+        encodeJson 0 query
         |> Cursor.getFirstResult Connection.post db.Conn db.CursorUrl
     db.LogResult (sprintf "Execute_Query: %s" (query.ToString ())) firstResult
     return! Cursor.moreResults db.Conn firstResult

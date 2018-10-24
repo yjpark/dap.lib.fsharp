@@ -1,6 +1,9 @@
 {
 	"folders": [
 		{
+			"path": "Farango"
+		},
+		{
 			"path": "Local"
 		},
 		{
@@ -9,9 +12,6 @@
 		{
 			"path": "Fable"
 		},
-		{
-			"path": "Farango"
-		}
 		{
             "name": "Farango (External)",
 			"path": "External/Farango"

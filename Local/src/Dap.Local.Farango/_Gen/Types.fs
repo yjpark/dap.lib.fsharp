@@ -25,8 +25,6 @@ type DbArgs = {
         )
     static member SetUri ((* DbArgs *) uri : string) (this : DbArgs) =
         {this with Uri = uri}
-    static member UpdateUri ((* DbArgs *) update : string -> string) (this : DbArgs) =
-        this |> DbArgs.SetUri (update this.Uri)
     static member JsonEncoder : JsonEncoder<DbArgs> =
         fun (this : DbArgs) ->
             E.object [

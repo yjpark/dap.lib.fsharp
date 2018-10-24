@@ -33,10 +33,6 @@ type FileSystemArgs = {
         {this with AppData = appData}
     static member SetAppCache ((* FileSystemArgs *) appCache : string) (this : FileSystemArgs) =
         {this with AppCache = appCache}
-    static member UpdateAppData ((* FileSystemArgs *) update : string -> string) (this : FileSystemArgs) =
-        this |> FileSystemArgs.SetAppData (update this.AppData)
-    static member UpdateAppCache ((* FileSystemArgs *) update : string -> string) (this : FileSystemArgs) =
-        this |> FileSystemArgs.SetAppCache (update this.AppCache)
     static member JsonEncoder : JsonEncoder<FileSystemArgs> =
         fun (this : FileSystemArgs) ->
             E.object [
@@ -62,6 +58,9 @@ type FileSystemArgs = {
     member this.WithAppCache ((* FileSystemArgs *) appCache : string) =
         this |> FileSystemArgs.SetAppCache appCache
 
+(*
+ * Generated: <Pack>
+ *)
 type ILocalPackArgs =
     abstract FileSystem : FileSystemArgs with get
 

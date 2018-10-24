@@ -12,6 +12,9 @@ module FarangoDb = Dap.Local.Farango.Db
 
 type Db = FarangoDb.Model
 
+(*
+ * Generated: <Pack>
+ *)
 type IDbPackArgs =
     abstract FarangoDb : FarangoDb.Args with get
 

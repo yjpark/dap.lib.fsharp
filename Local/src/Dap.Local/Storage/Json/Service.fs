@@ -23,7 +23,7 @@ let DoSaveNew = BaseTypes.DoSaveNew
 
 let args<'v when 'v :> IJson> provider (indent : int)
                 (encoder : JsonEncoder<'v>) (decoder : JsonDecoder<'v>) =
-    let encode = fun (v : 'v) -> E.encodeJson indent v
+    let encode = fun (v : 'v) -> encodeJson indent v
     let decode = fun (content : string) -> decodeJson decoder content
     let args : Args<'v> =
         {
