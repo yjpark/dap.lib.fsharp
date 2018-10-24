@@ -82,7 +82,7 @@ type Prefab (logging : ILogging) =
     let password = InputField.Prefab.AddToGroup logging "password" base.Model
     let login = Button.Prefab.AddToGroup logging "login" base.Model
     do (
-        base.Model.AsProperty.WithJson Json |> ignore
+        base.Model.AsProperty.LoadJson Json
         base.AddChild (title.Widget)
         base.AddChild (name.Widget)
         base.AddChild (password.Widget)

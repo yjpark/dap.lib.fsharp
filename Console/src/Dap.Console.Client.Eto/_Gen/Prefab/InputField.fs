@@ -43,7 +43,7 @@ type Prefab (logging : ILogging) =
     let label = Label.Prefab.AddToGroup logging "label" base.Model
     let value = TextField.Prefab.AddToGroup logging "value" base.Model
     do (
-        base.Model.AsProperty.WithJson Json |> ignore
+        base.Model.AsProperty.LoadJson Json
         base.AddChild (label.Widget)
         base.AddChild (value.Widget)
     )
