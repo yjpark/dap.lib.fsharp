@@ -8,19 +8,23 @@
     <Description>Local Libs</Description>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Meta.fs" />
+    <Compile Include="Generator.fs" />
     <Compile Include="Dsl.fs" />
     <Compile Include="_Gen/Types.fs" />
-    <Compile Include="_Gen/Builder.fs" />
+    <Compile Include="_Gen/IAppPack.fs" />
     <Compile Include="Runtime.fs" />
     <Compile Include="Shell.fs" />
     <Compile Include="FileSystem.fs" />
+    <Compile Include="EmbeddedResource.fs" />
     <Compile Include="Storage/Base/Types.fs" />
     <Compile Include="Storage/Base/Tasks.fs" />
     <Compile Include="Storage/Base/Logic.fs" />
     <Compile Include="Storage/Text/Service.fs" />
     <Compile Include="Storage/Json/Service.fs" />
-    <Compile Include="Provider/TextFile.fs" />
-    <Compile Include="EmbeddedResource.fs" />
+    <Compile Include="Feature/TextFile.fs" />
+    <Compile Include="Feature/Preferences.fs" />
+    <Compile Include="Feature/SecureStorage.fs" />
     <Compile Include="Helper.fs" />
   </ItemGroup>
   <ItemGroup>

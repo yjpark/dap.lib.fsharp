@@ -4,23 +4,27 @@ module Dap.Local.Helper
 open Dap.Prelude
 open Dap.Platform
 
-type FileSystemArgs with
-    static member LocalDefault () =
-        FileSystemArgs.Create ("", "")
-
-
 type FileSinkArgs with
-    static member LocalDefault (args : FileSystemArgs) (filename : string) =
+    static member LocalCreate (root : string, filename : string, ?minLevel : LogLevel, ?rolling : RollingInterval) =
         let timestamp = getNow' () |> instantToText
         let timestamp = timestamp.Replace (":", "_")
-        let path = System.IO.Path.Combine (args.AppCache, "log", timestamp, filename)
-        FileSinkArgs.Create (LogLevelInformation, path, Some RollingInterval.Daily)
+        let path = System.IO.Path.Combine (root, timestamp, filename)
+        FileSinkArgs.Create (path, ?minLevel = minLevel, ?rolling = rolling)
 
 type LoggingArgs with
-    static member LocalDefault (filename : string) =
-        let consoleSink = ConsoleSinkArgs.Default ()
-        let fileSink = FileSinkArgs.LocalDefault (FileSystemArgs.LocalDefault ()) filename
-        LoggingArgs.Create (Some consoleSink, Some fileSink)
-    static member LocalCreate (filename : string, consoleLogLevel : LogLevel) =
-        LoggingArgs.LocalDefault filename
-        |> fun l -> l.WithConsoleMinLevel consoleLogLevel
+    static member LocalCreate (?consoleLogLevel : LogLevel, ?filename : string, ?fileLogLevel : LogLevel, ?rolling : RollingInterval) =
+        let consoleSink =
+            consoleLogLevel
+            |> Option.map (fun consoleLogLevel ->
+                ConsoleSinkArgs.Create (minLevel = consoleLogLevel)
+            )
+        let fileSink =
+            filename
+            |> Option.map (fun filename ->
+                FileSinkArgs.LocalCreate ("log", filename, ?minLevel = fileLogLevel, ?rolling = rolling)
+            )
+        LoggingArgs.Create (?console = consoleSink, ?file = fileSink)
+
+type IAppPack with
+    member this.PreferencesProps = this.Preferences.Context.Properties
+    member this.SecureStorageProps = this.SecureStorage.Context.Properties

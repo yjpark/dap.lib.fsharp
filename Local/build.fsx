@@ -1,5 +1,6 @@
 #r "paket: groupref Build //"
 #load ".fake/build.fsx/intellisense.fsx"
+#load "src/Dap.Local/Meta.fs"
 #load "src/Dap.Local/Dsl.fs"
 #load "src/Dap.Local.Console/Dsl.fs"
 #load "src/Dap.Local.Farango/Dsl.fs"

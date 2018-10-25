@@ -8,16 +8,49 @@ open Dap.Platform
 open Dap.Platform.Meta
 open Dap.Platform.Generator
 open Dap.Platform.Dsl
+open Dap.Local.Meta
 
-let FileSystemArgs =
+let SetTextReq =
     combo {
-        var (M.string ("app_data"))
-        var (M.string ("app_cache"))
+        var (M.luid ("path"))
+        var (M.string ("text"))
     }
 
-let ILocalPack =
+let PreferencesProps =
+    combo {
+        var (M.string ("root", value="preferences"))
+    }
+
+let Preferences =
+    context <@ PreferencesProps @> {
+        kind "Preferences"
+        handler (M.luid "has") (M.bool response)
+        handler (M.luid "get") (M.string response)
+        handler (M.custom (<@ SetTextReq @>, "set")) (M.unit response)
+        handler (M.luid "remove") (M.unit response)
+        handler (M.unit "clear") (M.unit response)
+    }
+
+let SecureStorageProps =
+    combo {
+        var (M.string ("root", value="secure_storage"))
+        var (M.string ("secret", value="Iemohwai9iiY2phojael2och7quiex6Thohneothaek7eeghaebeewohghie9shu"))
+    }
+
+let SecureStorage =
+    context <@ SecureStorageProps @> {
+        kind "SecureStorage"
+        async_handler (M.luid "has") (M.bool response)
+        async_handler (M.luid "get") (M.string response)
+        async_handler (M.custom (<@ SetTextReq @>, "set")) (M.unit response)
+        handler (M.luid "remove") (M.unit response)
+        handler (M.unit "clear") (M.unit response)
+    }
+
+let IAppPack =
     pack [] {
-        extra (M.jsonArgs ([], <@ FileSystemArgs @>, "file_system"))
+        add (M.preferences ())
+        add (M.secureStorage ())
     }
 
 let compile segments =
@@ -26,16 +59,20 @@ let compile segments =
             G.AutoOpenModule ("Dap.Local.Types",
                 [
                     G.PlatformOpens
-                    G.LooseJsonRecord (<@ FileSystemArgs @>)
-                    G.PackInterface <@ ILocalPack @>
+                    G.JsonRecord (<@ SetTextReq @>)
+                    G.Combo (<@ PreferencesProps @>)
+                    G.Context (<@ Preferences @>)
+                    G.Combo (<@ SecureStorageProps @>)
+                    G.Context (<@ SecureStorage @>)
                 ]
             )
         )
-        G.File (segments, ["_Gen"; "Builder.fs"],
-            G.BuilderModule ("Dap.Local.Builder",
+        G.File (segments, ["_Gen"; "IAppPack.fs"],
+            G.AutoOpenModule ("Dap.Local.IAppPack",
                 [
                     G.PlatformOpens
-                    G.ValueBuilder <@ FileSystemArgs @>
+                    G.PackOpens
+                    G.PackInterface <@ IAppPack @>
                 ]
             )
         )

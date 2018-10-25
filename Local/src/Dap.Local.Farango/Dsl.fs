@@ -17,25 +17,17 @@ let DbArgs =
     }
 
 type M with
-    static member farangoDbSpawner (kind : Kind) =
+    static member farangoDb (?kind : Kind, ?key : Key) =
+        let kind = defaultArg kind FarangoDbKind
         let alias = "FarangoDb", "Dap.Local.Farango.Db"
         let args = JsonArgs "FarangoDb.Args"
         let type' = "FarangoDb.Agent"
         let spec = "FarangoDb.spec"
-        M.spawner ([alias], args, type', spec, kind)
-    static member farangoDbSpawner () =
-        M.farangoDbSpawner (FarangoDbKind)
-    static member farangoDbService (kind : Kind, key : Key) =
-        M.farangoDbSpawner (kind)
-        |> fun s -> s.ToService key
-    static member farangoDbService (key : Key) =
-        M.farangoDbService (FarangoDbKind, key)
-    static member farangoDbService () =
-        M.farangoDbService (NoKey)
+        M.agent (args, type', spec, kind, ?key = key, aliases = [alias])
 
 let IDbPack =
     pack [] {
-        add (M.farangoDbService ())
+        add (M.farangoDb ())
     }
 
 let compile segments =

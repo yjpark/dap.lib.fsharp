@@ -1,0 +1,41 @@
+[<AutoOpen>]
+[<RequireQualifiedAccess>]
+module Dap.Local.Feature.Preferences
+
+open System.IO
+open FSharp.Control.Tasks.V2
+
+open Dap.Prelude
+open Dap.Context
+open Dap.Platform
+open Dap.Local
+
+type Context (logging : ILogging) =
+    inherit BasePreferences<Context> (logging)
+    do (
+        let root = base.Properties.Root
+        let getPath = fun (luid : Luid) ->
+            Path.Combine (root.Value, luid)
+        base.Has.SetupHandler (fun (luid : Luid) ->
+            FileSystem.fileExists <| getPath luid
+        )
+        base.Get.SetupHandler (fun (luid : Luid) ->
+            TextFile.load <| getPath luid
+            |> Option.defaultValue ""
+        )
+        base.Set.SetupHandler (fun (req : SetTextReq) ->
+            TextFile.save (getPath req.Path) req.Text
+        )
+        base.Remove.SetupHandler (fun (luid : Luid) ->
+            FileSystem.deleteFile <| getPath luid
+            |> ignore
+        )
+        base.Clear.SetupHandler (fun () ->
+            FileSystem.deleteFolder root.Value
+            |> ignore
+        )
+    )
+    override this.Self = this
+    override __.Spawn l = new Context (l)
+    static member AddToAgent (agent : IAgent) =
+        new Context (agent.Env.Logging) :> IPreferences

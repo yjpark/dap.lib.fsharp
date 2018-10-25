@@ -7,63 +7,169 @@ open Dap.Platform
 
 (*
  * Generated: <Record>
- *     IsJson, IsLoose
+ *     IsJson
  *)
-type FileSystemArgs = {
-    AppData : (* FileSystemArgs *) string
-    AppCache : (* FileSystemArgs *) string
+type SetTextReq = {
+    Path : (* SetTextReq *) Luid
+    Text : (* SetTextReq *) string
 } with
     static member Create
         (
-            ?appData : string,
-            ?appCache : string
-        ) : FileSystemArgs =
+            ?path : (* SetTextReq *) Luid,
+            ?text : (* SetTextReq *) string
+        ) : SetTextReq =
         {
-            AppData = (* FileSystemArgs *) appData
-                |> Option.defaultWith (fun () -> "")
-            AppCache = (* FileSystemArgs *) appCache
+            Path = (* SetTextReq *) path
+                |> Option.defaultWith (fun () -> (System.Guid.NewGuid().ToString()))
+            Text = (* SetTextReq *) text
                 |> Option.defaultWith (fun () -> "")
         }
-    static member Default () =
-        FileSystemArgs.Create (
-            "", (* FileSystemArgs *) (* appData *)
-            "" (* FileSystemArgs *) (* appCache *)
-        )
-    static member SetAppData ((* FileSystemArgs *) appData : string) (this : FileSystemArgs) =
-        {this with AppData = appData}
-    static member SetAppCache ((* FileSystemArgs *) appCache : string) (this : FileSystemArgs) =
-        {this with AppCache = appCache}
-    static member JsonEncoder : JsonEncoder<FileSystemArgs> =
-        fun (this : FileSystemArgs) ->
+    static member Default () = SetTextReq.Create ()
+    static member SetPath ((* SetTextReq *) path : Luid) (this : SetTextReq) =
+        {this with Path = path}
+    static member SetText ((* SetTextReq *) text : string) (this : SetTextReq) =
+        {this with Text = text}
+    static member JsonEncoder : JsonEncoder<SetTextReq> =
+        fun (this : SetTextReq) ->
             E.object [
-                "app_data", E.string (* FileSystemArgs *) this.AppData
-                "app_cache", E.string (* FileSystemArgs *) this.AppCache
+                "path", E.string (* SetTextReq *) this.Path
+                "text", E.string (* SetTextReq *) this.Text
             ]
-    static member JsonDecoder : JsonDecoder<FileSystemArgs> =
+    static member JsonDecoder : JsonDecoder<SetTextReq> =
         D.object (fun get ->
             {
-                AppData = get.Optional.Field (* FileSystemArgs *) "app_data" D.string
-                    |> Option.defaultValue ""
-                AppCache = get.Optional.Field (* FileSystemArgs *) "app_cache" D.string
-                    |> Option.defaultValue ""
+                Path = get.Required.Field (* SetTextReq *) "path" D.string
+                Text = get.Required.Field (* SetTextReq *) "text" D.string
             }
         )
     static member JsonSpec =
-        FieldSpec.Create<FileSystemArgs> (FileSystemArgs.JsonEncoder, FileSystemArgs.JsonDecoder)
+        FieldSpec.Create<SetTextReq> (SetTextReq.JsonEncoder, SetTextReq.JsonDecoder)
     interface IJson with
-        member this.ToJson () = FileSystemArgs.JsonEncoder this
+        member this.ToJson () = SetTextReq.JsonEncoder this
     interface IObj
-    member this.WithAppData ((* FileSystemArgs *) appData : string) =
-        this |> FileSystemArgs.SetAppData appData
-    member this.WithAppCache ((* FileSystemArgs *) appCache : string) =
-        this |> FileSystemArgs.SetAppCache appCache
+    member this.WithPath ((* SetTextReq *) path : Luid) =
+        this |> SetTextReq.SetPath path
+    member this.WithText ((* SetTextReq *) text : string) =
+        this |> SetTextReq.SetText text
 
 (*
- * Generated: <Pack>
+ * Generated: <Combo>
  *)
-type ILocalPackArgs =
-    abstract FileSystem : FileSystemArgs with get
+type PreferencesProps (owner : IOwner, key : Key) =
+    inherit WrapProperties<PreferencesProps, IComboProperty> ()
+    let target' = Properties.combo (owner, key)
+    let root = target'.AddVar<(* PreferencesProps *) string> (E.string, D.string, "root", "preferences", None)
+    do (
+        base.Setup (target')
+    )
+    static member Create (o, k) = new PreferencesProps (o, k)
+    static member Default () = PreferencesProps.Create (noOwner, NoKey)
+    static member AddToCombo key (combo : IComboProperty) =
+        combo.AddCustom<PreferencesProps> (PreferencesProps.Create, key)
+    override this.Self = this
+    override __.Spawn (o, k) = PreferencesProps.Create (o, k)
+    override __.SyncTo t = target'.SyncTo t.Target
+    member __.Root (* PreferencesProps *) : IVarProperty<string> = root
 
-type ILocalPack =
-    inherit IPack
-    abstract Args : ILocalPackArgs with get
+(*
+ * Generated: <Context>
+ *)
+type IPreferences =
+    inherit IContext<PreferencesProps>
+    abstract PreferencesProps : PreferencesProps with get
+    abstract Has : IHandler<Luid, bool> with get
+    abstract Get : IHandler<Luid, string> with get
+    abstract Set : IHandler<SetTextReq, unit> with get
+    abstract Remove : IHandler<Luid, unit> with get
+    abstract Clear : IHandler<unit, unit> with get
+
+(*
+ * Generated: <Context>
+ *)
+[<Literal>]
+let PreferencesKind = "Preferences"
+
+[<AbstractClass>]
+type BasePreferences<'context when 'context :> IPreferences> (logging : ILogging) =
+    inherit CustomContext<'context, ContextSpec<PreferencesProps>, PreferencesProps> (logging, new ContextSpec<PreferencesProps>(PreferencesKind, PreferencesProps.Create))
+    let has = base.Handlers.Add<Luid, bool> (E.string, D.string, E.bool, D.bool, "has")
+    let get = base.Handlers.Add<Luid, string> (E.string, D.string, E.string, D.string, "get")
+    let set = base.Handlers.Add<SetTextReq, unit> (SetTextReq.JsonEncoder, SetTextReq.JsonDecoder, E.unit, D.unit, "set")
+    let remove = base.Handlers.Add<Luid, unit> (E.string, D.string, E.unit, D.unit, "remove")
+    let clear = base.Handlers.Add<unit, unit> (E.unit, D.unit, E.unit, D.unit, "clear")
+    member this.PreferencesProps : PreferencesProps = this.Properties
+    member __.Has : IHandler<Luid, bool> = has
+    member __.Get : IHandler<Luid, string> = get
+    member __.Set : IHandler<SetTextReq, unit> = set
+    member __.Remove : IHandler<Luid, unit> = remove
+    member __.Clear : IHandler<unit, unit> = clear
+    interface IPreferences with
+        member this.PreferencesProps : PreferencesProps = this.Properties
+        member __.Has : IHandler<Luid, bool> = has
+        member __.Get : IHandler<Luid, string> = get
+        member __.Set : IHandler<SetTextReq, unit> = set
+        member __.Remove : IHandler<Luid, unit> = remove
+        member __.Clear : IHandler<unit, unit> = clear
+    member this.AsPreferences = this :> IPreferences
+
+(*
+ * Generated: <Combo>
+ *)
+type SecureStorageProps (owner : IOwner, key : Key) =
+    inherit WrapProperties<SecureStorageProps, IComboProperty> ()
+    let target' = Properties.combo (owner, key)
+    let root = target'.AddVar<(* SecureStorageProps *) string> (E.string, D.string, "root", "secure_storage", None)
+    let secret = target'.AddVar<(* SecureStorageProps *) string> (E.string, D.string, "secret", "Iemohwai9iiY2phojael2och7quiex6Thohneothaek7eeghaebeewohghie9shu", None)
+    do (
+        base.Setup (target')
+    )
+    static member Create (o, k) = new SecureStorageProps (o, k)
+    static member Default () = SecureStorageProps.Create (noOwner, NoKey)
+    static member AddToCombo key (combo : IComboProperty) =
+        combo.AddCustom<SecureStorageProps> (SecureStorageProps.Create, key)
+    override this.Self = this
+    override __.Spawn (o, k) = SecureStorageProps.Create (o, k)
+    override __.SyncTo t = target'.SyncTo t.Target
+    member __.Root (* SecureStorageProps *) : IVarProperty<string> = root
+    member __.Secret (* SecureStorageProps *) : IVarProperty<string> = secret
+
+(*
+ * Generated: <Context>
+ *)
+type ISecureStorage =
+    inherit IContext<SecureStorageProps>
+    abstract SecureStorageProps : SecureStorageProps with get
+    abstract Remove : IHandler<Luid, unit> with get
+    abstract Clear : IHandler<unit, unit> with get
+    abstract HasAsync : IAsyncHandler<Luid, bool> with get
+    abstract GetAsync : IAsyncHandler<Luid, string> with get
+    abstract SetAsync : IAsyncHandler<SetTextReq, unit> with get
+
+(*
+ * Generated: <Context>
+ *)
+[<Literal>]
+let SecureStorageKind = "SecureStorage"
+
+[<AbstractClass>]
+type BaseSecureStorage<'context when 'context :> ISecureStorage> (logging : ILogging) =
+    inherit CustomContext<'context, ContextSpec<SecureStorageProps>, SecureStorageProps> (logging, new ContextSpec<SecureStorageProps>(SecureStorageKind, SecureStorageProps.Create))
+    let remove = base.Handlers.Add<Luid, unit> (E.string, D.string, E.unit, D.unit, "remove")
+    let clear = base.Handlers.Add<unit, unit> (E.unit, D.unit, E.unit, D.unit, "clear")
+    let hasAsync = base.AsyncHandlers.Add<Luid, bool> (E.string, D.string, E.bool, D.bool, "has")
+    let getAsync = base.AsyncHandlers.Add<Luid, string> (E.string, D.string, E.string, D.string, "get")
+    let setAsync = base.AsyncHandlers.Add<SetTextReq, unit> (SetTextReq.JsonEncoder, SetTextReq.JsonDecoder, E.unit, D.unit, "set")
+    member this.SecureStorageProps : SecureStorageProps = this.Properties
+    member __.Remove : IHandler<Luid, unit> = remove
+    member __.Clear : IHandler<unit, unit> = clear
+    member __.HasAsync : IAsyncHandler<Luid, bool> = hasAsync
+    member __.GetAsync : IAsyncHandler<Luid, string> = getAsync
+    member __.SetAsync : IAsyncHandler<SetTextReq, unit> = setAsync
+    interface ISecureStorage with
+        member this.SecureStorageProps : SecureStorageProps = this.Properties
+        member __.Remove : IHandler<Luid, unit> = remove
+        member __.Clear : IHandler<unit, unit> = clear
+        member __.HasAsync : IAsyncHandler<Luid, bool> = hasAsync
+        member __.GetAsync : IAsyncHandler<Luid, string> = getAsync
+        member __.SetAsync : IAsyncHandler<SetTextReq, unit> = setAsync
+    member this.AsSecureStorage = this :> ISecureStorage

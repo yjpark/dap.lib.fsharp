@@ -14,4 +14,4 @@ type DbArgsBuilder () =
     member __.Uri (target : DbArgs, (* DbArgs *) uri : string) =
         target.WithUri uri
 
-let db_args = DbArgsBuilder ()
+let db_args = new DbArgsBuilder ()

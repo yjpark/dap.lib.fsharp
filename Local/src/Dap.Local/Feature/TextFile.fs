@@ -1,5 +1,5 @@
 [<RequireQualifiedAccess>]
-module Dap.Local.Provider.TextFile
+module Dap.Local.Feature.TextFile
 
 open System.IO
 open FSharp.Control.Tasks.V2
