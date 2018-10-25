@@ -53,6 +53,14 @@ let IAppPack =
         add (M.secureStorage ())
     }
 
+type G with
+    static member AppPack (feature : string option) =
+        let feature = defaultArg feature "Dap.Local.Feature"
+        [
+            sprintf "type Preferences = %s.Preferences.Context" feature
+            sprintf "type SecureStorage = %s.SecureStorage.Context" feature
+        ]
+
 let compile segments =
     [
         G.File (segments, ["_Gen"; "Types.fs"],

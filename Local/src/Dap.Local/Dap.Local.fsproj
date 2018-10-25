@@ -9,7 +9,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Meta.fs" />
-    <Compile Include="Generator.fs" />
     <Compile Include="Dsl.fs" />
     <Compile Include="_Gen/Types.fs" />
     <Compile Include="_Gen/IAppPack.fs" />
