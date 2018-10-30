@@ -4,6 +4,7 @@ module Dap.Local.IAppPack
 open Dap.Prelude
 open Dap.Context
 open Dap.Platform
+open System.Threading
 open System.Threading.Tasks
 open FSharp.Control.Tasks.V2
 open Dap.Context.Builder

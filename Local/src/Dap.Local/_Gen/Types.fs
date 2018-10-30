@@ -20,7 +20,7 @@ type SetTextReq = {
         ) : SetTextReq =
         {
             Path = (* SetTextReq *) path
-                |> Option.defaultWith (fun () -> (System.Guid.NewGuid().ToString()))
+                |> Option.defaultWith (fun () -> (newLuid ()))
             Text = (* SetTextReq *) text
                 |> Option.defaultWith (fun () -> "")
         }
