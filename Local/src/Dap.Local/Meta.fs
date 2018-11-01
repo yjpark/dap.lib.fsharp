@@ -12,9 +12,9 @@ open Dap.Platform.Meta
 type M with
     static member preferences (?name : string, ?spawner : string, ?kind : Kind, ?key : Key, ?aliases : ModuleAlias list) =
         let name = defaultArg name "IPreferences"
-        M.context (name, ?spawner = spawner, ?kind = kind, ?key = key, ?aliases = aliases)
+        M.feature (name, ?spawner = spawner, ?kind = kind, ?key = key, ?aliases = aliases)
 
 type M with
     static member secureStorage (?name : string, ?spawner : string, ?kind : Kind, ?key : Key, ?aliases : ModuleAlias list) =
         let name = defaultArg name "ISecureStorage"
-        M.context (name, ?spawner = spawner, ?kind = kind, ?key = key, ?aliases = aliases)
+        M.feature (name, ?spawner = spawner, ?kind = kind, ?key = key, ?aliases = aliases)

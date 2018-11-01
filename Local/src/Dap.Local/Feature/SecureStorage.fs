@@ -45,5 +45,4 @@ type Context (logging : ILogging) =
     )
     override this.Self = this
     override __.Spawn l = new Context (l)
-    static member AddToAgent (agent : IAgent) =
-        new Context (agent.Env.Logging) :> ISecureStorage
+    interface IFallback

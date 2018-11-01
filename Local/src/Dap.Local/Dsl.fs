@@ -69,9 +69,9 @@ let compile segments =
                     G.PlatformOpens
                     G.JsonRecord (<@ SetTextReq @>)
                     G.Combo (<@ PreferencesProps @>)
-                    G.Context (<@ Preferences @>)
+                    G.Feature (<@ Preferences @>)
                     G.Combo (<@ SecureStorageProps @>)
-                    G.Context (<@ SecureStorage @>)
+                    G.Feature (<@ SecureStorage @>)
                 ]
             )
         )

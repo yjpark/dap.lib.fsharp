@@ -75,6 +75,7 @@ type PreferencesProps (owner : IOwner, key : Key) =
  * Generated: <Context>
  *)
 type IPreferences =
+    inherit IFeature
     inherit IContext<PreferencesProps>
     abstract PreferencesProps : PreferencesProps with get
     abstract Has : IHandler<Luid, bool> with get
@@ -110,6 +111,7 @@ type BasePreferences<'context when 'context :> IPreferences> (logging : ILogging
         member __.Set : IHandler<SetTextReq, unit> = set
         member __.Remove : IHandler<Luid, unit> = remove
         member __.Clear : IHandler<unit, unit> = clear
+    interface IFeature
     member this.AsPreferences = this :> IPreferences
 
 (*
@@ -137,6 +139,7 @@ type SecureStorageProps (owner : IOwner, key : Key) =
  * Generated: <Context>
  *)
 type ISecureStorage =
+    inherit IFeature
     inherit IContext<SecureStorageProps>
     abstract SecureStorageProps : SecureStorageProps with get
     abstract Remove : IHandler<Luid, unit> with get
@@ -172,4 +175,5 @@ type BaseSecureStorage<'context when 'context :> ISecureStorage> (logging : ILog
         member __.HasAsync : IAsyncHandler<Luid, bool> = hasAsync
         member __.GetAsync : IAsyncHandler<Luid, string> = getAsync
         member __.SetAsync : IAsyncHandler<SetTextReq, unit> = setAsync
+    interface IFeature
     member this.AsSecureStorage = this :> ISecureStorage
