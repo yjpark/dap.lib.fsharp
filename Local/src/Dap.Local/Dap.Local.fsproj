@@ -12,7 +12,6 @@
     <Compile Include="Dsl.fs" />
     <Compile Include="_Gen/Types.fs" />
     <Compile Include="_Gen/IAppPack.fs" />
-    <Compile Include="Runtime.fs" />
     <Compile Include="Shell.fs" />
     <Compile Include="FileSystem.fs" />
     <Compile Include="EmbeddedResource.fs" />
