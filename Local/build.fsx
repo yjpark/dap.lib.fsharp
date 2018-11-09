@@ -25,6 +25,7 @@ let projects =
     ++ "src/Dap.Local/*.fsproj"
     ++ "src/Dap.Local.Console/*.fsproj"
     ++ "src/Dap.Local.Farango/*.fsproj"
+    ++ "src/Dap.Local.Mac/*.fsproj"
 
 NuGet.create NuGet.release feed projects
 
