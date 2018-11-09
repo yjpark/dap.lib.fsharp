@@ -7,7 +7,6 @@ framework: auto-detect
 
 nuget FSharp.Core
 
-nuget Dap.Platform
 nuget Dap.Archive
 nuget Dap.Farango
 nuget Fable.Dap.Platform
