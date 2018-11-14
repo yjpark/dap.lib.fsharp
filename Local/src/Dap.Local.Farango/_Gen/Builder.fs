@@ -9,7 +9,7 @@ open Dap.Context.Builder
  *)
 type DbArgsBuilder () =
     inherit ObjBuilder<DbArgs> ()
-    override __.Zero () = DbArgs.Default ()
+    override __.Zero () = DbArgs.Create ()
     [<CustomOperation("uri")>]
     member __.Uri (target : DbArgs, (* DbArgs *) uri : string) =
         target.WithUri uri

@@ -24,7 +24,6 @@ type SetTextReq = {
             Text = (* SetTextReq *) text
                 |> Option.defaultWith (fun () -> "")
         }
-    static member Default () = SetTextReq.Create ()
     static member SetPath ((* SetTextReq *) path : Luid) (this : SetTextReq) =
         {this with Path = path}
     static member SetText ((* SetTextReq *) text : string) (this : SetTextReq) =
@@ -63,7 +62,7 @@ type PreferencesProps (owner : IOwner, key : Key) =
         base.Setup (target')
     )
     static member Create (o, k) = new PreferencesProps (o, k)
-    static member Default () = PreferencesProps.Create (noOwner, NoKey)
+    static member Create () = PreferencesProps.Create (noOwner, NoKey)
     static member AddToCombo key (combo : IComboProperty) =
         combo.AddCustom<PreferencesProps> (PreferencesProps.Create, key)
     override this.Self = this
@@ -126,7 +125,7 @@ type SecureStorageProps (owner : IOwner, key : Key) =
         base.Setup (target')
     )
     static member Create (o, k) = new SecureStorageProps (o, k)
-    static member Default () = SecureStorageProps.Create (noOwner, NoKey)
+    static member Create () = SecureStorageProps.Create (noOwner, NoKey)
     static member AddToCombo key (combo : IComboProperty) =
         combo.AddCustom<SecureStorageProps> (SecureStorageProps.Create, key)
     override this.Self = this

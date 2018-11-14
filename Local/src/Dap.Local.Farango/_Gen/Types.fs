@@ -19,7 +19,6 @@ type DbArgs = {
             Uri = (* DbArgs *) uri
                 |> Option.defaultWith (fun () -> "")
         }
-    static member Default () = DbArgs.Create ()
     static member SetUri ((* DbArgs *) uri : string) (this : DbArgs) =
         {this with Uri = uri}
     static member JsonEncoder : JsonEncoder<DbArgs> =
