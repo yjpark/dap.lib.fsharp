@@ -31,7 +31,7 @@ let handleWebSocket' (args : Args) (context : HttpContext) = task {
 let handleWebSocket (args : Args) : HttpContext -> System.Func<Task> -> Task =
     fun context next ->
         if context.Request.Path <> args.Path then
-            next.Invoke ()
+            next.Invoke context
         else
             if context.WebSockets.IsWebSocketRequest then
                 handleWebSocket' args context
