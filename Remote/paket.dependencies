@@ -21,7 +21,6 @@ nuget Microsoft.AspNetCore.Server.Kestrel
 nuget Microsoft.AspNetCore.StaticFiles
 nuget Microsoft.AspNetCore.WebSockets
 nuget Giraffe
-nuget Saturn
 
 group Build
     source https://nuget.yjpark.org/nuget/dap

@@ -9,7 +9,8 @@
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="WebSocketHub.fs" />
+    <Compile Include="Giraffe.fs" />
+    <Compile Include="WebPack.fs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Dap.Remote.AspNetCore\Dap.Remote.AspNetCore.fsproj" />
