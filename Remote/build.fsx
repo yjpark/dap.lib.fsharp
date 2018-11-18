@@ -14,7 +14,6 @@ let feed =
 
 let projects =
     !! "src/Dap.Remote.FSharpData/*.fsproj"
-    ++ "src/Dap.Remote.AspNetCore/*.fsproj"
     ++ "src/Dap.Remote.Server/*.fsproj"
     ++ "src/Dap.Remote.Console/*.fsproj"
     ++ "src/Dap.Remote.Web/*.fsproj"

@@ -9,32 +9,25 @@ open Giraffe
 
 open Dap.Prelude
 open Dap.Platform
-open Dap.Remote.AspNetCore.WebSocketHub
 
 type Giraffe = GiraffeHelper with
-    static member Use (action : IApplicationBuilder -> unit) =
-        fun (builder : IWebHostBuilder) ->
-            builder.Configure (Action<IApplicationBuilder> action)
-            |> ignore
-    static member UseHandler (handler : HttpHandler) =
-        Giraffe.Use (fun b -> b.UseGiraffe handler |> ignore)
-    static member UseErrorHandler (handler : ErrorHandler) =
-        Giraffe.Use (fun b -> b.UseGiraffeErrorHandler handler |> ignore)
-    static member UseWebSocketHub (env : IEnv, path : string, kind : Kind) =
-        Giraffe.Use (useWebSocketHub path env kind >> ignore)
-    static member UseWebSocketHubs (env : IEnv, hubs : (string * Kind) list) =
-        fun (builder : IWebHostBuilder) ->
-            hubs
-            |> List.iter (fun (path, kind) ->
-                builder |> Giraffe.UseWebSocketHub (env, path, kind)
-            )
+    static member addService (services : IServiceCollection) =
+        services.AddGiraffe () |> ignore
+    static member useHandler (handler : HttpHandler) =
+        WebHost.setup (fun host -> host.UseGiraffe handler |> ignore)
+    static member useErrorHandler (handler : ErrorHandler) =
+        WebHost.setup (fun host -> host.UseGiraffeErrorHandler handler |> ignore)
 
 type Giraffe with
-    static member SetHandler (handler : HttpHandler) = Giraffe.UseHandler handler
-    static member SetErrorHandler (handler : ErrorHandler) = Giraffe.UseErrorHandler handler
-    static member SetUrl (url : string) =
-        fun (builder : IWebHostBuilder) ->
-            builder.UseUrls url |> ignore
-    static member SetPort (port : int) =
-        sprintf "http://0.0.0.0:%d" port
-        |> Giraffe.SetUrl
+    static member setHandler (handler : HttpHandler) = Giraffe.useHandler handler
+    static member setErrorHandler (handler : ErrorHandler) = Giraffe.useErrorHandler handler
+
+type WebHost with
+    static member setGiraffe (handler : HttpHandler, ?errorHandler : ErrorHandler) =
+        WebHost.setupServices (fun s -> s.AddGiraffe ())
+        >> Giraffe.setHandler handler
+        >> (
+            errorHandler
+            |> Option.map Giraffe.setErrorHandler
+            |> Option.defaultValue id
+        )

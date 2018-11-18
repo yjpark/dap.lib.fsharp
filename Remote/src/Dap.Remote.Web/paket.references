@@ -5,5 +5,7 @@ Giraffe
 Microsoft.AspNetCore.Cors
 Microsoft.AspNetCore.Hosting
 Microsoft.AspNetCore.Diagnostics
+Microsoft.AspNetCore.Diagnostics.Elm
 Microsoft.AspNetCore.Server.Kestrel
 Microsoft.AspNetCore.StaticFiles
+Microsoft.AspNetCore.WebSockets
