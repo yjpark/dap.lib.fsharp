@@ -30,6 +30,8 @@ type Http with
     static member Ok (json : IJson, ?tabs : int) = Http.Return (200, json, ?tabs = tabs)
 
 type Http with
+    static member BadRequest (text : string) = Http.Return (400, text)
+    static member BadRequest (json : IJson, ?tabs : int) = Http.Return (400, json, ?tabs = tabs)
     static member NotFound (text : string) = Http.Return (404, text)
     static member NotFound (json : IJson, ?tabs : int) = Http.Return (404, json, ?tabs = tabs)
 
