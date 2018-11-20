@@ -12,6 +12,7 @@
     <Compile Include="WebSocketHub.fs" />
     <Compile Include="WebHost.fs" />
     <Compile Include="Giraffe.fs" />
+    <Compile Include="Http.fs" />
     <Compile Include="WebPack.fs" />
   </ItemGroup>
   <ItemGroup>
