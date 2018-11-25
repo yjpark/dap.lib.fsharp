@@ -16,6 +16,7 @@ open Dap.Platform
 type WebHost = {
     Root : string option
     Urls : string []
+    DevMode : bool
     Actions : (IApplicationBuilder -> unit) list
     ServicesActions : (IServiceCollection -> unit) list
 } with
@@ -39,6 +40,7 @@ type WebHost = {
         {
             Root = None
             Urls = [| |]
+            DevMode = false
             Actions = []
             ServicesActions = []
         }
@@ -77,18 +79,19 @@ type WebHost with
         fun (this : WebHost) ->
             {this with Root = Some root}
             |> WebHost.setupBatch [
-                fun h -> h.UseDefaultFiles ()
-                fun h -> h.UseStaticFiles ()
+                fun h -> h.UseFileServer (this.DevMode)
             ]
 
 type WebHost with
     static member setDevMode =
-        WebHost.setupBatch [
-            fun h -> h.UseDeveloperExceptionPage ()
-            fun h -> h.UseStatusCodePages ()
-            fun h -> h.UseElmPage ()
-            fun h -> h.UseElmCapture ()
-        ]>> WebHost.setupServices (fun s -> s.AddElm ())
+        fun (this : WebHost) ->
+            {this with DevMode = true}
+            |> WebHost.setupBatch [
+                fun h -> h.UseDeveloperExceptionPage ()
+                fun h -> h.UseStatusCodePages ()
+                fun h -> h.UseElmPage ()
+                fun h -> h.UseElmCapture ()
+            ]|> WebHost.setupServices (fun s -> s.AddElm ())
 
 type WebHost with
     static member setWebSocketHub (env : IEnv, path : string, kind : Kind) =
