@@ -30,6 +30,10 @@ type Http with
     static member Ok (json : IJson, ?tabs : int) = Http.Return (200, json, ?tabs = tabs)
 
 type Http with
+    static member Unauthorized (text : string) = Http.Return (401, text)
+    static member Unauthorized (json : IJson, ?tabs : int) = Http.Return (401, json, ?tabs = tabs)
+    static member Forbidden (text : string) = Http.Return (403, text)
+    static member Forbidden (json : IJson, ?tabs : int) = Http.Return (403, json, ?tabs = tabs)
     static member BadRequest (text : string) = Http.Return (400, text)
     static member BadRequest (json : IJson, ?tabs : int) = Http.Return (400, json, ?tabs = tabs)
     static member NotFound (text : string) = Http.Return (404, text)
