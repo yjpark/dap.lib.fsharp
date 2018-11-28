@@ -2,6 +2,8 @@
 module Dap.Remote.Web.WebHost
 
 open System
+open System.IO
+
 open Microsoft.AspNetCore.Builder
 open Microsoft.AspNetCore.Hosting
 open Microsoft.AspNetCore.Diagnostics
@@ -12,11 +14,18 @@ open Dap.Prelude
 open Dap.Platform
 
 type WebHost = {
+    Root : string option
     Urls : string []
+    DevMode : bool
     Actions : (IApplicationBuilder -> unit) list
     ServicesActions : (IServiceCollection -> unit) list
 } with
     member this.Build (builder : IWebHostBuilder) =
+        this.Root
+        |> Option.iter (fun root ->
+            builder.UseContentRoot (root) |> ignore
+            builder.UseWebRoot (root) |> ignore
+        )
         builder.UseUrls this.Urls |> ignore
         builder.Configure (Action<IApplicationBuilder> (fun host ->
             this.Actions
@@ -29,7 +38,9 @@ type WebHost = {
         builder.Build ()
     static member empty =
         {
+            Root = None
             Urls = [| |]
+            DevMode = false
             Actions = []
             ServicesActions = []
         }
@@ -63,22 +74,33 @@ type WebHost with
         WebHost.setupServices (action >> ignore)
 
 type WebHost with
+    static member setStaticRoot (root : string) =
+        let root = Path.Combine (Directory.GetCurrentDirectory(), root);
+        fun (this : WebHost) ->
+            {this with Root = Some root}
+            |> WebHost.setupBatch [
+                fun h -> h.UseFileServer (this.DevMode)
+            ]
+
+type WebHost with
     static member setDevMode =
-        WebHost.setupBatch [
-            fun h -> h.UseDeveloperExceptionPage ()
-            fun h -> h.UseStatusCodePages ()
-            fun h -> h.UseElmPage ()
-            fun h -> h.UseElmCapture ()
-        ]>> WebHost.setupServices (fun s -> s.AddElm ())
+        fun (this : WebHost) ->
+            {this with DevMode = true}
+            |> WebHost.setupBatch [
+                fun h -> h.UseDeveloperExceptionPage ()
+                fun h -> h.UseStatusCodePages ()
+                fun h -> h.UseElmPage ()
+                fun h -> h.UseElmCapture ()
+            ]|> WebHost.setupServices (fun s -> s.AddElm ())
 
 type WebHost with
     static member setWebSocketHub (env : IEnv, path : string, kind : Kind) =
-        WebHost.setup (fun h -> h.UseWebSockets ())
-        >> WebHost.setup (WebSocketHub.useWebSocketHub env path kind)
+        WebHost.setup (fun h ->
+            h.UseWebSockets ()
+        )>> WebHost.setup (WebSocketHub.useWebSocketHub env path kind)
     static member setWebSocketHubs (env : IEnv, hubs : (string * Kind) list) =
         WebHost.setup (fun h -> h.UseWebSockets ())
         >> WebHost.setupBatch [
             for (path, kind) in hubs do
                 yield WebSocketHub.useWebSocketHub env path kind
         ]
-
