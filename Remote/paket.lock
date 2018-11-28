@@ -51,7 +51,7 @@ NUGET
     FSharp.Control.AsyncSeq (2.0.21)
       FSharp.Core (>= 4.3.2)
     FSharp.Core (4.5.2)
-    FSharp.Data (3.0.0-beta4)
+    FSharp.Data (3.0)
       FSharp.Core (>= 4.3.4)
     Giraffe (3.4)
       FSharp.Core (>= 4.5.2)

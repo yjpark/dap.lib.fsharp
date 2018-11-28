@@ -10,7 +10,7 @@ nuget Dap.Local.Farango
 nuget Dap.Local.Console
 
 nuget Microsoft.AspNetCore.WebSockets
-nuget FSharp.Data 3.0.0-beta4
+nuget FSharp.Data
 nuget jose-jwt
 
 # Server.Web
