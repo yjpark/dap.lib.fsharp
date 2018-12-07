@@ -7,7 +7,6 @@ open Elmish.React
 open Elmish.Browser.Navigation
 open Elmish.Browser.UrlParser
 open Elmish.Debug
-open Elmish.HMR
 
 open Dap.Prelude
 open Dap.Platform
@@ -31,18 +30,13 @@ let inline handleReq (req : Req<'route>) : ActorOperate<'pack, 'route, 'model, '
 let inline runProgram () : ActorOperate<'pack, 'route, 'model, 'msg> =
     fun runner (model, cmd) ->
         let args = runner.Actor.Args
+        let program =
+            model.Program
+            |> if args.UseDebugger then Program.withDebugger else id
         if args.UseHMR then
-            let program = model.Program |> Program.withHMR
-            if args.UseDebugger then
-                program |> Program.withDebugger |> Program.run
-            else
-                program |> Program.run
+            program |> Elmish.HMR.Program.run
         else
-            let program = model.Program
-            if args.UseDebugger then
-                program |> Program.withDebugger |> Program.run
-            else
-                program |> Program.run
+            program |> Program.run
         (model, cmd)
 
 let inline handleInternalEvt evt : ActorOperate<'pack, 'route, 'model, 'msg> =
