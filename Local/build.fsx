@@ -23,7 +23,7 @@ let feed =
 let projects =
     !! "src/Fable.Dap.Local/*.fsproj"
     ++ "src/Dap.Local/*.fsproj"
-    ++ "src/Dap.Local.Console/*.fsproj"
+    ++ "src/Dap.Local.Dashboard/*.fsproj"
     ++ "src/Dap.Local.Farango/*.fsproj"
 
 NuGet.create NuGet.release feed projects
