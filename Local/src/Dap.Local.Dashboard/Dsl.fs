@@ -1,4 +1,4 @@
-module Dap.Local.Console.Dsl
+module Dap.Local.Dashboard.Dsl
 
 open Dap.Prelude
 open Dap.Context
@@ -9,7 +9,7 @@ open Dap.Platform.Meta
 open Dap.Platform.Generator
 open Dap.Platform.Dsl
 
-let IConsolePack =
+let IDashboardPack =
     pack [] {
         nothing ()
     }
@@ -17,10 +17,10 @@ let IConsolePack =
 let compile segments =
     [
         G.File (segments, ["_Gen"; "Types.fs"],
-            G.AutoOpenModule ("Dap.Local.Console.Types",
+            G.AutoOpenModule ("Dap.Local.Dashboard.Types",
                 [
                     G.PlatformOpens
-                    //G.PackInterface <@ IConsolePack @>
+                    //G.PackInterface <@ IDashboardPack @>
                 ]
             )
         )

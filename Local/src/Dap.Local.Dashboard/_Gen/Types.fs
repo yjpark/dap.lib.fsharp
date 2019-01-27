@@ -1,5 +1,5 @@
 [<AutoOpen>]
-module Dap.Local.Console.Types
+module Dap.Local.Dashboard.Types
 
 open Dap.Prelude
 open Dap.Context

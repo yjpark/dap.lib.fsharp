@@ -29,6 +29,9 @@
             ".paket": true,
             "paket-files": true,
             ".fake": true,
-        }
+		},
+		"cSpell.words": [
+			"Farango"
+		]
     }
 }
