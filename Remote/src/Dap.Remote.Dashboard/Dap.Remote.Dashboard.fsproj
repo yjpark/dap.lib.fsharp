@@ -9,8 +9,18 @@
     <Description>Dap Dashboard Lib</Description>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Dsl.fs" />
+    <Compile Include="Dsl/Args.fs" />
+    <Compile Include="_Gen/Args.fs" />
+    <Compile Include="Meta.fs" />
+    <Compile Include="Dsl/Types.fs" />
     <Compile Include="_Gen/Types.fs" />
+    <Compile Include="Dsl/Operator.fs" />
+    <Compile Include="_Gen/Operator.fs" />
+    <Compile Include="Helper.fs" />
+    <Compile Include="OperatorHub/Types.fs" />
+    <Compile Include="OperatorHub/Logic.fs" />
+    <Compile Include="Dsl/Pack.fs" />
+    <Compile Include="_Gen/Pack.fs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Dap.Local\Dap.Local.fsproj" />

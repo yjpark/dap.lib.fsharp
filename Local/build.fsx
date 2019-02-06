@@ -2,7 +2,6 @@
 #load ".fake/build.fsx/intellisense.fsx"
 #load "src/Dap.Local/Meta.fs"
 #load "src/Dap.Local/Dsl.fs"
-#load "src/Dap.Local.Dashboard/Dsl.fs"
 #load "src/Dap.Local.Farango/Dsl.fs"
 
 open Fake.Core
@@ -23,7 +22,6 @@ let feed =
 let projects =
     !! "src/Fable.Dap.Local/*.fsproj"
     ++ "src/Dap.Local/*.fsproj"
-    ++ "src/Dap.Local.Dashboard/*.fsproj"
     ++ "src/Dap.Local.Farango/*.fsproj"
 
 NuGet.create NuGet.release feed projects
@@ -31,9 +29,6 @@ NuGet.create NuGet.release feed projects
 DotNet.createPrepares [
     ["Dap.Local"], fun _ ->
         Dap.Local.Dsl.compile ["src" ; "Dap.Local"]
-        |> List.iter traceSuccess
-    ["Dap.Local.Dashboard"], fun _ ->
-        Dap.Local.Dashboard.Dsl.compile ["src" ; "Dap.Local.Dashboard"]
         |> List.iter traceSuccess
     ["Dap.Local.Farango"], fun _ ->
         Dap.Local.Farango.Dsl.compile ["src" ; "Dap.Local.Farango"]

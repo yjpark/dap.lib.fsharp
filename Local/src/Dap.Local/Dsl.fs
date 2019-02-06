@@ -3,6 +3,7 @@ module Dap.Local.Dsl
 open Dap.Prelude
 open Dap.Context
 open Dap.Context.Meta
+open Dap.Context.Meta.Net
 open Dap.Context.Generator
 open Dap.Platform
 open Dap.Platform.Meta
