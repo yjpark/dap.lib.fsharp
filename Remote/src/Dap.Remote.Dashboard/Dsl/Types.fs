@@ -13,6 +13,7 @@ open Dap.Remote.Dashboard.Meta
 let AgentSnapshot =
     combo {
         var (M.instant (InstantFormat.DateHourMinuteSecondSub, "time"))
+        var (M.ident "ident")
         var (M.json "version")
         var (M.json "state")
         var (M.json "stats")
@@ -20,6 +21,7 @@ let AgentSnapshot =
 
 let EnvSnapshot =
     combo {
+        var (M.string "scope")
         list (M.custom (<@ AgentSnapshot @>, "services"))
         list (M.custom (<@ AgentSnapshot @>, "agents"))
     }

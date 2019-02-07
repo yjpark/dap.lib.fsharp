@@ -8,7 +8,7 @@ framework: auto-detect
 nuget Fable.JsonConverter
 nuget FSharp.Control.AsyncSeq
 nuget FSharp.Core
-nuget FSharp.Data 3.0.0-beta4
+nuget FSharp.Data
 nuget Newtonsoft.Json
 
 group Build
