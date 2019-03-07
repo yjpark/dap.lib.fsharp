@@ -1,5 +1,5 @@
 [<AutoOpen>]
-module Dap.Remote.Web.WebHost
+module Dap.Remote.Web.App.WebHost
 
 open System
 open System.IO
@@ -12,6 +12,7 @@ open Microsoft.Extensions.DependencyInjection
 
 open Dap.Prelude
 open Dap.Platform
+open Dap.Remote.Web
 
 type WebHost = {
     Root : string option

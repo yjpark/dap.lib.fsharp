@@ -1,5 +1,5 @@
 [<AutoOpen>]
-module Dap.Remote.Web.Giraffe
+module Dap.Remote.Web.App.Giraffe
 
 open System
 open Microsoft.AspNetCore.Builder

@@ -1,3 +1,4 @@
+(* FAKE: 5.12.1 *)
 #r "paket: groupref Build //"
 #load ".fake/build.fsx/intellisense.fsx"
 #load "src/Dap.Remote.Dashboard/Dsl/Args.fs"
