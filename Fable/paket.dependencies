@@ -1,6 +1,5 @@
 version 5.196.2
 
-source https://nuget.yjpark.org/nuget/dap
 source https://www.nuget.org/api/v2
 storage: none
 framework: auto-detect
@@ -19,7 +18,6 @@ nuget Fable.Elmish.Debugger
 nuget Fable.Elmish.HMR
 
 group Build
-    source https://nuget.yjpark.org/nuget/dap
     source https://www.nuget.org/api/v2
     storage: none
     framework: netstandard2.0

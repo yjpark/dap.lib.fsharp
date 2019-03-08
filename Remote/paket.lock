@@ -1,7 +1,7 @@
 STORAGE: NONE
 RESTRICTION: == netstandard2.0
 NUGET
-  remote: https://nuget.yjpark.org/nuget/dap
+  remote: https://www.nuget.org/api/v2
     Dap.Archive (0.6.0)
       Dap.Remote (>= 0.6)
       FSharp.Core (>= 4.5.4)
@@ -31,7 +31,6 @@ NUGET
     Dap.WebSocket (0.6.0)
       Dap.Platform (>= 0.6.4)
       FSharp.Core (>= 4.5.4)
-  remote: https://www.nuget.org/api/v2
     Dap.Context (0.6.1)
       Dap.Prelude (>= 0.6)
       Thoth.Json.Net (>= 2.5)
@@ -1514,7 +1513,6 @@ NUGET
     Thoth.Json.Net (2.5)
       FSharp.Core (>= 4.5.2)
       Newtonsoft.Json (>= 11.0.2)
-  remote: https://nuget.yjpark.org/nuget/dap
     Dap.Context (0.6.0)
       Dap.Prelude (>= 0.6)
       Thoth.Json.Net (>= 2.5)

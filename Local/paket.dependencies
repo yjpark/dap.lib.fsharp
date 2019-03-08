@@ -1,6 +1,5 @@
 version 5.196.2
 
-source https://nuget.yjpark.org/nuget/dap
 source https://www.nuget.org/api/v2
 storage: none
 framework: auto-detect
@@ -12,7 +11,6 @@ nuget Dap.Farango
 nuget Fable.Dap.Platform
 
 group Build
-    source https://nuget.yjpark.org/nuget/dap
     source https://www.nuget.org/api/v2
     storage: none
     framework: netstandard2.0

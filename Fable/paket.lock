@@ -1,7 +1,7 @@
 STORAGE: NONE
 RESTRICTION: == netstandard2.0
 NUGET
-  remote: https://nuget.yjpark.org/nuget/dap
+  remote: https://www.nuget.org/api/v2
     Dap.Context (0.6.0)
       Dap.Prelude (>= 0.6)
       Thoth.Json.Net (>= 2.5)
@@ -34,7 +34,6 @@ NUGET
       Fable.Dap.WebSocket (>= 0.6)
     Fable.Dap.WebSocket (0.6.0)
       Fable.Dap.Platform (>= 0.6.2)
-  remote: https://www.nuget.org/api/v2
     Elmish (2.0.3)
       FSharp.Core (>= 4.5.2)
     Fable.Core (2.0.3)
