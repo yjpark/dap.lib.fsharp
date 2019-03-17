@@ -10,6 +10,11 @@ open Dap.Context.Generator.Util
 open Dap.Platform.Meta
 
 type M with
+    static member environment (?name : string, ?spawner : string, ?kind : Kind, ?key : Key, ?aliases : ModuleAlias list) =
+        let name = defaultArg name "IEnvironment"
+        M.feature (name, ?spawner = spawner, ?kind = kind, ?key = key, ?aliases = aliases)
+
+type M with
     static member preferences (?name : string, ?spawner : string, ?kind : Kind, ?key : Key, ?aliases : ModuleAlias list) =
         let name = defaultArg name "IPreferences"
         M.feature (name, ?spawner = spawner, ?kind = kind, ?key = key, ?aliases = aliases)

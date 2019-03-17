@@ -15,11 +15,13 @@ module Context = Dap.Platform.Context
  * Generated: <Pack>
  *)
 type IAppPackArgs =
+    abstract Environment : Context.Args<IEnvironment> with get
     abstract Preferences : Context.Args<IPreferences> with get
     abstract SecureStorage : Context.Args<ISecureStorage> with get
 
 type IAppPack =
     inherit IPack
     abstract Args : IAppPackArgs with get
+    abstract Environment : Context.Agent<IEnvironment> with get
     abstract Preferences : Context.Agent<IPreferences> with get
     abstract SecureStorage : Context.Agent<ISecureStorage> with get

@@ -14,10 +14,12 @@ type Context (logging : ILogging) =
     inherit BaseSecureStorage<Context> (logging)
     do (
         let owner = base.Owner
+        let environment = IEnvironment.Instance
         let root = base.Properties.Root
         let secret = base.Properties.Secret
         let getPath = fun (luid : Luid) ->
-            Path.Combine (root.Value, luid)
+            let folder = Path.Combine (environment.Properties.DataDirectory.Value, root.Value)
+            Path.Combine (folder, luid)
         let encrypt (content : string) =
             Des.encrypt secret.Value content
         let decrypt (content : string) : string option =

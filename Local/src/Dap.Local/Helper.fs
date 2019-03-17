@@ -12,5 +12,6 @@ type FileSinkArgs with
         |> this.WithPath
 
 type IAppPack with
+    member this.EnvironmentProps = this.Environment.Context.Properties
     member this.PreferencesProps = this.Preferences.Context.Properties
     member this.SecureStorageProps = this.SecureStorage.Context.Properties

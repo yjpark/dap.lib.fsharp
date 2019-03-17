@@ -17,6 +17,18 @@ let SetTextReq =
         var (M.string ("text"))
     }
 
+let EnvironmentProps =
+    combo {
+        var (M.string ("data_directory", value="data"))
+        var (M.string ("cache_directory", value="cache"))
+    }
+
+let Environment =
+    context <@ EnvironmentProps @> {
+        kind "Environment"
+        handler (M.unit "inspect") (M.json response)
+    }
+
 let PreferencesProps =
     combo {
         var (M.string ("root", value="preferences"))
@@ -50,6 +62,7 @@ let SecureStorage =
 
 let IAppPack =
     pack [] {
+        add (M.environment ())
         add (M.preferences ())
         add (M.secureStorage ())
     }
@@ -69,6 +82,8 @@ let compile segments =
                 [
                     G.PlatformOpens
                     G.JsonRecord (<@ SetTextReq @>)
+                    G.Combo (<@ EnvironmentProps @>)
+                    G.Feature (<@ Environment @>)
                     G.Combo (<@ PreferencesProps @>)
                     G.Feature (<@ Preferences @>)
                     G.Combo (<@ SecureStorageProps @>)

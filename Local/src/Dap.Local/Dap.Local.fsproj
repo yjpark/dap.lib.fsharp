@@ -4,7 +4,7 @@
     <PackageProjectUrl>https://github.com/yjpark/dap.lib.fsharp</PackageProjectUrl>
     <PackageTags>fsharp;dap;</PackageTags>
     <Authors>YJ Park</Authors>
-    <Version>0.6.0</Version>
+    <Version>0.6.1</Version>
     <Description>Local Libs</Description>
   </PropertyGroup>
   <ItemGroup>
@@ -20,6 +20,7 @@
     <Compile Include="Storage/Base/Logic.fs" />
     <Compile Include="Storage/Text/Service.fs" />
     <Compile Include="Storage/Json/Service.fs" />
+    <Compile Include="Feature/Environment.fs" />
     <Compile Include="Feature/TextFile.fs" />
     <Compile Include="Feature/Preferences.fs" />
     <Compile Include="Feature/SecureStorage.fs" />
