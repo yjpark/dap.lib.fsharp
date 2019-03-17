@@ -23,12 +23,23 @@ let checkDirectory (path : string) =
 let fileExists (path : string) =
     File.Exists (path)
 
-let openForRead (path : string) : StreamReader option =
+let tryCreateFromPath<'v> (path : string) (create : string -> 'v) =
     if fileExists path then
         try
-            Some <| new StreamReader (new FileStream (path, FileMode.Open, FileAccess.Read))
+            Some <| create path
         with e ->
-            logException (getLogger ()) "openForRead" "Exception_Raised" path e
+            logException (getLogger ()) "tryCreateFromPath" "Exception_Raised" path e
+            None
+    else
+        None
+
+let tryCreateFromStream<'v> (path : string) (create : System.IO.Stream -> 'v) =
+    if fileExists path then
+        try
+            use stream = new FileStream (path, FileMode.Open, FileAccess.Read)
+            Some <| create stream
+        with e ->
+            logException (getLogger ()) "tryCreateFromStream" "Exception_Raised" path e
             None
     else
         None

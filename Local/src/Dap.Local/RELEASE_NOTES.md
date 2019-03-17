@@ -1,3 +1,7 @@
+## 0.6.2
+* EmbeddedResource.FromStream
+* Add BinaryFile helper
+
 ## 0.6.1
 * Add IEnvironment
 

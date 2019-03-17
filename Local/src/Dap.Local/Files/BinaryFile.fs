@@ -1,5 +1,5 @@
 [<RequireQualifiedAccess>]
-module Dap.Local.Feature.TextFile
+module Dap.Local.BinaryFile
 
 open System.IO
 open FSharp.Control.Tasks.V2
@@ -11,23 +11,20 @@ open Dap.Local
 open Dap.Local.Storage.Base.Types
 
 let load (path : string) =
-    FileSystem.openForRead path
-    |> Option.map (fun reader ->
-        let content = reader.ReadToEnd()
-        reader.Close()
-        content
+    FileSystem.tryCreateFromPath path (fun path ->
+        File.ReadAllBytes path
     )
 
-let save (path : string) (content : string) =
+let save (path : string) (content : Bytes) =
     FileSystem.checkDirectory path
-    File.WriteAllText (path, content)
+    File.WriteAllBytes (path, content)
 
 type Provider (root : string) =
-    interface IProvider<string> with
+    interface IProvider<Bytes> with
         member __.LoadAsync (luid : Luid) = task {
             return load <| Path.Combine (root, luid)
         }
-        member __.SaveAsync (param : SaveParam<string>) = task {
+        member __.SaveAsync (param : SaveParam<Bytes>) = task {
             let path = Path.Combine (root, param.Luid)
             let exist = FileSystem.fileExists path
             if exist && not param.AllowOverwrite then
