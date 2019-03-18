@@ -1,3 +1,6 @@
+## 0.6.3
+* Add Dap.Local.Cache module
+
 ## 0.6.2
 * EmbeddedResource.FromStream
 * Add BinaryFile helper
