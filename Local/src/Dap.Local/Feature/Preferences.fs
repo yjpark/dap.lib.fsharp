@@ -23,7 +23,6 @@ type Context (logging : ILogging) =
         )
         base.Get.SetupHandler (fun (luid : Luid) ->
             TextFile.load <| getPath luid
-            |> Option.defaultValue ""
         )
         base.Set.SetupHandler (fun (req : SetTextReq) ->
             TextFile.save (getPath req.Path) req.Text

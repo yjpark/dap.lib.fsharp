@@ -38,7 +38,7 @@ let Preferences =
     context <@ PreferencesProps @> {
         kind "Preferences"
         handler (M.luid "has") (M.bool response)
-        handler (M.luid "get") (M.string response)
+        handler (M.luid "get") (M.option (M.string response))
         handler (M.custom (<@ SetTextReq @>, "set")) (M.unit response)
         handler (M.luid "remove") (M.unit response)
         handler (M.unit "clear") (M.unit response)
@@ -54,7 +54,7 @@ let SecureStorage =
     context <@ SecureStorageProps @> {
         kind "SecureStorage"
         async_handler (M.luid "has") (M.bool response)
-        async_handler (M.luid "get") (M.string response)
+        async_handler (M.luid "get") (M.option (M.string response))
         async_handler (M.custom (<@ SetTextReq @>, "set")) (M.unit response)
         handler (M.luid "remove") (M.unit response)
         handler (M.unit "clear") (M.unit response)

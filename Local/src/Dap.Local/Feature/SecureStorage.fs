@@ -31,7 +31,6 @@ type Context (logging : ILogging) =
             return
                 TextFile.load <| getPath luid
                 |> Option.bind decrypt
-                |> Option.defaultValue ""
         })
         base.SetAsync.SetupHandler (fun (req : SetTextReq) -> task {
             return TextFile.save (getPath req.Path) (encrypt req.Text)

@@ -1,3 +1,6 @@
+## 0.6.4
+* Preferences and SecureStorage Get return option
+
 ## 0.6.3
 * Add Dap.Local.Cache module
 

@@ -126,7 +126,7 @@ type IPreferences =
     inherit IContext<PreferencesProps>
     abstract PreferencesProps : PreferencesProps with get
     abstract Has : IHandler<Luid, bool> with get
-    abstract Get : IHandler<Luid, string> with get
+    abstract Get : IHandler<Luid, string option> with get
     abstract Set : IHandler<SetTextReq, unit> with get
     abstract Remove : IHandler<Luid, unit> with get
     abstract Clear : IHandler<unit, unit> with get
@@ -141,20 +141,20 @@ let PreferencesKind = "Preferences"
 type BasePreferences<'context when 'context :> IPreferences> (logging : ILogging) =
     inherit CustomContext<'context, ContextSpec<PreferencesProps>, PreferencesProps> (logging, new ContextSpec<PreferencesProps>(PreferencesKind, PreferencesProps.Create))
     let has = base.Handlers.Add<Luid, bool> (E.string, D.string, E.bool, D.bool, "has")
-    let get = base.Handlers.Add<Luid, string> (E.string, D.string, E.string, D.string, "get")
+    let get = base.Handlers.Add<Luid, string option> (E.string, D.string, (E.option E.string), (D.option D.string), "get")
     let set = base.Handlers.Add<SetTextReq, unit> (SetTextReq.JsonEncoder, SetTextReq.JsonDecoder, E.unit, D.unit, "set")
     let remove = base.Handlers.Add<Luid, unit> (E.string, D.string, E.unit, D.unit, "remove")
     let clear = base.Handlers.Add<unit, unit> (E.unit, D.unit, E.unit, D.unit, "clear")
     member this.PreferencesProps : PreferencesProps = this.Properties
     member __.Has : IHandler<Luid, bool> = has
-    member __.Get : IHandler<Luid, string> = get
+    member __.Get : IHandler<Luid, string option> = get
     member __.Set : IHandler<SetTextReq, unit> = set
     member __.Remove : IHandler<Luid, unit> = remove
     member __.Clear : IHandler<unit, unit> = clear
     interface IPreferences with
         member this.PreferencesProps : PreferencesProps = this.Properties
         member __.Has : IHandler<Luid, bool> = has
-        member __.Get : IHandler<Luid, string> = get
+        member __.Get : IHandler<Luid, string option> = get
         member __.Set : IHandler<SetTextReq, unit> = set
         member __.Remove : IHandler<Luid, unit> = remove
         member __.Clear : IHandler<unit, unit> = clear
@@ -192,7 +192,7 @@ type ISecureStorage =
     abstract Remove : IHandler<Luid, unit> with get
     abstract Clear : IHandler<unit, unit> with get
     abstract HasAsync : IAsyncHandler<Luid, bool> with get
-    abstract GetAsync : IAsyncHandler<Luid, string> with get
+    abstract GetAsync : IAsyncHandler<Luid, string option> with get
     abstract SetAsync : IAsyncHandler<SetTextReq, unit> with get
 
 (*
@@ -207,20 +207,20 @@ type BaseSecureStorage<'context when 'context :> ISecureStorage> (logging : ILog
     let remove = base.Handlers.Add<Luid, unit> (E.string, D.string, E.unit, D.unit, "remove")
     let clear = base.Handlers.Add<unit, unit> (E.unit, D.unit, E.unit, D.unit, "clear")
     let hasAsync = base.AsyncHandlers.Add<Luid, bool> (E.string, D.string, E.bool, D.bool, "has")
-    let getAsync = base.AsyncHandlers.Add<Luid, string> (E.string, D.string, E.string, D.string, "get")
+    let getAsync = base.AsyncHandlers.Add<Luid, string option> (E.string, D.string, (E.option E.string), (D.option D.string), "get")
     let setAsync = base.AsyncHandlers.Add<SetTextReq, unit> (SetTextReq.JsonEncoder, SetTextReq.JsonDecoder, E.unit, D.unit, "set")
     member this.SecureStorageProps : SecureStorageProps = this.Properties
     member __.Remove : IHandler<Luid, unit> = remove
     member __.Clear : IHandler<unit, unit> = clear
     member __.HasAsync : IAsyncHandler<Luid, bool> = hasAsync
-    member __.GetAsync : IAsyncHandler<Luid, string> = getAsync
+    member __.GetAsync : IAsyncHandler<Luid, string option> = getAsync
     member __.SetAsync : IAsyncHandler<SetTextReq, unit> = setAsync
     interface ISecureStorage with
         member this.SecureStorageProps : SecureStorageProps = this.Properties
         member __.Remove : IHandler<Luid, unit> = remove
         member __.Clear : IHandler<unit, unit> = clear
         member __.HasAsync : IAsyncHandler<Luid, bool> = hasAsync
-        member __.GetAsync : IAsyncHandler<Luid, string> = getAsync
+        member __.GetAsync : IAsyncHandler<Luid, string option> = getAsync
         member __.SetAsync : IAsyncHandler<SetTextReq, unit> = setAsync
     interface IFeature
     member this.AsSecureStorage = this :> ISecureStorage
