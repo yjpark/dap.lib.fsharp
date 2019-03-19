@@ -33,16 +33,28 @@ let tryCreateFromPath<'v> (path : string) (create : string -> 'v) =
     else
         None
 
-let tryCreateFromStream<'v> (path : string) (create : System.IO.Stream -> 'v) =
+let tryOpenStream (path : string) =
     if fileExists path then
         try
-            use stream = new FileStream (path, FileMode.Open, FileAccess.Read)
-            Some <| create stream
+            let stream = new FileStream (path, FileMode.Open, FileAccess.Read)
+            Some stream
         with e ->
-            logException (getLogger ()) "tryCreateFromStream" "Exception_Raised" path e
+            logException (getLogger ()) "tryOpenStream" "Exception_Raised" path e
             None
     else
         None
+
+let tryCreateFromStream<'v> (path : string) (create : System.IO.Stream -> 'v) =
+    tryOpenStream path
+    |> Option.bind (fun stream ->
+        try
+            let result = Some <| create stream
+            stream.Close ()
+            result
+        with e ->
+            logException (getLogger ()) "tryCreateFromStream" "Exception_Raised" path e
+            None
+    )
 
 let deleteFile (path : string) =
     if fileExists path then

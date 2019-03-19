@@ -1,3 +1,6 @@
+## 0.6.5
+* API changes with FileSystem and EmbeddedResource
+
 ## 0.6.4
 * Preferences and SecureStorage Get return option
 
