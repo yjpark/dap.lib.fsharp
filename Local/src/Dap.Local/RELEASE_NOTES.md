@@ -1,3 +1,6 @@
+## 0.6.6
+* Support decode multiple with FileSystem and EmbeddedResource
+
 ## 0.6.5
 * API changes with FileSystem and EmbeddedResource
 
