@@ -83,6 +83,6 @@ type EmbeddedResource = EmbeddedResourceHelper with
                 EmbeddedResource.TryCreateFromStream (relPath = name, create = decodeFromStream decoder, logger = logger, assembly = assembly)
                 |> Option.map (fun v -> name.Replace (prefix, ""), v)
             else
-                logWarn logger "EmbeddedResource.CreateMultiple" "Prefix_Not_Matched" (name, prefix)
+                //logWarn logger "EmbeddedResource.CreateMultiple" "Prefix_Not_Matched" (name, prefix)
                 None
         )
