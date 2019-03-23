@@ -2,6 +2,7 @@
 module Dap.Local.FileSystem
 
 open System.IO
+open System.Text
 open FSharp.Control.Tasks.V2
 
 open Dap.Prelude
@@ -55,6 +56,25 @@ let tryCreateFromStream<'v> (path : string) (create : System.IO.Stream -> 'v) =
             logException (getLogger ()) "tryCreateFromStream" "Exception_Raised" path e
             None
     )
+
+let private decodeFromStream<'v> (decoder : JsonDecoder<'v>) (stream : Stream) =
+    use reader = new StreamReader (stream, Encoding.UTF8)
+    reader.ReadToEnd ()
+    |> decodeJson decoder
+
+let decodeMultiple<'v> (path : string) (decoder : JsonDecoder<'v>) : (string * 'v) array =
+    let dirInfo = new DirectoryInfo (path);
+    if dirInfo.Exists then
+        dirInfo.GetFiles ()
+        |> Array.choose (fun file ->
+            tryCreateFromStream<'v> file.FullName <| decodeFromStream decoder
+            |> Option.map (fun v ->
+                file.Name, v)
+        )
+    else
+        logInfo (getLogger ()) "decodeMultiple" "Directory_Not_Exist" dirInfo
+        [| |]
+
 
 let deleteFile (path : string) =
     if fileExists path then

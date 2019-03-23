@@ -71,7 +71,7 @@ type EmbeddedResource = EmbeddedResourceHelper with
                 logException logger "EmbeddedResource.TryCreateFromStream" (typeof<'v>.FullName) (assembly, relPath) e
                 None
         )
-    static member CreateMultiple<'v> (prefix : string, decoder : JsonDecoder<'v>, ?logger : ILogger, ?assembly : Assembly) : (string * 'v) array =
+    static member DecodeMultiple<'v> (prefix : string, decoder : JsonDecoder<'v>, ?logger : ILogger, ?assembly : Assembly) : (string * 'v) array =
         let assembly = assembly |> Option.defaultValue (Assembly.GetCallingAssembly ())
         let prefix = prefix.Replace ("/", ".")
         let logger =
