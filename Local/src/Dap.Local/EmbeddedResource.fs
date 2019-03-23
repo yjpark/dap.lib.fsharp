@@ -14,7 +14,11 @@ type EmbeddedResource = EmbeddedResourceHelper with
         sprintf "%s.%s" (assembly.GetName().Name) resPath
     static member GetNames (?assembly : Assembly) =
         let assembly = assembly |> Option.defaultValue (Assembly.GetCallingAssembly ())
+        let prefix = sprintf "%s." (assembly.GetName().Name)
         assembly.GetManifestResourceNames ()
+        |> Array.map (fun path ->
+            path.Replace (prefix, "")
+        )
     static member LogNames (logger : ILogger, ?assembly : Assembly) =
         EmbeddedResource.GetNames (?assembly = assembly)
         |> Array.iter (fun name ->
