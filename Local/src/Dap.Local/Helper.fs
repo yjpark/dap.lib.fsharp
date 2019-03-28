@@ -7,8 +7,8 @@ open Dap.Local.Feature
 
 type IEnvironment with
     static member Instance = Environment.getInstance ()
-    member this.PreferencesProp = this.Preferences.Properties
-    member this.SecureStorageProp = this.SecureStorage.Properties
+    member this.PreferencesProps = this.Preferences.Properties
+    member this.SecureStorageProps = this.SecureStorage.Properties
 
 type FileSinkArgs with
     member this.WithTimestamp () =
