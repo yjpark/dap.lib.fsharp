@@ -10,7 +10,8 @@ open Dap.Local
 open Dap.Local.Feature
 
 let getPath (relPath : string) : string =
-    let cacheDirectory = IEnvironment.Instance.Properties.CacheDirectory.Value
+    let environment = Environment.getInstance ()
+    let cacheDirectory = environment.Properties.CacheDirectory.Value
     Path.Combine (cacheDirectory, relPath)
 
 let has (relPath : string) : bool =

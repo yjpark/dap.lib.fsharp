@@ -15,7 +15,7 @@ let EnvironmentKind = "Environment"
 
 let mutable private instance : IEnvironment option = None
 
-let private getInstance () =
+let internal getInstance () =
     if instance.IsNone then
         instance <- Some <| Feature.create<IEnvironment> (getLogging ())
     instance.Value
@@ -44,6 +44,3 @@ type Context (logging : ILogging) =
     override this.Self = this
     override __.Spawn l = new Context (l)
     interface IFallback
-
-type IEnvironment with
-    static member Instance = getInstance ()

@@ -14,7 +14,7 @@ type Context (logging : ILogging) =
     inherit BaseSecureStorage<Context> (logging)
     do (
         let owner = base.Owner
-        let environment = IEnvironment.Instance
+        let environment = Environment.getInstance ()
         let root = base.Properties.Root
         let secret = base.Properties.Secret
         let getPath = fun (luid : Luid) ->

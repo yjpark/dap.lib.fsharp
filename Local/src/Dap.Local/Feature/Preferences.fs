@@ -13,7 +13,7 @@ open Dap.Local
 type Context (logging : ILogging) =
     inherit BasePreferences<Context> (logging)
     do (
-        let environment = IEnvironment.Instance
+        let environment = Environment.getInstance ()
         let root = base.Properties.Root
         let getPath = fun (luid : Luid) ->
             let folder = Path.Combine (environment.Properties.DataDirectory.Value, root.Value)

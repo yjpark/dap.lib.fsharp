@@ -1,3 +1,6 @@
+## 0.6.8
+* put IEnvironment.Instance into Helper.fs
+
 ## 0.6.7
 * Add IEnvironment.Preferences and SecureStorage
 

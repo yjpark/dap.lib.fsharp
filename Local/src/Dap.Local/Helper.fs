@@ -3,6 +3,10 @@ module Dap.Local.Helper
 
 open Dap.Prelude
 open Dap.Platform
+open Dap.Local.Feature
+
+type IEnvironment with
+    static member Instance = Environment.getInstance ()
 
 type FileSinkArgs with
     member this.WithTimestamp () =
