@@ -1,3 +1,6 @@
+## 0.6.7
+* Add IEnvironment.Preferences and SecureStorage
+
 ## 0.6.6
 * Support decode multiple with FileSystem and EmbeddedResource
 

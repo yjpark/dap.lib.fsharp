@@ -54,54 +54,6 @@ type SetTextReq = {
 (*
  * Generated: <Combo>
  *)
-type EnvironmentProps (owner : IOwner, key : Key) =
-    inherit WrapProperties<EnvironmentProps, IComboProperty> ()
-    let target' = Properties.combo (owner, key)
-    let dataDirectory = target'.AddVar<(* EnvironmentProps *) string> (E.string, D.string, "data_directory", "data", None)
-    let cacheDirectory = target'.AddVar<(* EnvironmentProps *) string> (E.string, D.string, "cache_directory", "cache", None)
-    do (
-        base.Setup (target')
-    )
-    static member Create (o, k) = new EnvironmentProps (o, k)
-    static member Create () = EnvironmentProps.Create (noOwner, NoKey)
-    static member AddToCombo key (combo : IComboProperty) =
-        combo.AddCustom<EnvironmentProps> (EnvironmentProps.Create, key)
-    override this.Self = this
-    override __.Spawn (o, k) = EnvironmentProps.Create (o, k)
-    override __.SyncTo t = target'.SyncTo t.Target
-    member __.DataDirectory (* EnvironmentProps *) : IVarProperty<string> = dataDirectory
-    member __.CacheDirectory (* EnvironmentProps *) : IVarProperty<string> = cacheDirectory
-
-(*
- * Generated: <Context>
- *)
-type IEnvironment =
-    inherit IFeature
-    inherit IContext<EnvironmentProps>
-    abstract EnvironmentProps : EnvironmentProps with get
-    abstract Inspect : IHandler<unit, Json> with get
-
-(*
- * Generated: <Context>
- *)
-[<Literal>]
-let EnvironmentKind = "Environment"
-
-[<AbstractClass>]
-type BaseEnvironment<'context when 'context :> IEnvironment> (logging : ILogging) =
-    inherit CustomContext<'context, ContextSpec<EnvironmentProps>, EnvironmentProps> (logging, new ContextSpec<EnvironmentProps>(EnvironmentKind, EnvironmentProps.Create))
-    let inspect = base.Handlers.Add<unit, Json> (E.unit, D.unit, E.json, D.json, "inspect")
-    member this.EnvironmentProps : EnvironmentProps = this.Properties
-    member __.Inspect : IHandler<unit, Json> = inspect
-    interface IEnvironment with
-        member this.EnvironmentProps : EnvironmentProps = this.Properties
-        member __.Inspect : IHandler<unit, Json> = inspect
-    interface IFeature
-    member this.AsEnvironment = this :> IEnvironment
-
-(*
- * Generated: <Combo>
- *)
 type PreferencesProps (owner : IOwner, key : Key) =
     inherit WrapProperties<PreferencesProps, IComboProperty> ()
     let target' = Properties.combo (owner, key)
@@ -224,3 +176,35 @@ type BaseSecureStorage<'context when 'context :> ISecureStorage> (logging : ILog
         member __.SetAsync : IAsyncHandler<SetTextReq, unit> = setAsync
     interface IFeature
     member this.AsSecureStorage = this :> ISecureStorage
+
+(*
+ * Generated: <Combo>
+ *)
+type EnvironmentProps (owner : IOwner, key : Key) =
+    inherit WrapProperties<EnvironmentProps, IComboProperty> ()
+    let target' = Properties.combo (owner, key)
+    let dataDirectory = target'.AddVar<(* EnvironmentProps *) string> (E.string, D.string, "data_directory", "data", None)
+    let cacheDirectory = target'.AddVar<(* EnvironmentProps *) string> (E.string, D.string, "cache_directory", "cache", None)
+    do (
+        base.Setup (target')
+    )
+    static member Create (o, k) = new EnvironmentProps (o, k)
+    static member Create () = EnvironmentProps.Create (noOwner, NoKey)
+    static member AddToCombo key (combo : IComboProperty) =
+        combo.AddCustom<EnvironmentProps> (EnvironmentProps.Create, key)
+    override this.Self = this
+    override __.Spawn (o, k) = EnvironmentProps.Create (o, k)
+    override __.SyncTo t = target'.SyncTo t.Target
+    member __.DataDirectory (* EnvironmentProps *) : IVarProperty<string> = dataDirectory
+    member __.CacheDirectory (* EnvironmentProps *) : IVarProperty<string> = cacheDirectory
+
+(*
+ * Generated: <Context>
+ *)
+type IEnvironment =
+    inherit IFeature
+    inherit IContext<EnvironmentProps>
+    abstract EnvironmentProps : EnvironmentProps with get
+    abstract Inspect : IHandler<unit, Json> with get
+    abstract Preferences : IPreferences with get
+    abstract SecureStorage : ISecureStorage with get

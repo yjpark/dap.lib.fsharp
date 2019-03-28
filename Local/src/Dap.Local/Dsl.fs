@@ -17,18 +17,6 @@ let SetTextReq =
         var (M.string ("text"))
     }
 
-let EnvironmentProps =
-    combo {
-        var (M.string ("data_directory", value="data"))
-        var (M.string ("cache_directory", value="cache"))
-    }
-
-let Environment =
-    context <@ EnvironmentProps @> {
-        kind "Environment"
-        handler (M.unit "inspect") (M.json response)
-    }
-
 let PreferencesProps =
     combo {
         var (M.string ("root", value="preferences"))
@@ -60,11 +48,16 @@ let SecureStorage =
         handler (M.unit "clear") (M.unit response)
     }
 
-let IAppPack =
-    pack [] {
-        add (M.environment ())
-        add (M.preferences ())
-        add (M.secureStorage ())
+let EnvironmentProps =
+    combo {
+        var (M.string ("data_directory", value="data"))
+        var (M.string ("cache_directory", value="cache"))
+    }
+
+let Environment =
+    context <@ EnvironmentProps @> {
+        kind "Environment"
+        handler (M.unit "inspect") (M.json response)
     }
 
 type G with
@@ -82,21 +75,15 @@ let compile segments =
                 [
                     G.PlatformOpens
                     G.JsonRecord (<@ SetTextReq @>)
-                    G.Combo (<@ EnvironmentProps @>)
-                    G.Feature (<@ Environment @>)
                     G.Combo (<@ PreferencesProps @>)
                     G.Feature (<@ Preferences @>)
                     G.Combo (<@ SecureStorageProps @>)
                     G.Feature (<@ SecureStorage @>)
-                ]
-            )
-        )
-        G.File (segments, ["_Gen"; "IAppPack.fs"],
-            G.AutoOpenModule ("Dap.Local.IAppPack",
-                [
-                    G.PlatformOpens
-                    G.PackOpens
-                    G.PackInterface <@ IAppPack @>
+                    G.Combo (<@ EnvironmentProps @>)
+                    G.FeatureInterface (<@ Environment @>) @ [
+                        "    abstract Preferences : IPreferences with get"
+                        "    abstract SecureStorage : ISecureStorage with get"
+                    ]
                 ]
             )
         )
