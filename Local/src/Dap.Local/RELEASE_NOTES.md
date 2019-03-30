@@ -1,3 +1,6 @@
+## 0.6.9
+* Bugfix with Environment timing
+
 ## 0.6.8
 * put IEnvironment.Instance into Helper.fs
 

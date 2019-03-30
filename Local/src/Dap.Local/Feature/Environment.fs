@@ -24,8 +24,8 @@ let internal getInstance () =
 type Context<'context when 'context :> IEnvironment> (logging : ILogging) as self =
     inherit CustomContext<'context, ContextSpec<EnvironmentProps>, EnvironmentProps> (logging, new ContextSpec<EnvironmentProps>(EnvironmentKind, EnvironmentProps.Create))
     let inspect = base.Handlers.Add<unit, Json> (E.unit, D.unit, E.json, D.json, "inspect")
-    let preferences : IPreferences = Feature.create<IPreferences> (logging)
-    let secureStorage : ISecureStorage = Feature.create<ISecureStorage> (logging)
+    let preferences : Lazy<IPreferences> = lazy (Feature.create<IPreferences> (logging))
+    let secureStorage : Lazy<ISecureStorage> = lazy (Feature.create<ISecureStorage> (logging))
     do (
         if instance.IsNone then
             instance <- Some (self :> IEnvironment)
@@ -35,8 +35,8 @@ type Context<'context when 'context :> IEnvironment> (logging : ILogging) as sel
     interface IEnvironment with
         member this.EnvironmentProps = this.Properties
         member __.Inspect = inspect
-        member __.Preferences = preferences
-        member __.SecureStorage = secureStorage
+        member __.Preferences = preferences.Force ()
+        member __.SecureStorage = secureStorage.Force ()
     member this.AsEnvironment = this :> IEnvironment
 
 type Context (logging : ILogging) =
