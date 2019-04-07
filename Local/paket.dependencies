@@ -6,20 +6,17 @@ framework: auto-detect
 
 nuget FSharp.Core
 
-nuget Dap.Archive
+nuget Dap.Prelude 0.6.1
+nuget Dap.Context 0.6.3
+nuget Dap.Platform 0.6.10
+nuget Dap.Archive 0.6.0
 nuget Dap.Farango
 nuget Fable.Dap.Platform
 
-group Build
-    source https://www.nuget.org/api/v2
-    storage: none
-    framework: netstandard2.0
+# Build
+nuget Dap.Build
 
-    nuget Dap.Build
-    nuget Dap.Context
-    nuget Dap.Platform
-
-    clitool dotnet-sourcelink
-    nuget Microsoft.SourceLink.GitHub 1.0.0-beta-62925-02
-    nuget Microsoft.Build.Tasks.Git 1.0.0-beta-62925-02
-    nuget Microsoft.SourceLink.Common 1.0.0-beta-62925-02
+clitool dotnet-sourcelink
+nuget Microsoft.SourceLink.GitHub 1.0.0-beta-62925-02
+nuget Microsoft.Build.Tasks.Git 1.0.0-beta-62925-02
+nuget Microsoft.SourceLink.Common 1.0.0-beta-62925-02

@@ -1,3 +1,6 @@
+## 0.6.10
+* Add Console helper
+
 ## 0.6.9
 * Bugfix with Environment timing
 

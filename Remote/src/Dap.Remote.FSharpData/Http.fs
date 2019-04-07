@@ -209,3 +209,18 @@ let delete runner url (decoder : JsonDecoder<'res>) callback =
 let deleteAsync runner url (decoder : JsonDecoder<'res>) body =
     let req = Request<'res>.Create Delete url decoder None None None
     handleAsync runner req
+
+let encodeParam' (param : (string * string) list) =
+    param
+    |> List.map (fun (k, v) ->
+        sprintf "%s=%s" k (System.Uri.EscapeDataString v)
+    )|> String.concat "&"
+
+let encodeParam (param : Map<string, string>) =
+    encodeParam' <| Map.toList param
+
+let encodeUrl' url (param : (string * string) list) =
+    sprintf "%s?%s" url <| encodeParam' param
+
+let encodeUrl url (param : Map<string, string>) =
+    encodeUrl' url <| Map.toList param

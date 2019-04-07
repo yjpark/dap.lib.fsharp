@@ -4,10 +4,10 @@ source https://www.nuget.org/api/v2
 storage: none
 framework: auto-detect
 
-nuget Dap.Prelude 0.6.0
-nuget Dap.Context 0.6.1
-nuget Dap.Platform 0.6.6
-nuget Dap.Remote
+nuget Dap.Prelude 0.6.1
+nuget Dap.Context 0.6.3
+nuget Dap.Platform 0.6.10
+nuget Dap.Remote 0.6.3
 nuget Dap.Local.Farango
 
 nuget Microsoft.AspNetCore.WebSockets
@@ -24,15 +24,10 @@ nuget Microsoft.AspNetCore.StaticFiles
 nuget Microsoft.AspNetCore.WebSockets
 nuget Giraffe
 
-group Build
-    source https://www.nuget.org/api/v2
-    storage: none
-    framework: netstandard2.0
+# Build
+nuget Dap.Build
 
-    nuget Dap.Build
-    nuget Dap.Remote
-
-    clitool dotnet-sourcelink
-    nuget Microsoft.SourceLink.GitHub 1.0.0-beta-62925-02
-    nuget Microsoft.Build.Tasks.Git 1.0.0-beta-62925-02
-    nuget Microsoft.SourceLink.Common 1.0.0-beta-62925-02
+clitool dotnet-sourcelink
+nuget Microsoft.SourceLink.GitHub 1.0.0-beta-62925-02
+nuget Microsoft.Build.Tasks.Git 1.0.0-beta-62925-02
+nuget Microsoft.SourceLink.Common 1.0.0-beta-62925-02

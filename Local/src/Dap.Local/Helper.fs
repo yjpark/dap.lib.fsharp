@@ -2,6 +2,7 @@
 module Dap.Local.Helper
 
 open Dap.Prelude
+open Dap.Context
 open Dap.Platform
 open Dap.Local.Feature
 
@@ -16,3 +17,6 @@ type FileSinkArgs with
         let timestamp = timestamp.Replace (":", "_")
         System.IO.Path.Combine (this.Folder, timestamp, this.Filename)
         |> this.WithPath
+
+let checkLocalEnvironment () =
+    logWarn IEnvironment.Instance "Init" "Props" (encodeJson 4 IEnvironment.Instance.Properties)
