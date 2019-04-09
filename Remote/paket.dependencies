@@ -1,4 +1,4 @@
-version 5.196.2
+version 5.198.0
 
 source https://www.nuget.org/api/v2
 storage: none
@@ -6,13 +6,19 @@ framework: auto-detect
 
 nuget Dap.Prelude 0.6.1
 nuget Dap.Context 0.6.3
+nuget Dap.Platform.Cli 0.6.0
 nuget Dap.Platform 0.6.10
+nuget Dap.WebSocket 0.6.1
 nuget Dap.Remote 0.6.3
+nuget Dap.Local 0.6.10
 nuget Dap.Local.Farango
 
 nuget Microsoft.AspNetCore.WebSockets
 nuget FSharp.Data
 nuget jose-jwt
+
+## AWS
+nuget AWSSDK.S3
 
 # Server.Web
 nuget Microsoft.AspNetCore.Cors

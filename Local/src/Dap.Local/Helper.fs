@@ -18,5 +18,17 @@ type FileSinkArgs with
         System.IO.Path.Combine (this.Folder, timestamp, this.Filename)
         |> this.WithPath
 
+type System.IO.Stream with
+    member this.ReadAllBytes () : Bytes =
+        let stream =
+            match this with
+            | :? System.IO.MemoryStream as stream ->
+                stream
+            | _ ->
+                use stream = new System.IO.MemoryStream ()
+                this.CopyTo stream
+                stream
+        stream.ToArray ()
+
 let checkLocalEnvironment () =
     logWarn IEnvironment.Instance "Init" "Props" (encodeJson 4 IEnvironment.Instance.Properties)
