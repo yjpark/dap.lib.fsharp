@@ -1,3 +1,6 @@
+## 0.6.12
+* Add more logic to console helper
+
 ## 0.6.11
 * Add System.IO.Stream.ReadAllBytes
 

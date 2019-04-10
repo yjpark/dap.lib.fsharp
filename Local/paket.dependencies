@@ -6,9 +6,13 @@ framework: auto-detect
 
 nuget FSharp.Core
 
+nuget Argu
+
 nuget Dap.Prelude 0.6.1
 nuget Dap.Context 0.6.3
 nuget Dap.Platform 0.6.10
+nuget Dap.WebSocket 0.6.1
+nuget Dap.Remote 0.6.4
 nuget Dap.Archive 0.6.0
 nuget Dap.Farango
 nuget Fable.Dap.Platform
