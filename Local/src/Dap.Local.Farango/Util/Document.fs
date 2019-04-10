@@ -26,3 +26,6 @@ let getAsync'<'res> (collection : string) (key : string) (decoder : JsonDecoder<
 
 let getAsync collection key decoder db =
     Async.StartAsTask <| getAsync' collection key decoder db
+
+let deleteAsync collection key db =
+    Async.StartAsTask <| deleteDocument db.Conn collection key
