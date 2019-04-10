@@ -1,6 +1,5 @@
-## 0.6.1
-* TODO:RELEASE
-* Add Document.deleteAsync helper
+## 0.6.2
+* Add Document.deleteAsync patchAsync and replaceAsync helper
 
 ## 0.6.1
 * Add Document.getAsync helper
