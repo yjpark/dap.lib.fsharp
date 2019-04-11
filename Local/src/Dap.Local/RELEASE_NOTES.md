@@ -1,3 +1,6 @@
+## 0.6.13
+* Add Console.newLoggingArgs
+
 ## 0.6.12
 * Add more logic to console helper
 

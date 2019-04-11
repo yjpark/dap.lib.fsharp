@@ -43,9 +43,12 @@ let executeAndWaitForExit (env : IEnv) (task : Task<unit>) =
     with e ->
         logError env "Execute" "Exception_Raised" (task.ToString (), e)
 
-let initLogging (logFile : string) (verbose : bool) =
+let newLoggingArgs (logFile : string) (verbose : bool) =
     let consoleMinLevel = if verbose then LogLevelInformation else LogLevelWarning
     LoggingArgs.CreateBoth (logFile, consoleMinLevel = consoleMinLevel)
+
+let initLogging (logFile : string) (verbose : bool) =
+    newLoggingArgs logFile verbose
     |> Feature.createLogging
     |> ignore
 
