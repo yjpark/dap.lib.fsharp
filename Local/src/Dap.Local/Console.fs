@@ -50,7 +50,6 @@ let newLoggingArgs (logFile : string) (verbose : bool) =
 let initLogging (logFile : string) (verbose : bool) =
     newLoggingArgs logFile verbose
     |> Feature.createLogging
-    |> ignore
 
 let main<'args when 'args :> IArgParserTemplate> (program : string) (execute : ParseResults<'args> -> int) argv =
     let parser = ArgumentParser.Create<'args> (programName = program)
