@@ -8,7 +8,7 @@ type Token = Token.Record
 type UserAuth = UserAuth.Record
 
 let calcCryptoKey (salt : string) (password : string) =
-    calcSha256SumWithSalt salt password
+    Sha256.ofText2 password salt
 
 let calcPassHash (salt : string) (password : string) =
-    calcSha256SumWithSalt salt password
+    Sha256.ofText2 password salt

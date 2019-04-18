@@ -7,6 +7,7 @@ open Dap.Prelude
 open Dap.Context
 open Dap.Context.Meta
 open Dap.Context.Meta.Util
+open Dap.Platform
 open Dap.Platform.Meta
 
 [<Literal>]

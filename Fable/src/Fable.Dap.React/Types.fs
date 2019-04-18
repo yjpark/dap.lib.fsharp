@@ -4,5 +4,5 @@ module Dap.React.Types
 type IRoute =
     abstract Url : string with get
 
-type Widget = Fable.Import.React.ReactElement
+type Widget = Fable.React.ReactElement
 

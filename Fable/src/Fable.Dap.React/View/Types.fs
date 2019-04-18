@@ -2,9 +2,8 @@ module Dap.React.View.Types
 
 open Elmish
 open Elmish.React
-open Elmish.Browser
-open Elmish.Browser.Navigation
-open Elmish.Browser.UrlParser
+open Elmish.Navigation
+open Elmish.UrlParser
 open Fable.Import
 
 open Dap.Prelude

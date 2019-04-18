@@ -4,8 +4,8 @@ module Dap.React.View.Logic
 open Fable.Core
 open Elmish
 open Elmish.React
-open Elmish.Browser.Navigation
-open Elmish.Browser.UrlParser
+open Elmish.Navigation
+open Elmish.UrlParser
 open Elmish.Debug
 
 open Dap.Prelude
@@ -34,7 +34,8 @@ let inline runProgram () : ActorOperate<'pack, 'route, 'model, 'msg> =
             model.Program
             |> if args.UseDebugger then Program.withDebugger else id
         if args.UseHMR then
-            program |> Elmish.HMR.Program.run
+            // program |> Elmish.HMR.Program.run
+            program |> Program.run
         else
             program |> Program.run
         (model, cmd)
@@ -83,7 +84,7 @@ let inline initProgram (initer : Initer<'route, 'model, 'msg>) (args : Args<'pac
     Program.mkProgram init update view
     |> Program.withSubscription subscribe
     |> Program.toNavigable (parseHash args.Parse) route
-    |> Program.withReact args.Root
+    |> Program.withReactBatched args.Root
     |> Program.withErrorHandler (fun (text, e) ->
         logException runner "Program" "Error" text e
     )

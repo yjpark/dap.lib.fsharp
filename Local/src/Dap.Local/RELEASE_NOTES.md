@@ -1,3 +1,6 @@
+## 0.6.14
+* Update Thoth.Json.Net to 3.0
+
 ## 0.6.13
 * Add Console.newLoggingArgs
 

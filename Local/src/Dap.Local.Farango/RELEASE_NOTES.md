@@ -1,3 +1,6 @@
+## 0.6.3
+* Update Thoth.Json.Net to 3.0
+
 ## 0.6.2
 * Add Document.deleteAsync patchAsync and replaceAsync helper
 
