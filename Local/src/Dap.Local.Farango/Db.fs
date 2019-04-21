@@ -45,7 +45,7 @@ and Model = {
         | Ok res ->
             logInfo this.Runner "DB_Succeed" op res
         | Error err ->
-            logError this.Runner "DB_Failed" op res
+            logError this.Runner "DB_Failed" op err
     interface ILogger with
         member this.Log m = this.Runner.Log m
 
