@@ -1,3 +1,6 @@
+## 0.6.2
+* Use newGuid to create guid
+
 ## 0.6.1
 * Update Thoth.Json.Net to 3.0
 * Follow Dap.Platform Update

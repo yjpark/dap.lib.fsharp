@@ -1,3 +1,6 @@
+## 0.6.5
+* Use newGuid to create guid
+
 ## 0.6.4
 * Add Http.HandleJsonPost
 
