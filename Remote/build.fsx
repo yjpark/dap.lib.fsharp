@@ -7,6 +7,7 @@
 #load "src/Dap.Remote.Dashboard/Dsl/Types.fs"
 #load "src/Dap.Remote.Dashboard/Dsl/Operator.fs"
 #load "src/Dap.Remote.Dashboard/Dsl/Pack.fs"
+#load "src/Dap.Remote.Web/Dsl.fs"
 #load "src/Dap.Remote.Aws/Dsl.fs"
 
 open Fake.Core
@@ -37,6 +38,9 @@ DotNet.createPrepares [
         Dap.Remote.Dashboard.Dsl.Operator.compile ["src" ; "Dap.Remote.Dashboard"]
         |> List.iter traceSuccess
         Dap.Remote.Dashboard.Dsl.Pack.compile ["src" ; "Dap.Remote.Dashboard"]
+        |> List.iter traceSuccess
+    ["Dap.Remote.Web"], fun _ ->
+        Dap.Remote.Web.Dsl.compile ["src" ; "Dap.Remote.Web"]
         |> List.iter traceSuccess
     ["Dap.Remote.Aws"], fun _ ->
         Dap.Remote.Aws.Dsl.compile ["src" ; "Dap.Remote.Aws"]

@@ -3,6 +3,7 @@ module Dap.Remote.Web.Http
 
 open System
 open System.Text
+open FSharp.Control.Tasks.V2
 open Microsoft.AspNetCore.Http
 open Giraffe
 
@@ -43,3 +44,21 @@ type Http with
     static member InternalError (text : string) = Http.Return (500, text)
     static member InternalError (json : IJson, ?tabs : int) = Http.Return (500, json, ?tabs = tabs)
 
+type Http with
+    static member HandleJsonPost<'param when 'param :> IJson> (decoder : JsonDecoder<'param>) (samples : Json list) (getNext : 'param -> HttpFunc) =
+        fun (ctx : HttpContext) -> task {
+            let! body = ctx.ReadBodyFromRequestAsync ()
+            match tryDecodeJson decoder body with
+            | Ok param ->
+                let next = getNext param
+                return! next ctx
+            | Error err ->
+                let res =
+                    HttpTypes.InvalidBody.Create (
+                        url = ctx.GetRequestUrl (),
+                        body = body,
+                        error = err,
+                        samples = samples
+                    )
+                return! ctx |> Http.BadRequest (res)
+        }

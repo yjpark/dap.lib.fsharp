@@ -5,7 +5,7 @@
     <PackageProjectUrl>https://github.com/yjpark/dap.lib.fsharp</PackageProjectUrl>
     <PackageTags>fsharp;dap;</PackageTags>
     <Authors>YJ Park</Authors>
-    <Version>0.6.3</Version>
+    <Version>0.6.4</Version>
     <Description>Local Libs</Description>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
@@ -15,10 +15,11 @@
     <Compile Include="_Gen/Builder.fs" />
     <Compile Include="Db.fs" />
     <Compile Include="_Gen/Packs.fs" />
+    <Compile Include="Query.fs" />
     <Compile Include="Util/Document.fs" />
+    <Compile Include="Util/Documents.fs" />
     <Compile Include="Util/InitDb.fs" />
     <Compile Include="Collection.fs" />
-    <Compile Include="Query.fs" />
     <Compile Include="Helper.fs" />
   </ItemGroup>
   <ItemGroup>

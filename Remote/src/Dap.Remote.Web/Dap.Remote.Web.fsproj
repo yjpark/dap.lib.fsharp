@@ -4,12 +4,14 @@
     <PackageProjectUrl>https://github.com/yjpark/dap.lib.fsharp</PackageProjectUrl>
     <PackageTags>fsharp;dap;</PackageTags>
     <Authors>YJ Park</Authors>
-    <Version>0.6.3</Version>
+    <Version>0.6.4</Version>
     <Description>Dap Remote common server libs</Description>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Dsl.fs" />
     <Compile Include="WebSocketHub.fs" />
+    <Compile Include="_Gen/HttpTypes.fs" />
     <Compile Include="Http.fs" />
     <Compile Include="App/WebHost.fs" />
     <Compile Include="App/Giraffe.fs" />

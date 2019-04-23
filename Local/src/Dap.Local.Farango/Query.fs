@@ -11,7 +11,7 @@ open Dap.Context
 open Dap.Local.Farango
 
 type Query = {
-    Query : string
+    Statement : string
     BatchSize : int option
     BindVars : Json option
 } with
@@ -26,7 +26,7 @@ type Query = {
                     s
             )
         )|> Option.defaultValue ""
-        |> sprintf "%s%s" this.Query
+        |> sprintf "%s%s" this.Statement
     member this.FailIfInvalid () =
         this.BindVars
         |> Option.iter (fun bindVars ->
@@ -35,14 +35,14 @@ type Query = {
         )
     static member Create q s v =
         {
-            Query = q
+            Statement = q
             BatchSize = s
             BindVars = v
         }
     static member JsonDecoder : JsonDecoder<Query> =
         D.object (fun get ->
             {
-                Query = get.Required.Field "query" D.string
+                Statement = get.Required.Field "query" D.string
                 BatchSize = get.Required.Field "batchSize" (D.option D.int)
                 BindVars = get.Required.Field "bindVars" (D.option D.value)
             }
@@ -50,7 +50,7 @@ type Query = {
     static member JsonEncoder : JsonEncoder<Query> =
         fun this ->
             E.object [
-                yield "query", E.string this.Query
+                yield "query", E.string this.Statement
                 if this.BatchSize.IsSome then
                     yield "batchSize", E.int this.BatchSize.Value
                 if this.BindVars.IsSome then
@@ -71,8 +71,6 @@ let executeAsync' (query : Query) (db : Db) = async {
 let executeAsync query db =
     Async.StartAsTask <| executeAsync' query db
 
-
 type Db.Model with
-    member this.GetCollection name = Collection.Create this name
     member this.ExecuteQueryAsync query = executeAsync query this
 

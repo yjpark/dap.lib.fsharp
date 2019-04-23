@@ -1,3 +1,6 @@
+## 0.6.4
+* Add Util.Documents
+
 ## 0.6.3
 * Update Thoth.Json.Net to 3.0
 
