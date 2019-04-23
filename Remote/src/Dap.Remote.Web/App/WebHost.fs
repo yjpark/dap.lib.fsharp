@@ -11,6 +11,7 @@ open Microsoft.AspNetCore.Diagnostics.Elm
 open Microsoft.Extensions.DependencyInjection
 
 open Dap.Prelude
+open Dap.Context
 open Dap.Platform
 open Dap.Remote.Web
 

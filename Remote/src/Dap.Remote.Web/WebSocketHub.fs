@@ -7,6 +7,7 @@ open Microsoft.AspNetCore.Http
 open Microsoft.AspNetCore.Builder
 
 open Dap.Prelude
+open Dap.Context
 open Dap.Platform
 module GatewayTypes = Dap.Remote.WebSocketGateway.Types
 

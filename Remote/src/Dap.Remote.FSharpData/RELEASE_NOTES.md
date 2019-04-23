@@ -1,3 +1,6 @@
+## 0.6.3
+* Update dependencies
+
 ## 0.6.2
 * Update Thoth.Json.Net to 3.0
 

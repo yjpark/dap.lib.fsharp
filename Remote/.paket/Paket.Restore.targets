@@ -295,6 +295,7 @@
               ContinuePackingAfterGeneratingNuspec="$(ContinuePackingAfterGeneratingNuspec)"
               NuspecOutputPath="$(AdjustedNuspecOutputPath)"
               IncludeBuildOutput="$(IncludeBuildOutput)"
+              BuildOutputFolder="$(BuildOutputTargetFolder)"
               ContentTargetFolders="$(ContentTargetFolders)"
               RestoreOutputPath="$(RestoreOutputAbsolutePath)"
               NuspecFile="$(NuspecFileAbsolutePath)"
