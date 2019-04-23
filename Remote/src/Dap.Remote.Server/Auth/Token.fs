@@ -54,7 +54,7 @@ type Record = {
 let create (runner : IRunner) (ownerKey : string) (cryptoKey : string) (data : Json) (validFor : Duration) : Record =
     let now = runner.Clock.Now
     let exp = now + validFor
-    Record.Create (System.Guid.NewGuid().ToString()) ownerKey cryptoKey data (now.ToUnixTimeSeconds()) (exp.ToUnixTimeSeconds())
+    Record.Create (newGuid ()) ownerKey cryptoKey data (now.ToUnixTimeSeconds()) (exp.ToUnixTimeSeconds())
 
 let toJwt (token : Record) =
     JWT.Encode (token.EncodeJson 0, (unbox null), JwsAlgorithm.none)
