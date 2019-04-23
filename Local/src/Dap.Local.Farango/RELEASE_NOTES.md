@@ -1,3 +1,6 @@
+## 0.6.5
+* Update dependencies
+
 ## 0.6.4
 * Add Util.Documents
 

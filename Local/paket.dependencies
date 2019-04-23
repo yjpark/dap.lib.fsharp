@@ -9,11 +9,11 @@ nuget FSharp.Core
 nuget Argu
 
 nuget Dap.Prelude 0.6.2
-nuget Dap.Context 0.6.4
-nuget Dap.Platform 0.6.13
+nuget Dap.Context 0.6.6
+nuget Dap.Platform 0.6.16
 nuget Dap.WebSocket 0.6.2
 nuget Dap.Remote 0.6.5
-nuget Dap.Archive 0.6.1
+nuget Dap.Archive 0.6.2
 nuget Dap.Farango 0.0.4
 
 # Build

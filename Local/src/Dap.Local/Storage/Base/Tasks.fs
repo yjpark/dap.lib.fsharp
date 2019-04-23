@@ -3,6 +3,7 @@ module Dap.Local.Storage.Base.Tasks
 open FSharp.Control.Tasks.V2
 
 open Dap.Prelude
+open Dap.Context
 open Dap.Platform
 
 open Dap.Local.Storage.Base.Types
