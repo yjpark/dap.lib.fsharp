@@ -10,13 +10,26 @@ open Giraffe
 open Dap.Prelude
 open Dap.Context
 
+let fileContentTypeProvider = new Microsoft.AspNetCore.StaticFiles.FileExtensionContentTypeProvider ()
+
 type Http = HttpHelper with
     static member TextContentType = "text/plain; charset=utf-8"
     static member JsonContentType = "application/json; charset=utf-8"
-    static member Return (statusCode : int, bytes : byte [], ?contentType : string) =
+    static member Return (statusCode : int, bytes : byte [],
+                            ?contentType : string, ?filename : string) =
         fun (ctx : HttpContext) ->
             ctx.SetStatusCode statusCode
-            contentType |> Option.iter ctx.SetContentType
+            contentType
+            |> Option.defaultWith (fun () ->
+                filename
+                |> Option.bind (fun x ->
+                    let result, value = fileContentTypeProvider.TryGetContentType (x)
+                    if result then
+                        Some value
+                    else
+                        None
+                )|> Option.defaultValue "application/octet-stream"
+            )|> ctx.SetContentType
             ctx.WriteBytesAsync bytes
     static member Return (statusCode : int, text : string) =
         let bytes = Encoding.UTF8.GetBytes text
@@ -27,6 +40,8 @@ type Http = HttpHelper with
         Http.Return (statusCode, bytes, contentType = Http.JsonContentType)
 
 type Http with
+    static member Ok (bytes : byte [], ?contentType : string, ?filename : string) =
+        Http.Return (200, bytes, ?contentType = contentType, ?filename = filename)
     static member Ok (text : string) = Http.Return (200, text)
     static member Ok (json : IJson, ?tabs : int) = Http.Return (200, json, ?tabs = tabs)
 

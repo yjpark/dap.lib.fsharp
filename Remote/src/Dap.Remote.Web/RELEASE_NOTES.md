@@ -1,3 +1,6 @@
+## 0.6.7
+* Setup Http ContentType base on filename
+
 ## 0.6.6
 * Update dependencies
 
