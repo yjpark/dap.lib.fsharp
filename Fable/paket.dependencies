@@ -4,11 +4,11 @@ source https://www.nuget.org/api/v2
 storage: none
 framework: auto-detect
 
-nuget Dap.Platform 0.6.13
+nuget Dap.Platform 0.6.16
 
 nuget Fable.Dap.Prelude 0.6.2
-nuget Fable.Dap.Context 0.6.5
-nuget Fable.Dap.Platform 0.6.7
+nuget Fable.Dap.Context 0.6.7
+nuget Fable.Dap.Platform 0.6.8
 nuget Fable.Dap.WebSocket 0.6.2
 nuget Fable.Dap.Remote 0.6.2
 
