@@ -1,4 +1,4 @@
-(* FAKE: 5.12.1 *)
+(* FAKE: 5.13.3 *)
 #r "paket: groupref Build //"
 #load ".fake/build.fsx/intellisense.fsx"
 

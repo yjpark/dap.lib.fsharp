@@ -1,16 +1,37 @@
 {
 	"folders": [
 		{
-			"path": "Farango"
+			"path": "src/Dap.Local"
 		},
 		{
-			"path": "Local"
+			"path": "src/Dap.Local.Farango"
 		},
 		{
-			"path": "Remote"
+			"path": "src/Dap.Remote.Dashboard"
 		},
 		{
-			"path": "Fable"
+			"path": "src/Dap.Remote.FSharpData"
+		},
+		{
+			"path": "src/Dap.Remote.Server"
+		},
+		{
+			"path": "src/Dap.Remote.Web"
+		},
+		{
+			"path": "src/Dap.Remote.Aws"
+		},
+		{
+			"path": "src/Dap.Fable"
+		},
+		{
+			"path": "src/Fable.Dap.Local"
+		},
+		{
+			"path": "src/Fable.Dap.React"
+		},
+		{
+			"path": "src/Fable.Dap.React.Src"
 		},
 		{
             "name": "Farango (External)",

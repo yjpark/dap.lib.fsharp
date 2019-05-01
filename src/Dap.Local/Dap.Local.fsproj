@@ -1,0 +1,35 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <PackageProjectUrl>https://github.com/yjpark/dap.lib.fsharp</PackageProjectUrl>
+    <PackageTags>fsharp;dap;</PackageTags>
+    <Authors>YJ Park</Authors>
+    <Version>0.7.0</Version>
+    <Description>Local Libs</Description>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Meta.fs" />
+    <Compile Include="Dsl.fs" />
+    <Compile Include="_Gen/Types.fs" />
+    <Compile Include="Shell.fs" />
+    <Compile Include="EmbeddedResource.fs" />
+    <Compile Include="Storage/Base/Types.fs" />
+    <Compile Include="Storage/Base/Tasks.fs" />
+    <Compile Include="Storage/Base/Logic.fs" />
+    <Compile Include="Storage/Text/Service.fs" />
+    <Compile Include="Storage/Json/Service.fs" />
+    <Compile Include="Files/FileSystem.fs" />
+    <Compile Include="Files/TextFile.fs" />
+    <Compile Include="Files/BinaryFile.fs" />
+    <Compile Include="Feature/Environment.fs" />
+    <Compile Include="Feature/Preferences.fs" />
+    <Compile Include="Feature/SecureStorage.fs" />
+    <Compile Include="Cache.fs" />
+    <Compile Include="Console.fs" />
+    <Compile Include="Helper.fs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta2-18618-05" PrivateAssets="All" />
+  </ItemGroup>
+  <Import Project="..\..\.paket\Paket.Restore.targets" />
+</Project>

@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <PackageProjectUrl>https://github.com/yjpark/dap.lib.fsharp</PackageProjectUrl>
+    <PackageTags>fsharp;dap;</PackageTags>
+    <Authors>YJ Park</Authors>
+    <Version>0.7.0</Version>
+    <Description>Dap Dashboard Lib</Description>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Dsl/Args.fs" />
+    <Compile Include="_Gen/Args.fs" />
+    <Compile Include="Meta.fs" />
+    <Compile Include="Dsl/Types.fs" />
+    <Compile Include="_Gen/Types.fs" />
+    <Compile Include="Dsl/Operator.fs" />
+    <Compile Include="_Gen/Operator.fs" />
+    <Compile Include="Helper.fs" />
+    <Compile Include="OperatorHub/Types.fs" />
+    <Compile Include="OperatorHub/Logic.fs" />
+    <Compile Include="Dsl/Pack.fs" />
+    <Compile Include="_Gen/Pack.fs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Dap.Local\Dap.Local.fsproj" />
+  </ItemGroup>
+  <Import Project="..\..\.paket\Paket.Restore.targets" />
+</Project>
