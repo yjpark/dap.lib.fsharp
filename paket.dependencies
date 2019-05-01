@@ -15,7 +15,6 @@ nuget Dap.WebSocket
 nuget Dap.Remote
 
 # Remote
-nuget Microsoft.AspNetCore.WebSockets
 nuget FSharp.Data
 nuget jose-jwt
 
