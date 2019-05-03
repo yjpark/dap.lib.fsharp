@@ -86,7 +86,6 @@ let EnvironmentProps =
     combo {
         var (M.string ("data_directory", value="data"))
         var (M.string ("cache_directory", value="cache"))
-        var (M.custom (<@ Version @>, "version"))
     }
 
 let Environment =
@@ -118,6 +117,7 @@ let compile segments =
                     G.Feature (<@ SecureStorage @>)
                     G.Combo (<@ EnvironmentProps @>)
                     G.FeatureInterface (<@ Environment @>) @ [
+                        "    abstract Version : Version with get"
                         "    abstract Preferences : IPreferences with get"
                         "    abstract SecureStorage : ISecureStorage with get"
                     ]

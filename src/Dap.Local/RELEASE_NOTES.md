@@ -1,3 +1,6 @@
+## 0.7.4
+* Add IEnvironment.Version
+
 ## 0.7.3
 * Tweak GitVersion.fs
 

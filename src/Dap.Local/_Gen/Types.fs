@@ -285,7 +285,6 @@ type EnvironmentProps (owner : IOwner, key : Key) =
     let target' = Properties.combo (owner, key)
     let dataDirectory = target'.AddVar<(* EnvironmentProps *) string> (E.string, D.string, "data_directory", "data", None)
     let cacheDirectory = target'.AddVar<(* EnvironmentProps *) string> (E.string, D.string, "cache_directory", "cache", None)
-    let version = target'.AddVar<(* EnvironmentProps *) Version> (Version.JsonEncoder, Version.JsonDecoder, "version", (Version.Create ()), None)
     do (
         base.Setup (target')
     )
@@ -298,7 +297,6 @@ type EnvironmentProps (owner : IOwner, key : Key) =
     override __.SyncTo t = target'.SyncTo t.Target
     member __.DataDirectory (* EnvironmentProps *) : IVarProperty<string> = dataDirectory
     member __.CacheDirectory (* EnvironmentProps *) : IVarProperty<string> = cacheDirectory
-    member __.Version (* EnvironmentProps *) : IVarProperty<Version> = version
 
 (*
  * Generated: <Context>
@@ -308,5 +306,6 @@ type IEnvironment =
     inherit IContext<EnvironmentProps>
     abstract EnvironmentProps : EnvironmentProps with get
     abstract Inspect : IHandler<unit, Json> with get
+    abstract Version : Version with get
     abstract Preferences : IPreferences with get
     abstract SecureStorage : ISecureStorage with get

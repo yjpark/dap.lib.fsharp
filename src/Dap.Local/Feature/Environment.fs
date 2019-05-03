@@ -21,7 +21,7 @@ let internal getInstance () =
         instance <- Some <| Feature.create<IEnvironment> (getLogging ())
     instance.Value
 
-let loadVersion (logging : ILogging) : Version =
+let private loadVersion (logging : ILogging) : Version =
     let versions = CliHook.createAll<IVersion> logging
     if versions.Length > 1 then
         failWith "Got_Multiple_Versions" (versions.Length, versions)
@@ -40,6 +40,7 @@ let loadVersion (logging : ILogging) : Version =
 type Context<'context when 'context :> IEnvironment> (logging : ILogging) as self =
     inherit CustomContext<'context, ContextSpec<EnvironmentProps>, EnvironmentProps> (logging, new ContextSpec<EnvironmentProps>(EnvironmentKind, EnvironmentProps.Create))
     let inspect = base.Handlers.Add<unit, Json> (E.unit, D.unit, E.json, D.json, "inspect")
+    let version : Lazy<Version> = lazy (loadVersion logging)
     let preferences : Lazy<IPreferences> = lazy (Feature.create<IPreferences> (logging))
     let secureStorage : Lazy<ISecureStorage> = lazy (Feature.create<ISecureStorage> (logging))
     do (
@@ -51,6 +52,7 @@ type Context<'context when 'context :> IEnvironment> (logging : ILogging) as sel
     interface IEnvironment with
         member this.EnvironmentProps = this.Properties
         member __.Inspect = inspect
+        member __.Version = version.Force ()
         member __.Preferences = preferences.Force ()
         member __.SecureStorage = secureStorage.Force ()
     member this.AsEnvironment = this :> IEnvironment
