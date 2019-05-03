@@ -27,8 +27,7 @@ let CommitTag = "$COMMIT$"
 let CommentTag = "$COMMENT$"
 
 [<Literal>]
-let AppVersionTemplate = """
-module $PREFIX$.AppVersion
+let AppVersionTemplate = """module $PREFIX$.AppVersion
 
 open Dap.Local
 
@@ -43,8 +42,7 @@ with
 """
 
 [<Literal>]
-let GitVersionTemplate = """
-module $PREFIX$.GitVersion
+let GitVersionTemplate = """module $PREFIX$.GitVersion
 
 let Commit = "$COMMIT$"
 let Comment = $QUOTE$
