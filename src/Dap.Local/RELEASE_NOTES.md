@@ -1,3 +1,6 @@
+## 0.7.2
+* Bugfix with GitVersion.fs
+
 ## 0.7.1
 * Add Version to Environment and hacky tool to update Git Version
 

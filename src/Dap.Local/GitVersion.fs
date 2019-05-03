@@ -30,7 +30,7 @@ let CommentTag = "$COMMENT$"
 let AppVersionTemplate = """
 module $PREFIX$.AppVersion
 
-open Dap.Local.Feature
+open Dap.Local
 
 type AppVersion () =
 with
