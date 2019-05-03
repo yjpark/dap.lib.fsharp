@@ -8,6 +8,10 @@ open Dap.Local.Feature
 
 type IEnvironment with
     static member Instance = Environment.getInstance ()
+    static member PrintVersion () : unit =
+        noLogging (fun () ->
+            printfn "%s" IEnvironment.Instance.Version.DevVer
+        )
     member this.PreferencesProps = this.Preferences.Properties
     member this.SecureStorageProps = this.SecureStorage.Properties
 

@@ -1,5 +1,9 @@
+## 0.7.6
+* Add IEnvironment.PrintVersion
+
 ## 0.7.5
 * Add Version.SemVer and Version.DevVer
+
 ## 0.7.4
 * Add IEnvironment.Version
 

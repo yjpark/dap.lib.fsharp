@@ -95,6 +95,16 @@ type IVersion =
 [<AutoOpen>]
 module IVersionExtensions =
     type IVersion with
+        member this.ToVersion () =
+            Version.Create (
+                major = this.Major,
+                minor = this.Minor,
+                patch = this.Patch,
+                commit = this.Commit,
+                comment = this.Comment
+            )
+
+    type Version with
         member this.SemVer =
             sprintf "%i.%i.%i" this.Major this.Minor this.Patch
         member this.DevVer =
@@ -103,15 +113,7 @@ module IVersionExtensions =
                 if System.String.IsNullOrEmpty this.Commit then
                     x
                 else
-                    sprintf "%s-%s" x this.Commit
-            )
-        member this.ToVersion () =
-            Version.Create (
-                major = this.Major,
-                minor = this.Minor,
-                patch = this.Patch,
-                commit = this.Commit,
-                comment = this.Comment
+                    sprintf "%s+%s" x this.Commit
             )
 
 
