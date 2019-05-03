@@ -11,6 +11,40 @@ open Dap.Platform.Generator
 open Dap.Platform.Dsl
 open Dap.Local.Meta
 
+let Version =
+    combo {
+        // https://semver.org/
+        var (M.int "major")
+        var (M.int "minor")
+        var (M.int "patch")
+        var (M.string "commit")
+        var (M.string "comment")
+    }
+
+let IVersion = """
+type IVersion =
+#if !FABLE_COMPILER
+    inherit Dap.Platform.Cli.ICliHook
+#endif
+    abstract Major : int with get
+    abstract Minor : int with get
+    abstract Patch : int with get
+    abstract Commit : string with get
+    abstract Comment : string with get
+
+[<AutoOpen>]
+module IVersionExtensions =
+    type IVersion with
+        member this.ToVersion () =
+            Version.Create (
+                major = this.Major,
+                minor = this.Minor,
+                patch = this.Patch,
+                commit = this.Commit,
+                comment = this.Comment
+            )
+"""
+
 let SetTextReq =
     combo {
         var (M.luid ("path"))
@@ -52,6 +86,7 @@ let EnvironmentProps =
     combo {
         var (M.string ("data_directory", value="data"))
         var (M.string ("cache_directory", value="cache"))
+        var (M.custom (<@ Version @>, "version"))
     }
 
 let Environment =
@@ -74,6 +109,8 @@ let compile segments =
             G.AutoOpenModule ("Dap.Local.Types",
                 [
                     G.PlatformOpens
+                    G.JsonRecord (<@ Version @>)
+                    [ IVersion ]
                     G.JsonRecord (<@ SetTextReq @>)
                     G.Combo (<@ PreferencesProps @>)
                     G.Feature (<@ Preferences @>)

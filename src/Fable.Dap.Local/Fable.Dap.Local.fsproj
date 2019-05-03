@@ -6,10 +6,13 @@
     <PackageProjectUrl>https://github.com/yjpark/dap.lib.fsharp</PackageProjectUrl>
     <PackageTags>fsharp;dap;</PackageTags>
     <Authors>YJ Park</Authors>
-    <Version>0.7.0</Version>
+    <Version>0.7.1</Version>
     <Description>Local Libs on fable</Description>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="_Gen\Types.fs" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="*.fsproj; **\*.fs; **\*.js" PackagePath="fable" />
   </ItemGroup>

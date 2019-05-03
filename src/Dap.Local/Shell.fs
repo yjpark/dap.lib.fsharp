@@ -3,6 +3,7 @@
 module Dap.Local.Shell
 
 open System.Diagnostics
+open System.Runtime.InteropServices
 
 // https://stackoverflow.com/questions/44205260/net-core-copy-to-clipboard
 // https://loune.net/2017/06/running-shell-bash-commands-in-net-core/
@@ -35,3 +36,9 @@ let bash (cmd : string) =
 
 let bat (cmd : string) =
     run "cmd.exe" "/c " cmd
+
+let bashOrBat (cmd : string) =
+    if RuntimeInformation.IsOSPlatform (OSPlatform.Windows) then
+        bat cmd
+    else
+        bash cmd

@@ -8,6 +8,7 @@ open FSharp.Control.Tasks.V2
 open Dap.Prelude
 open Dap.Context
 open Dap.Platform
+open Dap.Platform.Cli
 open Dap.Local
 
 [<Literal>]
@@ -19,6 +20,21 @@ let internal getInstance () =
     if instance.IsNone then
         instance <- Some <| Feature.create<IEnvironment> (getLogging ())
     instance.Value
+
+let loadVersion (logging : ILogging) : Version =
+    let versions = CliHook.createAll<IVersion> logging
+    if versions.Length > 1 then
+        failWith "Got_Multiple_Versions" (versions.Length, versions)
+    elif versions.Length = 1 then
+        (List.head versions) .ToVersion ()
+    else
+        Version.Create (
+            major = 0,
+            minor = 1,
+            patch = 0,
+            commit = "master",
+            comment = "Under Development"
+        )
 
 [<AbstractClass>]
 type Context<'context when 'context :> IEnvironment> (logging : ILogging) as self =

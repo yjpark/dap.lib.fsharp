@@ -15,6 +15,8 @@
 #load "src/Dap.Remote.Web/Dsl.fs"
 #load "src/Dap.Remote.Aws/Dsl.fs"
 
+#load "src/Dap.Fable/Dsl.fs"
+
 open Fake.Core
 open Fake.Core.TargetOperators
 open Fake.IO.Globbing.Operators
@@ -64,6 +66,9 @@ DotNet.createPrepares [
         |> List.iter traceSuccess
     ["Dap.Remote.Aws"], fun _ ->
         Dap.Remote.Aws.Dsl.compile ["src" ; "Dap.Remote.Aws"]
+        |> List.iter traceSuccess
+    ["Dap.Fable"], fun _ ->
+        Dap.Fable.Dsl.compile ["src" ; "Fable.Dap.Local"]
         |> List.iter traceSuccess
 ]
 
