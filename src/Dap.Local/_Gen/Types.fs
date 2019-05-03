@@ -96,7 +96,7 @@ type IVersion =
 module IVersionExtensions =
     type IVersion with
         member this.SemVer =
-            sprintf "%s.%s.%s" this.Major this.Minor this.Patch
+            sprintf "%i.%i.%i" this.Major this.Minor this.Patch
         member this.DevVer =
             this.SemVer
             |> (fun x ->
