@@ -1,3 +1,6 @@
+## 0.7.3
+* Tweak GitVersion.fs
+
 ## 0.7.2
 * Bugfix with GitVersion.fs
 

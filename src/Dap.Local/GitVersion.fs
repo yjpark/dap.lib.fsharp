@@ -1,4 +1,5 @@
 [<AutoOpen>]
+[<RequireQualifiedAccess>]
 module Dap.Local.GitVersion
 
 open Dap.Prelude
@@ -6,7 +7,7 @@ open Dap.Context
 open Dap.Platform
 
 [<Literal>]
-let VersionFile = "Version.fs"
+let VersionFile = "AppVersion.fs"
 
 [<Literal>]
 let GitVersionFile = "GitVersion.fs"
@@ -27,7 +28,8 @@ let CommitTag = "$COMMIT$"
 let CommentTag = "$COMMENT$"
 
 [<Literal>]
-let AppVersionTemplate = """module $PREFIX$.AppVersion
+let AppVersionTemplate = """[<RequireQualifiedAccess>]
+module $PREFIX$.AppVersion
 
 open Dap.Local
 
@@ -42,7 +44,8 @@ with
 """
 
 [<Literal>]
-let GitVersionTemplate = """module $PREFIX$.GitVersion
+let GitVersionTemplate = """[<RequireQualifiedAccess>]
+module $PREFIX$.GitVersion
 
 let Commit = "$COMMIT$"
 let Comment = $QUOTE$
