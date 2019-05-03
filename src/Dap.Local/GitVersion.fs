@@ -7,7 +7,7 @@ open Dap.Context
 open Dap.Platform
 
 [<Literal>]
-let VersionFile = "AppVersion.fs"
+let AppVersionFile = "AppVersion.fs"
 
 [<Literal>]
 let GitVersionFile = "GitVersion.fs"
@@ -34,7 +34,6 @@ module $PREFIX$.AppVersion
 open Dap.Local
 
 type AppVersion () =
-with
     interface IVersion with
         member __.Major = 0
         member __.Minor = 1
@@ -76,7 +75,7 @@ let updateGitVersionFile (logger : ILogger) (folder : string) (prefix : string) 
     logWarn logger "GitVersion.updateGitVersionFile" "GitVersion_Updated" path
 
 let checkAppVersionFile (logger : ILogger) (folder : string) (prefix : string) =
-    let path = System.IO.Path.Combine (folder, VersionFile)
+    let path = System.IO.Path.Combine (folder, AppVersionFile)
     if FileSystem.fileExists path then
         logWarn logger "GitVersion.checkAppVersionFile" "AppVersion_Exists" path
     else
