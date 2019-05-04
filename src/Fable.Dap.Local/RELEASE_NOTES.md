@@ -1,3 +1,6 @@
+## 0.7.2
+* Bugfix with IVersion
+
 ## 0.7.1
 * Add Version Definition
 
