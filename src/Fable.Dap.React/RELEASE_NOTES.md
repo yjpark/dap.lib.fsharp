@@ -1,3 +1,6 @@
+## 0.7.1
+* Add View.OnRoute Event
+
 ## 0.7.0
 * Update with FAKE 5.13.3 and Paket 5.203.2
 

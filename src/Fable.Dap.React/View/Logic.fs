@@ -9,6 +9,7 @@ open Elmish.UrlParser
 open Elmish.Debug
 
 open Dap.Prelude
+open Dap.Context
 open Dap.Platform
 open Dap.React
 
@@ -41,11 +42,18 @@ let inline runProgram () : ActorOperate<'pack, 'route, 'model, 'msg> =
         (model, cmd)
 
 let inline handleInternalEvt evt : ActorOperate<'pack, 'route, 'model, 'msg> =
-    match evt with
-    | SetRoute route ->
-        updateModel (fun m -> {m with Route = Some route})
-    | RunProgram ->
-        runProgram ()
+    fun runner (model, cmd) ->
+        match evt with
+        | SetRoute route ->
+            (runner, model, cmd)
+            |-|>updateModel (fun m -> {m with Route = Some route})
+            |=|> (addSubCmd InternalEvt (OnRoute route))
+        | OnRoute route ->
+            runner.FireOnRoute' route
+            (model, cmd)
+        | RunProgram ->
+            (runner, model, cmd)
+            |=|> runProgram ()
 
 let inline update () : Update<View<'pack, 'route, 'model, 'msg>, Model<'route, 'model, 'msg>, Msg<'route, 'model, 'msg>> =
     fun runner msg model ->
