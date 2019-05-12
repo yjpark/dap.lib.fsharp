@@ -1,0 +1,8 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <ItemGroup>
+    <Compile Include="$(DapLibSrcDir)\Fable.Dap.React\Types.fs" />
+    <Compile Include="$(DapLibSrcDir)\Fable.Dap.React\View\Types.fs" />
+    <Compile Include="$(DapLibSrcDir)\Fable.Dap.React\View\Logic.fs" />
+  </ItemGroup>
+</Project>

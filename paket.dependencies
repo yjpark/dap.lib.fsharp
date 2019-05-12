@@ -38,10 +38,15 @@ nuget Fable.Dap.Platform
 nuget Fable.Dap.WebSocket
 nuget Fable.Dap.Remote
 
+nuget Fable.React
 nuget Fable.Elmish.React
 nuget Fable.Elmish.Browser
 nuget Fable.Elmish.Debugger
 nuget Fable.Elmish.HMR
+
+nuget Fulma
+nuget Fable.FontAwesome
+nuget Fable.FontAwesome.Free
 
 # Farango
 nuget Fable.JsonConverter

@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <Import Project="Fable.Dap.Local\Fable.Dap.Local.props" />
+  <Import Project="Fable.Dap.React\Fable.Dap.React.props" />
+  <Import Project="Fable.Dap.Fulma\Fable.Dap.Fulma.props" />
+</Project>

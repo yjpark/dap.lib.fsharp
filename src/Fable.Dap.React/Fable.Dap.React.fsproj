@@ -9,13 +9,12 @@
     <Description>Dap App on Fable React</Description>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
+  <PropertyGroup Label="UserMacros">
+      <DapLibSrcDir>..</DapLibSrcDir>
+  </PropertyGroup>
+  <Import Project="Fable.Dap.React.props" />
   <ItemGroup>
-    <Compile Include="Types.fs" />
-    <Compile Include="View/Types.fs" />
-    <Compile Include="View/Logic.fs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="*.fsproj; **\*.fs; **\*.js" PackagePath="fable" />
+    <Content Include="*.fsproj; *.props; **\*.fs; **\*.js" PackagePath="fable" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Fable.Dap.Local\Fable.Dap.Local.fsproj" />

@@ -31,7 +31,7 @@
 			"path": "src/Fable.Dap.React"
 		},
 		{
-			"path": "src/Fable.Dap.React.Src"
+			"path": "src/Fable.Dap.Fulma"
 		},
 		{
             "name": "Farango (External)",
@@ -52,7 +52,8 @@
             ".fake": true,
 		},
 		"cSpell.words": [
-			"Farango"
+			"Farango",
+			"fulma"
 		]
     }
 }
