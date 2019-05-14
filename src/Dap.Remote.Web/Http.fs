@@ -3,6 +3,7 @@ module Dap.Remote.Web.Http
 
 open System
 open System.Text
+open System.Threading.Tasks
 open FSharp.Control.Tasks.V2
 open Microsoft.AspNetCore.Http
 open Giraffe
@@ -38,6 +39,13 @@ type Http = HttpHelper with
         let text = encodeJson (defaultArg tabs 4) json
         let bytes = Encoding.UTF8.GetBytes text
         Http.Return (statusCode, bytes, contentType = Http.JsonContentType)
+    static member Chain (next : HttpFunc) : Task<HttpContext option> -> Task<HttpContext option> =
+        Task.mapAsync (fun x -> task {
+            if x.IsSome then
+                return! next x.Value
+            else
+                return None
+        })
 
 type Http with
     static member Ok (bytes : byte [], ?contentType : string, ?filename : string) =
