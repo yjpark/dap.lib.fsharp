@@ -1,3 +1,6 @@
+## 0.7.2
+* Add Http.Inject
+
 ## 0.7.1
 * Add Http.Chain
 

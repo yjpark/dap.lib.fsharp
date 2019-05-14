@@ -46,6 +46,14 @@ type Http = HttpHelper with
             else
                 return None
         })
+    static member Inject (next : HttpFunc) (ctx : HttpContext) (action : HttpFunc) : Task<HttpContext option> = task {
+        let! nextCtx = next ctx
+        match nextCtx with
+        | Some nextCtx ->
+            return! action nextCtx
+        | None ->
+            return! action ctx
+    }
 
 type Http with
     static member Ok (bytes : byte [], ?contentType : string, ?filename : string) =
