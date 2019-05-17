@@ -76,12 +76,29 @@ type WebHost with
         WebHost.setupServices (action >> ignore)
 
 type WebHost with
-    static member setStaticRoot (root : string) =
+    static member setStaticRoot
+            (
+                root : string,
+                ?options : FileServerOptions,
+                ?enableDirectoryBrowsing : bool,
+                ?serveUnknownFileTypes : bool
+            ) =
         let root = Path.Combine (Directory.GetCurrentDirectory(), root);
         fun (this : WebHost) ->
+            let options =
+                options
+                |> Option.defaultValue (
+                    let mutable o = new FileServerOptions ()
+                    o.EnableDirectoryBrowsing <- defaultArg enableDirectoryBrowsing this.DevMode
+                    serveUnknownFileTypes
+                    |> Option.iter (fun x ->
+                        o.StaticFileOptions.ServeUnknownFileTypes <- x
+                    )
+                    o
+                )
             {this with Root = Some root}
             |> WebHost.setupBatch [
-                fun h -> h.UseFileServer (this.DevMode)
+                fun h -> h.UseFileServer (options)
             ]
 
 type WebHost with

@@ -1,3 +1,6 @@
+## 0.7.3
+* Add more options to WebHost.setStaticRoot
+
 ## 0.7.2
 * Add Http.Inject
 
