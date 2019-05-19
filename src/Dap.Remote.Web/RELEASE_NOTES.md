@@ -1,3 +1,6 @@
+## 0.7.4
+* Add WebApp.cleanup
+
 ## 0.7.3
 * Add more options to WebHost.setStaticRoot
 

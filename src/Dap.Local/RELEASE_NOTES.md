@@ -1,3 +1,6 @@
+## 0.7.8
+* Support cleanup for Console.waitForExit'
+
 ## 0.7.7
 * Add IVersion.PreRelease
 

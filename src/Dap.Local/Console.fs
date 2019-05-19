@@ -23,17 +23,21 @@ let ReturnCode_ParseFailed = 501
 [<Literal>]
 let ReturnCode_ExecuteFailed = 502
 
-let onExit (env : IEnv) (exited : AutoResetEvent) =
+let onExit (cleanup : unit -> unit) (env : IEnv) (exited : AutoResetEvent) =
     fun (_sender : obj) (cancelArgs : ConsoleCancelEventArgs) ->
-        logWarn env "Console" "Quiting ..." cancelArgs
+        logWarn env "Console" "Quitting ..." cancelArgs
+        cleanup ()
         env.Logging.Close ()
         exited.Set() |> ignore
 
-let waitForExit (env : IEnv) =
+let waitForExit' (cleanup : unit -> unit) (env : IEnv) =
     let exited = new AutoResetEvent(false)
-    let onExit' = new ConsoleCancelEventHandler (onExit env exited)
+    let onExit' = new ConsoleCancelEventHandler (onExit cleanup env exited)
     Console.CancelKeyPress.AddHandler onExit'
     exited.WaitOne() |> ignore
+
+let waitForExit (env : IEnv) =
+    waitForExit' ignore env
 
 let executeAndWaitForExit (env : IEnv) (task : Task<unit>) =
     try
