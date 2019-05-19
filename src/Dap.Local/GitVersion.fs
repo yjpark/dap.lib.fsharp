@@ -33,6 +33,8 @@ module $PREFIX$.AppVersion
 
 open Dap.Local
 
+// Semantic Versioning Detail: https://semver.org/
+
 type AppVersion () =
     interface IVersion with
         member __.Major = 0
@@ -40,6 +42,7 @@ type AppVersion () =
         member __.Patch = 0
         member __.Commit = $PREFIX$.GitVersion.Commit
         member __.Comment = $PREFIX$.GitVersion.Comment
+        member __.PreRelease = None
 """
 
 [<Literal>]

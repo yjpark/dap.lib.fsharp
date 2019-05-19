@@ -1,3 +1,6 @@
+## 0.7.7
+* Add IVersion.PreRelease
+
 ## 0.7.6
 * Add IEnvironment.PrintVersion
 

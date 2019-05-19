@@ -19,8 +19,10 @@ let Version =
         var (M.int "patch")
         var (M.string "commit")
         var (M.string "comment")
+        option (M.string "pre_release")
     }
 
+// Note: Put here for the Fable DSL to access
 let IVersion = """
 type IVersion =
 #if !FABLE_COMPILER
@@ -31,6 +33,7 @@ type IVersion =
     abstract Patch : int with get
     abstract Commit : string with get
     abstract Comment : string with get
+    abstract PreRelease : string option with get
 
 [<AutoOpen>]
 module IVersionExtensions =
@@ -41,7 +44,8 @@ module IVersionExtensions =
                 minor = this.Minor,
                 patch = this.Patch,
                 commit = this.Commit,
-                comment = this.Comment
+                comment = this.Comment,
+                ?preRelease = this.PreRelease
             )
 
     type Version with
@@ -50,6 +54,10 @@ module IVersionExtensions =
         member this.DevVer =
             this.SemVer
             |> (fun x ->
+                match this.PreRelease with
+                | None -> x
+                | Some pre -> sprintf "%s-%s" x pre
+            )|> (fun x ->
                 if System.String.IsNullOrEmpty this.Commit then
                     x
                 else
