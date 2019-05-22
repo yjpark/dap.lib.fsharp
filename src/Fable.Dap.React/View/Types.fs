@@ -98,6 +98,7 @@ and View<'pack, 'route, 'model, 'msg
     override this.Runner = this
     member this.Program = this.Actor.State.Program
     member this.ViewState = this.Actor.State.View
+    member this.HasRoute = this.Actor.State.Route.IsSome
     member this.Route = this.Actor.State.Route |> Option.get
     member this.DoRoute route = this.Deliver <| AppReq ^<| DoRoute route
     member this.OnRoute = onRoute.Publish
