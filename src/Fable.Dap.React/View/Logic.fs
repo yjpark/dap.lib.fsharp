@@ -45,6 +45,7 @@ let inline handleInternalEvt evt : ActorOperate<'pack, 'route, 'model, 'msg> =
     fun runner (model, cmd) ->
         match evt with
         | SetRoute route ->
+            logInfo runner "Set_Route" ((route :> IRoute) .Url) (model.Route)
             (runner, model, cmd)
             |-|>updateModel (fun m -> {m with Route = Some route})
             |=|> (addSubCmd InternalEvt (OnRoute route))
