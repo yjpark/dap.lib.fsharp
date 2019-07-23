@@ -1,4 +1,4 @@
-version 5.203.2
+version 5.215.0
 
 source https://www.nuget.org/api/v2
 storage: none
@@ -30,6 +30,9 @@ nuget Microsoft.AspNetCore.Server.Kestrel
 nuget Microsoft.AspNetCore.StaticFiles
 nuget Microsoft.AspNetCore.WebSockets
 nuget Giraffe
+
+# Squidex
+nuget FSharp.Data.TypeProviders
 
 # Fable
 nuget Fable.Dap.Prelude

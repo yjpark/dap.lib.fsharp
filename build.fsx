@@ -14,6 +14,7 @@
 #load "src/Dap.Remote.Dashboard/Dsl/Pack.fs"
 #load "src/Dap.Remote.Web/Dsl.fs"
 #load "src/Dap.Remote.Aws/Dsl.fs"
+#load "src/Dap.Remote.Squidex/Dsl.fs"
 
 #load "src/Dap.Fable/Dsl.fs"
 
@@ -39,10 +40,12 @@ let projects =
     ++ "src/Dap.Remote.Server/*.fsproj"
     ++ "src/Dap.Remote.Web/*.fsproj"
     ++ "src/Dap.Remote.Aws/*.fsproj"
+    ++ "src/Dap.Remote.Squidex/*.fsproj"
     ++ "src/Dap.Fable/*.fsproj"
     ++ "src/Fable.Dap.Local/*.fsproj"
     ++ "src/Fable.Dap.React/*.fsproj"
     ++ "src/Fable.Dap.Fulma/*.fsproj"
+    ++ "demo/Squidex.Demo/*.fsproj"
 
 NuGet.create NuGet.release feed projects
 
@@ -67,6 +70,9 @@ DotNet.createPrepares [
         |> List.iter traceSuccess
     ["Dap.Remote.Aws"], fun _ ->
         Dap.Remote.Aws.Dsl.compile ["src" ; "Dap.Remote.Aws"]
+        |> List.iter traceSuccess
+    ["Dap.Remote.Squidex"], fun _ ->
+        Dap.Remote.Squidex.Dsl.compile ["src" ; "Dap.Remote.Squidex"]
         |> List.iter traceSuccess
     ["Dap.Fable"], fun _ ->
         Dap.Fable.Dsl.compile ["src" ; "Fable.Dap.Local"]

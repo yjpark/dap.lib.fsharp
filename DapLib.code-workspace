@@ -22,6 +22,9 @@
 			"path": "src/Dap.Remote.Aws"
 		},
 		{
+			"path": "src/Dap.Remote.Squidex"
+		},
+		{
 			"path": "src/Dap.Fable"
 		},
 		{
@@ -32,6 +35,9 @@
 		},
 		{
 			"path": "src/Fable.Dap.Fulma"
+		},
+		{
+			"path": "demo/Squidex.Demo"
 		},
 		{
             "name": "Farango (External)",
@@ -53,7 +59,9 @@
 		},
 		"cSpell.words": [
 			"Farango",
-			"fulma"
+			"concat",
+			"fulma",
+			"squidex"
 		]
     }
 }
