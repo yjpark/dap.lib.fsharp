@@ -53,9 +53,9 @@ let main argv =
     let env = Env.create <| Env.param platform logging "Demo" clock
     let config =
         SquidexConfig.Create (
-            url = "http://localhost:5000",
+            url = "http://localhost:8000",
             app = "test",
-            token = "eyJhbGciOiJSUzI1NiIsImtpZCI6IjkxRkRENEVCRDYwNjMxNURFREI4MENEMDkzMERFRkZBMjFEREE2NkIiLCJ0eXAiOiJKV1QiLCJ4NXQiOiJrZjNVNjlZR01WM3R1QXpRa3czdi1pSGRwbXMifQ.eyJuYmYiOjE1NjM4NDk5MDAsImV4cCI6MTU2NjQ0MTkwMCwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo1MDAwL2lkZW50aXR5LXNlcnZlciIsImF1ZCI6WyJodHRwOi8vbG9jYWxob3N0OjUwMDAvaWRlbnRpdHktc2VydmVyL3Jlc291cmNlcyIsInNxdWlkZXgtYXBpIl0sImNsaWVudF9pZCI6InRlc3Q6ZGVmYXVsdCIsInNjb3BlIjpbInNxdWlkZXgtYXBpIl19.vIvZHxvUOJSBZjFpGvptfH5--4BaAUg6sSxDrfoi-Pd3lbrCHt035kiAFWMdwRBmYvKe6-swBoMRr7z7gILnryGV39CYV0psArRW-XAFKBSajYfCBVrjGyNHCWexouACvuhHOgpXZolUK5dJwp3O8HbqosoLMmpPHCHvzfDtxBiFDE96pvdhfvESOWmg2ZbWr7HAgZskQ59W1nDj3EftCmjenMsCpon-CpRkVpyv8qx8fxPU7UnxtBTSYDckal0OvSvUu89tt_AzHSd0Degtk8nTbA9xYxxJhK_n465OR_gE5HhmVs6wWBTO4Yofmdh71msqVvg4xYVvZ4XuJHGm-Q"
+            token = "eyJhbGciOiJSUzI1NiIsImtpZCI6IjkxRkRENEVCRDYwNjMxNURFREI4MENEMDkzMERFRkZBMjFEREE2NkIiLCJ0eXAiOiJKV1QiLCJ4NXQiOiJrZjNVNjlZR01WM3R1QXpRa3czdi1pSGRwbXMifQ.eyJuYmYiOjE1NjM5NTUyMjMsImV4cCI6MTU2NjU0NzIyMywiaXNzIjoiaHR0cDovLzE5Mi4xNjguMC4yOjgwMDAvaWRlbnRpdHktc2VydmVyIiwiYXVkIjpbImh0dHA6Ly8xOTIuMTY4LjAuMjo4MDAwL2lkZW50aXR5LXNlcnZlci9yZXNvdXJjZXMiLCJzcXVpZGV4LWFwaSJdLCJjbGllbnRfaWQiOiJmZWVkcy1jb25maWc6ZGVmYXVsdCIsInNjb3BlIjpbInNxdWlkZXgtYXBpIl19.DxOX2G8L9EGqoJFzFlqyEXUcoDWr5fPQO7Sq2oVWzjILJvM8ydvEBX1ZhRP8YHY4Nvu_aWu7dYKnxlmuo7Jec28fEhs74Tl60-2WxRmGQemXtDwmTCNUVhs99H1KTNntQGh0R7BNrTK2wvb69fBT-SmdKbP8uLsu7UjEyGDi-p97Lxbhdr9kY9SYWGiZUtLDZvZ3goNM6XzSTeEpBklWQZ6vxU0ZD98RtycBW7WP1MXdrDzrqi9iUhXuccptxyT21c8ZTjtFvGEzzZ4VKmPPjdE95njmbTP5N-I_3uq6EDGkBXTKolaa5k7RXuoSPSCNvTqSriIgBx4AIon5JF_NCw"
         )
     ContentsQuery.Create (
         schema = "translation",
