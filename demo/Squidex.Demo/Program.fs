@@ -53,7 +53,7 @@ let main argv =
     let clock = new RealClock ()
     let env = Env.create <| Env.param platform logging "Demo" clock
     let config =
-        IEnvironment.Instance.Preferences.Get.Handle "SquidexConfig.json"
+        IEnvironment.Instance.Preferences.Get.Handle "squidex_config.json"
         |> Option.get
         |> decodeJson SquidexConfig.JsonDecoder
     ContentsQuery.Create (
