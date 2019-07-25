@@ -5,6 +5,7 @@ open Dap.Prelude
 open Dap.Context
 open Dap.Platform
 
+open Dap.Local
 open Dap.Remote.Squidex
 open Dap.Remote.Squidex.Query
 
@@ -52,11 +53,9 @@ let main argv =
     let clock = new RealClock ()
     let env = Env.create <| Env.param platform logging "Demo" clock
     let config =
-        SquidexConfig.Create (
-            url = "http://localhost:8000",
-            app = "test",
-            token = "eyJhbGciOiJSUzI1NiIsImtpZCI6IjkxRkRENEVCRDYwNjMxNURFREI4MENEMDkzMERFRkZBMjFEREE2NkIiLCJ0eXAiOiJKV1QiLCJ4NXQiOiJrZjNVNjlZR01WM3R1QXpRa3czdi1pSGRwbXMifQ.eyJuYmYiOjE1NjM5NTUyMjMsImV4cCI6MTU2NjU0NzIyMywiaXNzIjoiaHR0cDovLzE5Mi4xNjguMC4yOjgwMDAvaWRlbnRpdHktc2VydmVyIiwiYXVkIjpbImh0dHA6Ly8xOTIuMTY4LjAuMjo4MDAwL2lkZW50aXR5LXNlcnZlci9yZXNvdXJjZXMiLCJzcXVpZGV4LWFwaSJdLCJjbGllbnRfaWQiOiJmZWVkcy1jb25maWc6ZGVmYXVsdCIsInNjb3BlIjpbInNxdWlkZXgtYXBpIl19.DxOX2G8L9EGqoJFzFlqyEXUcoDWr5fPQO7Sq2oVWzjILJvM8ydvEBX1ZhRP8YHY4Nvu_aWu7dYKnxlmuo7Jec28fEhs74Tl60-2WxRmGQemXtDwmTCNUVhs99H1KTNntQGh0R7BNrTK2wvb69fBT-SmdKbP8uLsu7UjEyGDi-p97Lxbhdr9kY9SYWGiZUtLDZvZ3goNM6XzSTeEpBklWQZ6vxU0ZD98RtycBW7WP1MXdrDzrqi9iUhXuccptxyT21c8ZTjtFvGEzzZ4VKmPPjdE95njmbTP5N-I_3uq6EDGkBXTKolaa5k7RXuoSPSCNvTqSriIgBx4AIon5JF_NCw"
-        )
+        IEnvironment.Instance.Preferences.Get.Handle "SquidexConfig.json"
+        |> Option.get
+        |> decodeJson SquidexConfig.JsonDecoder
     ContentsQuery.Create (
         schema = "translation",
         lang = "en",

@@ -32,6 +32,7 @@ let tryCreateFromPath<'v> (path : string) (create : string -> 'v) =
             logException (getLogger ()) "tryCreateFromPath" "Exception_Raised" path e
             None
     else
+        logInfo (getLogger ()) "tryCreateFromPath" "File_Not_Exist" path
         None
 
 let tryOpenStream (path : string) =
@@ -43,6 +44,7 @@ let tryOpenStream (path : string) =
             logException (getLogger ()) "tryOpenStream" "Exception_Raised" path e
             None
     else
+        logInfo (getLogger ()) "tryOpenStream" "File_Not_Exist" path
         None
 
 let tryCreateFromStream<'v> (path : string) (create : System.IO.Stream -> 'v) =
