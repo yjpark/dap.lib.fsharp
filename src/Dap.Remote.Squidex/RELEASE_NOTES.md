@@ -1,3 +1,6 @@
+## 0.1.1
+* Separate Links and Array
+
 ## 0.1.0
 * Support queryXxxContents and queryXxxContentsWithTotal with Squidex graphql
 * Create SquidexItem to wrap content provide flatten data for easier decoding

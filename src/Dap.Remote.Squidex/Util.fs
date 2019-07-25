@@ -63,13 +63,16 @@ type ContentField with
         | LocalizedValue (key, _spec) ->
             [sprintf "%s%s { %s }" prefix key lang]
         | SimpleChild (key, fields)
-        | SimpleArray (key, fields) ->
+        | SimpleArray (key, fields)
+        | SimpleLinks (key, fields) ->
             ContentField.FieldsToQuery None tabs lang key fields
         | InvariantChild (key, fields)
-        | InvariantArray (key, fields) ->
+        | InvariantArray (key, fields)
+        | InvariantLinks (key, fields) ->
             ContentField.FieldsToQuery (Some Invariant) tabs lang key fields
         | LocalizedChild (key, fields)
-        | LocalizedArray (key, fields) ->
+        | LocalizedArray (key, fields)
+        | LocalizedLinks (key, fields) ->
             ContentField.FieldsToQuery (Some lang) tabs lang key fields
     member this.TryFlattenValue
             (lang : string option,
@@ -120,6 +123,34 @@ type ContentField with
             errors <- err :: errors
             None
     member this.TryFlattenArray
+            (selfLang : string option, lang : string,
+                key : string, fields : ContentField list,
+                data : Json, errors : byref<string list>) =
+        let decoder =
+            match selfLang with
+            | None -> D.array D.json
+            | Some lang -> D.field lang (D.array D.json)
+        let result =
+            data
+            |> tryCastJson (D.field key decoder)
+        match result with
+        | Ok fieldArray ->
+            let mutable fieldErrors = []
+            let encoder = fun (fieldData : Json) ->
+                E.object [
+                    for field in fields do
+                        match field.TryFlatten (lang, fieldData, &fieldErrors) with
+                        | Some (k, v) -> yield (k, v)
+                        | None -> ()
+                ]
+            let result =
+                Some (key, E.array encoder fieldArray)
+            errors <- fieldErrors @ errors
+            result
+        | Error err ->
+            errors <- err :: errors
+            None
+    member this.TryFlattenLinks
             (selfLang : string option, lang : string,
                 key : string, fields : ContentField list,
                 data : Json, errors : byref<string list>) =
@@ -177,6 +208,12 @@ type ContentField with
             this.TryFlattenArray (Some Invariant, lang, key, fields, data, &errors)
         | LocalizedArray (key, fields) ->
             this.TryFlattenArray (Some lang, lang, key, fields, data, &errors)
+        | SimpleLinks (key, fields) ->
+            this.TryFlattenLinks (None, lang, key, fields, data, &errors)
+        | InvariantLinks (key, fields) ->
+            this.TryFlattenLinks (Some Invariant, lang, key, fields, data, &errors)
+        | LocalizedLinks (key, fields) ->
+            this.TryFlattenLinks (Some lang, lang, key, fields, data, &errors)
 
 type SquidexConfig with
     member this.GraphqlUrl =
@@ -282,12 +319,18 @@ type Squidex = SquidexHelper with
         ContentField.CreateInvariantChild key fields
     static member LocalizedChild key fields : ContentField =
         ContentField.CreateLocalizedChild key fields
-    static member SimpCreateSimpleChildleArray key fields : ContentField =
-        ContentField.CreateSimpleArray key (SquidexItem.WrapFields fields)
+    static member SimpleArray key fields : ContentField =
+        ContentField.CreateSimpleArray key fields
     static member InvariantArray key fields : ContentField =
-        ContentField.CreateInvariantArray key (SquidexItem.WrapFields fields)
+        ContentField.CreateInvariantArray key fields
     static member LocalizedArray key fields : ContentField =
-        ContentField.CreateLocalizedArray key (SquidexItem.WrapFields fields)
+        ContentField.CreateLocalizedArray key fields
+    static member SimpleLinks key fields : ContentField =
+        ContentField.CreateSimpleLinks key (SquidexItem.WrapFields fields)
+    static member InvariantLinks key fields : ContentField =
+        ContentField.CreateInvariantLinks key (SquidexItem.WrapFields fields)
+    static member LocalizedLinks key fields : ContentField =
+        ContentField.CreateLocalizedLinks key (SquidexItem.WrapFields fields)
 
 type ContentsWithTotalResult with
     static member JsonDecoderWithFlatten (query : ContentsQuery) : JsonDecoder<ContentsWithTotalResult> =

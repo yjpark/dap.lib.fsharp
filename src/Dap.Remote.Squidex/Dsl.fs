@@ -71,6 +71,18 @@ let ContentField =
             var (M.string "key")
             list (M.custom ("ContentField", "fields", "NoField"))
         })
+        case "SimpleLinks" (fields {
+            var (M.string "key")
+            list (M.custom ("ContentField", "fields", "NoField"))
+        })
+        case "InvariantLinks" (fields {
+            var (M.string "key")
+            list (M.custom ("ContentField", "fields", "NoField"))
+        })
+        case "LocalizedLinks" (fields {
+            var (M.string "key")
+            list (M.custom ("ContentField", "fields", "NoField"))
+        })
     }|> UnionMeta.SetInitValue (Some "NoField")
 
 let ContentsQuery =

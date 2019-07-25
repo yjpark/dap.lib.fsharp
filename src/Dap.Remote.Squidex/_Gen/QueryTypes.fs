@@ -19,6 +19,9 @@ type ContentField =
     | SimpleArray of key : string * fields : ContentField list
     | InvariantArray of key : string * fields : ContentField list
     | LocalizedArray of key : string * fields : ContentField list
+    | SimpleLinks of key : string * fields : ContentField list
+    | InvariantLinks of key : string * fields : ContentField list
+    | LocalizedLinks of key : string * fields : ContentField list
 with
     static member CreateNoField () : ContentField =
         NoField
@@ -40,6 +43,12 @@ with
         InvariantArray (key, fields)
     static member CreateLocalizedArray key fields : ContentField =
         LocalizedArray (key, fields)
+    static member CreateSimpleLinks key fields : ContentField =
+        SimpleLinks (key, fields)
+    static member CreateInvariantLinks key fields : ContentField =
+        InvariantLinks (key, fields)
+    static member CreateLocalizedLinks key fields : ContentField =
+        LocalizedLinks (key, fields)
 
 (*
  * Generated: <Record>

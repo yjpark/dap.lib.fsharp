@@ -72,9 +72,25 @@ let main argv =
         fields = [
             Squidex.InvariantValue "key" S.string
             Squidex.InvariantValue "args" S.json
-            Squidex.InvariantArray "pipes" [
+            Squidex.InvariantLinks "pipes" [
                 Squidex.InvariantValue "kind" S.string
                 Squidex.InvariantValue "args" S.json
+            ]
+        ]
+    ) |> execQuery env config
+
+    ContentsQuery.Create (
+        schema = "transformers",
+        lang = "en",
+        fields = [
+            Squidex.InvariantValue "key" S.string
+            Squidex.InvariantValue "enabled" S.bool
+            Squidex.InvariantValue "args" S.json
+            Squidex.InvariantArray "rules" [
+                Squidex.SimpleValue "rule" S.json
+            ]
+            Squidex.InvariantLinks "pipeline" [
+                Squidex.InvariantValue "key" S.string
             ]
         ]
     ) |> execQuery env config
