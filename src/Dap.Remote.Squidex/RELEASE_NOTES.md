@@ -1,3 +1,6 @@
+## 0.1.2
+* Check null when flatten data
+
 ## 0.1.1
 * Separate Links and Array
 

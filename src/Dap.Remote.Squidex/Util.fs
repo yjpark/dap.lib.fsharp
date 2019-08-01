@@ -74,119 +74,140 @@ type ContentField with
         | LocalizedArray (key, fields)
         | LocalizedLinks (key, fields) ->
             ContentField.FieldsToQuery (Some lang) tabs lang key fields
+    member this.IsFieldNull (key : string, data : Json) : bool =
+        data
+        |> tryCastJson (D.field key D.json)
+        |> function
+        | Ok x ->
+            x.IsNull
+        | Error err ->
+            false
+
     member this.TryFlattenValue
             (lang : string option,
                 key : string, spec : FieldSpec,
                 data : Json, errors : byref<string list>) =
-        let decoder =
-            match lang with
-            | None -> spec.Decoder
-            | Some lang -> D.field lang spec.Decoder
-        let result =
-            data
-            |> tryCastJson (D.field key decoder)
-            |> Result.bind (fun v ->
-                try
-                    Ok (key, spec.Encoder v)
-                with e ->
-                    Error <| e.Message
-            )
-        match result with
-            | Ok (k, v) -> Some (k, v)
-            | Error err ->
-                errors <- err :: errors
-                None
+        if this.IsFieldNull (key, data) then
+            None
+        else
+            let decoder =
+                match lang with
+                | None -> spec.Decoder
+                | Some lang -> D.field lang spec.Decoder
+            let result =
+                data
+                |> tryCastJson (D.field key decoder)
+                |> Result.bind (fun v ->
+                    try
+                        Ok (key, spec.Encoder v)
+                    with e ->
+                        Error <| e.Message
+                )
+            match result with
+                | Ok (k, v) -> Some (k, v)
+                | Error err ->
+                    errors <- err :: errors
+                    None
     member this.TryFlattenChild
             (selfLang : string option, lang : string,
                 key : string, fields : ContentField list,
                 data : Json, errors : byref<string list>) =
-        let decoder =
-            match selfLang with
-            | None -> D.json
-            | Some lang -> D.field lang D.json
-        let result =
-            data
-            |> tryCastJson (D.field key decoder)
-        match result with
-        | Ok fieldData ->
-            let mutable fieldErrors = []
-            let result =
-                Some (key, E.object [
-                    for field in fields do
-                        match field.TryFlatten (lang, fieldData, &fieldErrors) with
-                        | Some (k, v) -> yield (k, v)
-                        | None -> ()
-                ])
-            errors <- fieldErrors @ errors
-            result
-        | Error err ->
-            errors <- err :: errors
+        if this.IsFieldNull (key, data) then
             None
+        else
+            let decoder =
+                match selfLang with
+                | None -> D.json
+                | Some lang -> D.field lang D.json
+            let result =
+                data
+                |> tryCastJson (D.field key decoder)
+            match result with
+            | Ok fieldData ->
+                let mutable fieldErrors = []
+                let result =
+                    Some (key, E.object [
+                        for field in fields do
+                            match field.TryFlatten (lang, fieldData, &fieldErrors) with
+                            | Some (k, v) -> yield (k, v)
+                            | None -> ()
+                    ])
+                errors <- fieldErrors @ errors
+                result
+            | Error err ->
+                errors <- err :: errors
+                None
     member this.TryFlattenArray
             (selfLang : string option, lang : string,
                 key : string, fields : ContentField list,
                 data : Json, errors : byref<string list>) =
-        let decoder =
-            match selfLang with
-            | None -> D.array D.json
-            | Some lang -> D.field lang (D.array D.json)
-        let result =
-            data
-            |> tryCastJson (D.field key decoder)
-        match result with
-        | Ok fieldArray ->
-            let mutable fieldErrors = []
-            let encoder = fun (fieldData : Json) ->
-                E.object [
-                    for field in fields do
-                        match field.TryFlatten (lang, fieldData, &fieldErrors) with
-                        | Some (k, v) -> yield (k, v)
-                        | None -> ()
-                ]
-            let result =
-                Some (key, E.array encoder fieldArray)
-            errors <- fieldErrors @ errors
-            result
-        | Error err ->
-            errors <- err :: errors
+        if this.IsFieldNull (key, data) then
             None
+        else
+            let decoder =
+                match selfLang with
+                | None -> D.array D.json
+                | Some lang -> D.field lang (D.array D.json)
+            let result =
+                data
+                |> tryCastJson (D.field key decoder)
+            match result with
+            | Ok fieldArray ->
+                let mutable fieldErrors = []
+                let encoder = fun (fieldData : Json) ->
+                    E.object [
+                        for field in fields do
+                            match field.TryFlatten (lang, fieldData, &fieldErrors) with
+                            | Some (k, v) -> yield (k, v)
+                            | None -> ()
+                    ]
+                let result =
+                    Some (key, E.array encoder fieldArray)
+                errors <- fieldErrors @ errors
+                result
+            | Error err ->
+                errors <- err :: errors
+                None
     member this.TryFlattenLinks
             (selfLang : string option, lang : string,
                 key : string, fields : ContentField list,
                 data : Json, errors : byref<string list>) =
-        let dataFields = SquidexItem.UnwrapDataFields fields
-        let decoder =
-            match dataFields with
-            | [] -> D.json
-            | _ -> D.field "data" D.json
-        let decoder =
-            match selfLang with
-            | None -> D.array decoder
-            | Some lang -> D.field lang (D.array decoder)
-        let result =
-            data
-            |> tryCastJson (D.field key decoder)
-        match result with
-        | Ok fieldArray ->
-            let mutable fieldErrors = []
-            let encoder = fun (fieldData : Json) ->
-                let fields' =
-                    match dataFields with
-                    | [] -> fields
-                    | _ -> dataFields
-                E.object [
-                    for field in fields' do
-                        match field.TryFlatten (lang, fieldData, &fieldErrors) with
-                        | Some (k, v) -> yield (k, v)
-                        | None -> ()
-                ]
-            let result =
-                Some (key, E.array encoder fieldArray)
-            errors <- fieldErrors @ errors
-            result
-        | Error err ->
-            errors <- err :: errors
+        if this.IsFieldNull (key, data) then
             None
+        else
+            let dataFields = SquidexItem.UnwrapDataFields fields
+            let decoder =
+                match dataFields with
+                | [] -> D.json
+                | _ -> D.field "data" D.json
+            let decoder =
+                match selfLang with
+                | None -> D.array decoder
+                | Some lang -> D.field lang (D.array decoder)
+            let result =
+                data
+                |> tryCastJson (D.field key decoder)
+            match result with
+            | Ok fieldArray ->
+                let mutable fieldErrors = []
+                let encoder = fun (fieldData : Json) ->
+                    let fields' =
+                        match dataFields with
+                        | [] -> fields
+                        | _ -> dataFields
+                    E.object [
+                        for field in fields' do
+                            match field.TryFlatten (lang, fieldData, &fieldErrors) with
+                            | Some (k, v) -> yield (k, v)
+                            | None -> ()
+                    ]
+                let result =
+                    Some (key, E.array encoder fieldArray)
+                errors <- fieldErrors @ errors
+                result
+            | Error err ->
+                errors <- err :: errors
+                None
     member this.TryFlatten (lang : string, data : Json, errors : byref<string list>) : (string * Json) option =
         match this with
         | NoField -> None
