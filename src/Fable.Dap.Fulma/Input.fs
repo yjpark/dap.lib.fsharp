@@ -32,7 +32,8 @@ type Model = {
     Text : string
     Icon : Fa.IconOption option
     Error : string option
-    OnChanged : string -> unit
+    OnChange : (string -> unit) option
+    OnSubmit : (string -> unit) option
 } with
     static member Create
         (
@@ -40,25 +41,37 @@ type Model = {
             ?text : string,
             ?icon : Fa.IconOption,
             ?error : string,
-            ?onChanged : string -> unit
+            ?onChange : string -> unit,
+            ?onSubmit : string -> unit
         ) : Model =
         {
             Style = defaultArg style Style.Text
             Text = defaultArg text ""
             Icon = icon
             Error = error
-            OnChanged = defaultArg onChanged ignore
+            OnChange = onChange
+            OnSubmit = onSubmit
         }
 
 type W with
     static member Input' (model : Model) : Widget list =
+        let mutable v = model.Text
         let inputOptions = [
             yield Input.DefaultValue model.Text
-            yield Input.OnChange (fun e ->
-                model.OnChanged <| getInputValue e.target
-            )
+            if model.OnChange.IsSome then
+                yield Input.OnChange (fun e ->
+                    v <- getInputValue e.target
+                    model.OnChange.Value v
+                )
             if model.Error.IsSome then
                 yield Input.Color IsDanger
+            if model.OnSubmit.IsSome then
+                yield Input.Props [
+                    P.OnKeyPress (fun e ->
+                        if e.key = "Enter" then
+                            model.OnSubmit.Value v
+                    )
+                ]
         ]
         let input =
             Control.div [
@@ -85,13 +98,15 @@ type W with
             ?text : string,
             ?icon : Fa.IconOption,
             ?error : string,
-            ?onChanged : string -> unit
+            ?onChange : string -> unit,
+            ?onSubmit : string -> unit
         ) : Widget list =
         Model.Create (
             ?style = style,
             ?text = text,
             ?icon = icon,
             ?error = error,
-            ?onChanged = onChanged
+            ?onChange = onChange,
+            ?onSubmit = onSubmit
         )|> W.Input'
 
