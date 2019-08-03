@@ -20,10 +20,10 @@ with
         (
             ?px : int
         ) =
-        let px = defaultArg px 10
+        let px = defaultArg px 12
         R.span [
             P.Style [
                 P.CSSProp.MarginRight (sprintf "%ipx" px)
             ]
-        ] [H.str "&nbsp;"]
+        ] []
 
