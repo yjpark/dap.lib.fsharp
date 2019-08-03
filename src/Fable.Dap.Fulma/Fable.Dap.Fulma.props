@@ -5,6 +5,7 @@
     <Compile Include="$(DapLibSrcDir)\Fable.Dap.Fulma\Types.fs" />
     <Compile Include="$(DapLibSrcDir)\Fable.Dap.Fulma\Button.fs" />
     <Compile Include="$(DapLibSrcDir)\Fable.Dap.Fulma\Input.fs" />
+    <Compile Include="$(DapLibSrcDir)\Fable.Dap.Fulma\Checkbox.fs" />
     <Compile Include="$(DapLibSrcDir)\Fable.Dap.Fulma\Breadcrumb.fs" />
     <Compile Include="$(DapLibSrcDir)\Fable.Dap.Fulma\Tabs.fs" />
     <Compile Include="$(DapLibSrcDir)\Fable.Dap.Fulma\Json.fs" />

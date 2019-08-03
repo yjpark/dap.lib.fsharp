@@ -14,13 +14,16 @@ open Dap.Context                                                      //__SILP__
 open Dap.Platform                                                     //__SILP__
 open Dap.React                                                        //__SILP_
 
+[<Literal>]
+let DefaultMarginPx = 12
+
 type W = DapFulmaWidgets
 with
     static member Space
         (
             ?px : int
         ) =
-        let px = defaultArg px 12
+        let px = defaultArg px DefaultMarginPx
         R.span [
             P.Style [
                 P.CSSProp.MarginRight (sprintf "%ipx" px)
