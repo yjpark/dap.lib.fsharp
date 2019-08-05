@@ -1,3 +1,6 @@
+## 0.7.5
+* Remove Http.HandleJsonPost generic constraint
+
 ## 0.7.4
 * Add WebApp.cleanup
 

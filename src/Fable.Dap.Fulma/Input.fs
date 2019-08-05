@@ -58,10 +58,11 @@ type W with
         let mutable v = model.Text
         let inputOptions = [
             yield Input.DefaultValue model.Text
-            if model.OnChange.IsSome then
+            if model.OnChange.IsSome || model.OnSubmit.IsSome then
                 yield Input.OnChange (fun e ->
                     v <- getInputValue e.target
-                    model.OnChange.Value v
+                    if model.OnChange.IsSome then
+                        model.OnChange.Value v
                 )
             if model.Error.IsSome then
                 yield Input.Color IsDanger

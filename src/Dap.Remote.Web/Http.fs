@@ -76,7 +76,7 @@ type Http with
     static member InternalError (json : IJson, ?tabs : int) = Http.Return (500, json, ?tabs = tabs)
 
 type Http with
-    static member HandleJsonPost<'param when 'param :> IJson> (decoder : JsonDecoder<'param>) (samples : Json list) (getNext : 'param -> HttpFunc) =
+    static member HandleJsonPost<'param> (decoder : JsonDecoder<'param>) (samples : Json list) (getNext : 'param -> HttpFunc) =
         fun (ctx : HttpContext) -> task {
             let! body = ctx.ReadBodyFromRequestAsync ()
             match tryDecodeJson decoder body with
