@@ -4,7 +4,7 @@
     <PackageProjectUrl>https://github.com/yjpark/dap.lib.fsharp</PackageProjectUrl>
     <PackageTags>fsharp;dap;</PackageTags>
     <Authors>YJ Park</Authors>
-    <Version>0.7.5</Version>
+    <Version>0.8.0</Version>
     <Description>Dap Remote common server libs</Description>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
@@ -13,7 +13,9 @@
     <Compile Include="WebSocketHub.fs" />
     <Compile Include="_Gen/HttpTypes.fs" />
     <Compile Include="Http.fs" />
+    <Compile Include="Auth/OpenIdConnect.fs" />
     <Compile Include="App/WebHost.fs" />
+    <Compile Include="App/Auth.fs" />
     <Compile Include="App/Giraffe.fs" />
     <Compile Include="App/WebApp.fs" />
     <Compile Include="App/Helper.fs" />

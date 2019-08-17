@@ -45,7 +45,6 @@ let projects =
     ++ "src/Fable.Dap.Local/*.fsproj"
     ++ "src/Fable.Dap.React/*.fsproj"
     ++ "src/Fable.Dap.Fulma/*.fsproj"
-    ++ "demo/Squidex.Demo/*.fsproj"
 
 NuGet.create NuGet.release feed projects
 

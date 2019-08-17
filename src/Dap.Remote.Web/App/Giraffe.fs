@@ -14,9 +14,9 @@ type Giraffe = GiraffeHelper with
     static member addService (services : IServiceCollection) =
         services.AddGiraffe () |> ignore
     static member useHandler (handler : HttpHandler) =
-        WebHost.setup (fun host -> host.UseGiraffe handler |> ignore)
+        WebHost.setupApp (fun host -> host.UseGiraffe handler)
     static member useErrorHandler (handler : ErrorHandler) =
-        WebHost.setup (fun host -> host.UseGiraffeErrorHandler handler |> ignore)
+        WebHost.setupApp (fun host -> host.UseGiraffeErrorHandler handler)
 
 type Giraffe with
     static member setHandler (handler : HttpHandler) = Giraffe.useHandler handler
@@ -24,7 +24,7 @@ type Giraffe with
 
 type WebHost with
     static member setGiraffe (handler : HttpHandler, ?errorHandler : ErrorHandler) =
-        WebHost.setupServices (fun s -> s.AddGiraffe ())
+        WebHost.setupService (fun s -> s.AddGiraffe ())
         >> Giraffe.setHandler handler
         >> (
             errorHandler

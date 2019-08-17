@@ -13,5 +13,5 @@ let runWebApp<'app when 'app :> IBaseApp> (newWebHost : 'app -> WebHost) (cleanu
     let host =
         new WebHostBuilder ()
         |> WebHostBuilderKestrelExtensions.UseKestrel
-        |> webHost.Build
+        |> webHost.Build app
     WebApp.WebApp<'app>.Run host cleanup app

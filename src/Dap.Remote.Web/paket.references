@@ -9,3 +9,5 @@ Microsoft.AspNetCore.Diagnostics.Elm
 Microsoft.AspNetCore.Server.Kestrel
 Microsoft.AspNetCore.StaticFiles
 Microsoft.AspNetCore.WebSockets
+Microsoft.AspNetCore.Authentication.OpenIdConnect
+Microsoft.AspNetCore.Authentication.Cookies

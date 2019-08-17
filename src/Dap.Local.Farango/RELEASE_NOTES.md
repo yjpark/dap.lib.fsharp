@@ -1,3 +1,6 @@
+## 0.8.0
+* log API changes
+
 ## 0.7.1
 * Use utf-8 as request content encoding to fix issues with non-ascii characters
 

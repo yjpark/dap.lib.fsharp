@@ -1,3 +1,6 @@
+## 0.2.0
+* log API changes
+
 ## 0.1.2
 * Check null when flatten data
 
