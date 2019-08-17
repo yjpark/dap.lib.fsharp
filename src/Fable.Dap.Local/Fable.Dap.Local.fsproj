@@ -11,7 +11,7 @@
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
   <PropertyGroup Label="UserMacros">
-      <DapLibSrcDir>..</DapLibSrcDir>
+    <DapLibSrcDir>..</DapLibSrcDir>
   </PropertyGroup>
   <Import Project="Fable.Dap.Local.props" />
   <ItemGroup>
@@ -20,5 +20,5 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta2-18618-05" PrivateAssets="All" />
   </ItemGroup>
-  <Import Project="..\..\.paket\Paket.Restore.targets" />
+  <Import Project="..\..\..\..\.paket\Paket.Restore.targets" />
 </Project>

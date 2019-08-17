@@ -1,3 +1,6 @@
+## 0.8.1
+* Can restrict certain path in static files to authenticated users
+
 ## 0.8.0
 * log API changes
 

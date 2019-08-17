@@ -1,4 +1,5 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <DefineConstants>FABLE_COMPILER</DefineConstants>
@@ -10,7 +11,7 @@
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
   <PropertyGroup Label="UserMacros">
-      <DapLibSrcDir>..</DapLibSrcDir>
+    <DapLibSrcDir>..</DapLibSrcDir>
   </PropertyGroup>
   <Import Project="Fable.Dap.Fulma.props" />
   <ItemGroup>
@@ -22,5 +23,5 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta2-18618-05" PrivateAssets="All" />
   </ItemGroup>
-  <Import Project="..\..\.paket\Paket.Restore.targets" />
+  <Import Project="..\..\..\..\.paket\Paket.Restore.targets" />
 </Project>
