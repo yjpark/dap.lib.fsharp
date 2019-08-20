@@ -28,8 +28,8 @@ type WebHost with
             |> List.iter (fun action ->
                 action auth |> ignore
             )
-        )
-    static member setupOpenIdConnectAndCookie
+        )>> WebHost.setupApp (fun x -> x.UseAuthentication ())
+    static member setupAuthWithOpenIdConnectAndCookie
             (
                 openIdConnectOptions : OpenIdConnectOptions -> unit,
                 ?cookieOptions : CookieAuthenticationOptions -> unit
@@ -54,7 +54,7 @@ type WebHost with
                 )
             ]
         )
-    static member setupOpenIdConnectAndCookieFromConfig
+    static member setupAuthWithOpenIdConnectAndCookieFromConfig
             (
                 getConfig : unit -> IConfiguration,
                 ?section : string,
@@ -64,7 +64,7 @@ type WebHost with
             ) =
         let section = defaultArg section "OpenIdConnect"
         let nameClaimType = defaultArg nameClaimType "name"
-        WebHost.setupOpenIdConnectAndCookie (
+        WebHost.setupAuthWithOpenIdConnectAndCookie (
             openIdConnectOptions = (fun options ->
                 let config = getConfig ()
                 config.GetSection(section).Bind (options)
