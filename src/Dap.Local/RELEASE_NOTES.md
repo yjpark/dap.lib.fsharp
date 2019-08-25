@@ -1,3 +1,6 @@
+## 0.8.1
+* Add IEnvironment.TryGetVariable
+
 ## 0.8.0
 * log API changes
 

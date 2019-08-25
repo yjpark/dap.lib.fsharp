@@ -14,6 +14,12 @@ type IEnvironment with
         )
     member this.PreferencesProps = this.Preferences.Properties
     member this.SecureStorageProps = this.SecureStorage.Properties
+    member __.TryGetVariable (key : string) : string option =
+        let v = System.Environment.GetEnvironmentVariable key
+        if v = null then
+            None
+        else
+            Some v
 
 type FileSinkArgs with
     member this.WithTimestamp () =
