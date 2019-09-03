@@ -13,12 +13,14 @@ type SquidexConfig = {
     Url : (* SquidexConfig *) string
     App : (* SquidexConfig *) string
     Token : (* SquidexConfig *) string
+    Languages : (* SquidexConfig *) string list
 } with
     static member Create
         (
             ?url : (* SquidexConfig *) string,
             ?app : (* SquidexConfig *) string,
-            ?token : (* SquidexConfig *) string
+            ?token : (* SquidexConfig *) string,
+            ?languages : (* SquidexConfig *) string list
         ) : SquidexConfig =
         {
             Url = (* SquidexConfig *) url
@@ -27,6 +29,8 @@ type SquidexConfig = {
                 |> Option.defaultWith (fun () -> "")
             Token = (* SquidexConfig *) token
                 |> Option.defaultWith (fun () -> "")
+            Languages = (* SquidexConfig *) languages
+                |> Option.defaultWith (fun () -> [])
         }
     static member SetUrl ((* SquidexConfig *) url : string) (this : SquidexConfig) =
         {this with Url = url}
@@ -34,12 +38,15 @@ type SquidexConfig = {
         {this with App = app}
     static member SetToken ((* SquidexConfig *) token : string) (this : SquidexConfig) =
         {this with Token = token}
+    static member SetLanguages ((* SquidexConfig *) languages : string list) (this : SquidexConfig) =
+        {this with Languages = languages}
     static member JsonEncoder : JsonEncoder<SquidexConfig> =
         fun (this : SquidexConfig) ->
             E.object [
                 "url", E.string (* SquidexConfig *) this.Url
                 "app", E.string (* SquidexConfig *) this.App
                 "token", E.string (* SquidexConfig *) this.Token
+                "languages", (E.list E.string) (* SquidexConfig *) this.Languages
             ]
     static member JsonDecoder : JsonDecoder<SquidexConfig> =
         D.object (fun get ->
@@ -47,6 +54,7 @@ type SquidexConfig = {
                 Url = get.Required.Field (* SquidexConfig *) "url" D.string
                 App = get.Required.Field (* SquidexConfig *) "app" D.string
                 Token = get.Required.Field (* SquidexConfig *) "token" D.string
+                Languages = get.Required.Field (* SquidexConfig *) "languages" (D.list D.string)
             }
         )
     static member JsonSpec =
@@ -60,6 +68,8 @@ type SquidexConfig = {
         this |> SquidexConfig.SetApp app
     member this.WithToken ((* SquidexConfig *) token : string) =
         this |> SquidexConfig.SetToken token
+    member this.WithLanguages ((* SquidexConfig *) languages : string list) =
+        this |> SquidexConfig.SetLanguages languages
 
 (*
  * Generated: <Record>

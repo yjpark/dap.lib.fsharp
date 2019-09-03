@@ -25,6 +25,9 @@
 			"path": "src/Dap.Remote.Squidex"
 		},
 		{
+			"path": "src/Dap.Remote.Squidex.Sync"
+		},
+		{
 			"path": "src/Dap.Fable"
 		},
 		{

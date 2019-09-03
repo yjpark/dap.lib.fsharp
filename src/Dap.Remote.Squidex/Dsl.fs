@@ -17,6 +17,7 @@ let SquidexConfig =
         var (M.string "url")
         var (M.string "app")
         var (M.string "token")
+        list (M.string "languages")
     }
 
 let SquidexItem =
@@ -88,10 +89,10 @@ let ContentField =
 let ContentsQuery =
     combo {
         var (M.string "schema")
-        var (M.string "lang")
         list (M.custom (<@ ContentField @>, "fields"))
         var (M.int ("top", 200))
         var (M.int ("skip", 0))
+        option (M.string "lang")
         option (M.string "filter")
         option (M.string "orderby")
     }

@@ -33,9 +33,11 @@ type SquidexItem with
         )|> List.tryHead
         |> Option.defaultValue []
 
+
 type ContentField with
     static member FieldsToQuery
-            (selfLang : string option) (tabs : int) (lang : string)
+            (config : SquidexConfig)
+            (selfLang : string option) (tabs : int) (lang : string option)
             (key : string) (fields : ContentField list)
                 : string list =
         let prefix = getPrefix tabs
@@ -45,14 +47,14 @@ type ContentField with
                 yield sprintf "%s  %s {" prefix selfLang.Value
             let extra_tabs = if selfLang.IsSome then 2 else 1
             for field in fields do
-                for line in (field.ToQuery (tabs + extra_tabs) lang) do
+                for line in (field.ToQuery config (tabs + extra_tabs) lang) do
                     yield line
             if selfLang.IsSome then
                 yield sprintf "%s  }" prefix
             yield sprintf "%s}" prefix
         ]
 
-    member this.ToQuery (tabs : int) (lang : string) : string list =
+    member this.ToQuery (config : SquidexConfig) (tabs : int) (lang : string option) : string list =
         let prefix = getPrefix tabs
         match this with
         | NoField -> []
@@ -61,19 +63,23 @@ type ContentField with
         | InvariantValue (key, _spec) ->
             [sprintf "%s%s { %s }" prefix key Invariant]
         | LocalizedValue (key, _spec) ->
-            [sprintf "%s%s { %s }" prefix key lang]
+            match lang with
+            | Some lang ->
+                [sprintf "%s%s { %s }" prefix key lang]
+            | None ->
+                [sprintf "%s%s { %s }" prefix key (String.concat " " config.Languages)]
         | SimpleChild (key, fields)
         | SimpleArray (key, fields)
         | SimpleLinks (key, fields) ->
-            ContentField.FieldsToQuery None tabs lang key fields
+            ContentField.FieldsToQuery config None tabs lang key fields
         | InvariantChild (key, fields)
         | InvariantArray (key, fields)
         | InvariantLinks (key, fields) ->
-            ContentField.FieldsToQuery (Some Invariant) tabs lang key fields
+            ContentField.FieldsToQuery config (Some Invariant) tabs lang key fields
         | LocalizedChild (key, fields)
         | LocalizedArray (key, fields)
         | LocalizedLinks (key, fields) ->
-            ContentField.FieldsToQuery (Some lang) tabs lang key fields
+            ContentField.FieldsToQuery config lang tabs lang key fields
     member this.IsFieldNull (key : string, data : Json) : bool =
         data
         |> tryCastJson (D.field key D.json)
@@ -109,7 +115,7 @@ type ContentField with
                     errors <- err :: errors
                     None
     member this.TryFlattenChild
-            (selfLang : string option, lang : string,
+            (selfLang : string option, lang : string option,
                 key : string, fields : ContentField list,
                 data : Json, errors : byref<string list>) =
         if this.IsFieldNull (key, data) then
@@ -138,7 +144,7 @@ type ContentField with
                 errors <- err :: errors
                 None
     member this.TryFlattenArray
-            (selfLang : string option, lang : string,
+            (selfLang : string option, lang : string option,
                 key : string, fields : ContentField list,
                 data : Json, errors : byref<string list>) =
         if this.IsFieldNull (key, data) then
@@ -169,7 +175,7 @@ type ContentField with
                 errors <- err :: errors
                 None
     member this.TryFlattenLinks
-            (selfLang : string option, lang : string,
+            (selfLang : string option, lang : string option,
                 key : string, fields : ContentField list,
                 data : Json, errors : byref<string list>) =
         if this.IsFieldNull (key, data) then
@@ -208,7 +214,7 @@ type ContentField with
             | Error err ->
                 errors <- err :: errors
                 None
-    member this.TryFlatten (lang : string, data : Json, errors : byref<string list>) : (string * Json) option =
+    member this.TryFlatten (lang : string option, data : Json, errors : byref<string list>) : (string * Json) option =
         match this with
         | NoField -> None
         | SimpleValue (key, spec) ->
@@ -216,25 +222,25 @@ type ContentField with
         | InvariantValue (key, spec) ->
             this.TryFlattenValue (Some Invariant, key, spec, data, &errors)
         | LocalizedValue (key, spec) ->
-            this.TryFlattenValue (Some lang, key, spec, data, &errors)
+            this.TryFlattenValue (lang, key, spec, data, &errors)
         | SimpleChild (key, fields) ->
             this.TryFlattenChild (None, lang, key, fields, data, &errors)
         | InvariantChild (key, fields) ->
             this.TryFlattenChild (Some Invariant, lang, key, fields, data, &errors)
         | LocalizedChild (key, fields) ->
-            this.TryFlattenChild (Some lang, lang, key, fields, data, &errors)
+            this.TryFlattenChild (lang, lang, key, fields, data, &errors)
         | SimpleArray (key, fields) ->
             this.TryFlattenArray (None, lang, key, fields, data, &errors)
         | InvariantArray (key, fields) ->
             this.TryFlattenArray (Some Invariant, lang, key, fields, data, &errors)
         | LocalizedArray (key, fields) ->
-            this.TryFlattenArray (Some lang, lang, key, fields, data, &errors)
+            this.TryFlattenArray (lang, lang, key, fields, data, &errors)
         | SimpleLinks (key, fields) ->
             this.TryFlattenLinks (None, lang, key, fields, data, &errors)
         | InvariantLinks (key, fields) ->
             this.TryFlattenLinks (Some Invariant, lang, key, fields, data, &errors)
         | LocalizedLinks (key, fields) ->
-            this.TryFlattenLinks (Some lang, lang, key, fields, data, &errors)
+            this.TryFlattenLinks (lang, lang, key, fields, data, &errors)
 
 type SquidexConfig with
     member this.GraphqlUrl =
@@ -252,6 +258,7 @@ type SquidexConfig with
 
 type ContentsQuery with
     member this.ToQuery
+            (config : SquidexConfig)
             (getQueryName : string -> string) =
         let param =
             [
@@ -265,7 +272,7 @@ type ContentsQuery with
         let fields =
             [
                 for field in this.Fields do
-                    for line in (field.ToQuery 1 this.Lang) do
+                    for line in (field.ToQuery config 1 this.Lang) do
                         yield line
             ]
         [
@@ -276,8 +283,9 @@ type ContentsQuery with
             "}"
         ] |> String.concat "\n"
     member this.ToBody
+            (config : SquidexConfig)
             (getQueryName : string -> string) =
-        let query = this.ToQuery getQueryName
+        let query = this.ToQuery config getQueryName
         E.object [
             "query", E.string query
         ]|> E.encode 4

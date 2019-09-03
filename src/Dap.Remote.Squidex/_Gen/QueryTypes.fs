@@ -55,27 +55,25 @@ with
  *)
 type ContentsQuery = {
     Schema : (* ContentsQuery *) string
-    Lang : (* ContentsQuery *) string
     Fields : (* ContentsQuery *) ContentField list
     Top : (* ContentsQuery *) int
     Skip : (* ContentsQuery *) int
+    Lang : (* ContentsQuery *) string option
     Filter : (* ContentsQuery *) string option
     Orderby : (* ContentsQuery *) string option
 } with
     static member Create
         (
             ?schema : (* ContentsQuery *) string,
-            ?lang : (* ContentsQuery *) string,
             ?fields : (* ContentsQuery *) ContentField list,
             ?top : (* ContentsQuery *) int,
             ?skip : (* ContentsQuery *) int,
+            ?lang : (* ContentsQuery *) string,
             ?filter : (* ContentsQuery *) string,
             ?orderby : (* ContentsQuery *) string
         ) : ContentsQuery =
         {
             Schema = (* ContentsQuery *) schema
-                |> Option.defaultWith (fun () -> "")
-            Lang = (* ContentsQuery *) lang
                 |> Option.defaultWith (fun () -> "")
             Fields = (* ContentsQuery *) fields
                 |> Option.defaultWith (fun () -> [])
@@ -83,33 +81,34 @@ type ContentsQuery = {
                 |> Option.defaultWith (fun () -> 200)
             Skip = (* ContentsQuery *) skip
                 |> Option.defaultWith (fun () -> 0)
+            Lang = (* ContentsQuery *) lang
             Filter = (* ContentsQuery *) filter
             Orderby = (* ContentsQuery *) orderby
         }
     static member SetSchema ((* ContentsQuery *) schema : string) (this : ContentsQuery) =
         {this with Schema = schema}
-    static member SetLang ((* ContentsQuery *) lang : string) (this : ContentsQuery) =
-        {this with Lang = lang}
     static member SetFields ((* ContentsQuery *) fields : ContentField list) (this : ContentsQuery) =
         {this with Fields = fields}
     static member SetTop ((* ContentsQuery *) top : int) (this : ContentsQuery) =
         {this with Top = top}
     static member SetSkip ((* ContentsQuery *) skip : int) (this : ContentsQuery) =
         {this with Skip = skip}
+    static member SetLang ((* ContentsQuery *) lang : string option) (this : ContentsQuery) =
+        {this with Lang = lang}
     static member SetFilter ((* ContentsQuery *) filter : string option) (this : ContentsQuery) =
         {this with Filter = filter}
     static member SetOrderby ((* ContentsQuery *) orderby : string option) (this : ContentsQuery) =
         {this with Orderby = orderby}
     member this.WithSchema ((* ContentsQuery *) schema : string) =
         this |> ContentsQuery.SetSchema schema
-    member this.WithLang ((* ContentsQuery *) lang : string) =
-        this |> ContentsQuery.SetLang lang
     member this.WithFields ((* ContentsQuery *) fields : ContentField list) =
         this |> ContentsQuery.SetFields fields
     member this.WithTop ((* ContentsQuery *) top : int) =
         this |> ContentsQuery.SetTop top
     member this.WithSkip ((* ContentsQuery *) skip : int) =
         this |> ContentsQuery.SetSkip skip
+    member this.WithLang ((* ContentsQuery *) lang : string option) =
+        this |> ContentsQuery.SetLang lang
     member this.WithFilter ((* ContentsQuery *) filter : string option) =
         this |> ContentsQuery.SetFilter filter
     member this.WithOrderby ((* ContentsQuery *) orderby : string option) =

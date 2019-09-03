@@ -1,5 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <PackageProjectUrl>https://github.com/yjpark/dap.lib.fsharp</PackageProjectUrl>
@@ -11,14 +10,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Dsl.fs" />
-    <Compile Include="_Gen/SquidexTypes.fs" />
-    <Compile Include="_Gen/QueryTypes.fs" />
-    <Compile Include="Util.fs" />
-    <Compile Include="Query/Contents.fs" />
-    <Compile Include="Query/ContentsWithTotal.fs" />
+    <Compile Include="_Gen/Types.fs" />
+    <Compile Include="_Gen/Pack.fs" />
+    <Compile Include="Helper.fs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Dap.Remote.FSharpData\Dap.Remote.FSharpData.fsproj" />
+    <ProjectReference Include="..\Dap.Remote.Web\Dap.Remote.Web.fsproj" />
+    <ProjectReference Include="..\Dap.Remote.Squidex\Dap.Remote.Squidex.fsproj" />
   </ItemGroup>
-  <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>

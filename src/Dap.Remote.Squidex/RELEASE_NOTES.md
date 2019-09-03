@@ -1,3 +1,6 @@
+## 0.2.1
+* Add languages to SquidexConfig, handle multiple languages in a better way
+
 ## 0.2.0
 * log API changes
 

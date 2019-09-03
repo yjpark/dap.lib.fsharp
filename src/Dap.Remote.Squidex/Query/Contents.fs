@@ -64,7 +64,7 @@ type Args = {
     member this.ToContentsRequest : Http.Request<Res> =
         let query = SquidexItem.WrapContentsQuery false this.Query
         let decoder = decodeRes this.Query
-        let body = query.ToBody getQueryName
+        let body = query.ToBody this.Config getQueryName
         this.ToRequest' query decoder body
 
 let queryAsync : AsyncApi<IRunner, Args, Http.Response<Res>> =
