@@ -1,3 +1,6 @@
+## 0.2.2
+* Support add squidex item meta fields to flatten data
+
 ## 0.2.1
 * Add languages to SquidexConfig
 * Handle multiple languages in a better way

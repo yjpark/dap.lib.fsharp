@@ -18,6 +18,52 @@ let getPrefix (tabs : int) =
     |> List.map (fun _ -> "")
     |> String.concat TabStr
 
+type SquidexMeta with
+    member this.JsonKey =
+        match this with
+        | SquidexMeta.Id -> "id"
+        | SquidexMeta.Version -> "version"
+        | SquidexMeta.Created -> "created"
+        | SquidexMeta.CreatedBy -> "createdBy"
+        | SquidexMeta.LastModified -> "lastModified"
+        | SquidexMeta.LastModifiedBy -> "lastModifiedBy"
+        | SquidexMeta.Url -> "url"
+    member this.JsonSpec =
+        match this with
+        | SquidexMeta.Id -> S.string
+        | SquidexMeta.Version -> S.int
+        | SquidexMeta.Created -> S.dateTime
+        | SquidexMeta.CreatedBy -> S.string
+        | SquidexMeta.LastModified -> S.dateTime
+        | SquidexMeta.LastModifiedBy -> S.string
+        | SquidexMeta.Url -> S.string
+    member this.GetJsonValue (item : SquidexItem) =
+        match this with
+        | SquidexMeta.Id -> E.string item.Id
+        | SquidexMeta.Version -> E.int item.Version
+        | SquidexMeta.Created -> E.dateTime item.Created
+        | SquidexMeta.CreatedBy -> E.string item.CreatedBy
+        | SquidexMeta.LastModified -> E.dateTime item.LastModified
+        | SquidexMeta.LastModifiedBy -> E.string item.LastModifiedBy
+        | SquidexMeta.Url -> E.string item.Url
+    static member All =
+        [
+            SquidexMeta.Id
+            SquidexMeta.Version
+            SquidexMeta.Created
+            SquidexMeta.CreatedBy
+            SquidexMeta.LastModified
+            SquidexMeta.LastModifiedBy
+            SquidexMeta.Url
+        ]
+    static member WrapFields (fields : ContentField list) =
+        (SquidexMeta.All
+        |> List.map (fun meta ->
+            ContentField.CreateSimpleValue meta.JsonKey meta.JsonSpec
+        )) @ [
+            ContentField.CreateSimpleChild "data" fields
+        ]
+
 type SquidexItem with
     static member UnwrapDataFields (fields : ContentField list) : ContentField list =
         fields
@@ -58,6 +104,7 @@ type ContentField with
         let prefix = getPrefix tabs
         match this with
         | NoField -> []
+        | MetaValue (_key, _meta) -> []
         | SimpleValue (key, _spec) ->
             [sprintf "%s%s" prefix key]
         | InvariantValue (key, _spec) ->
@@ -88,7 +135,6 @@ type ContentField with
             x.IsNull
         | Error err ->
             false
-
     member this.TryFlattenValue
             (lang : string option,
                 key : string, spec : FieldSpec,
@@ -134,7 +180,7 @@ type ContentField with
                 let result =
                     Some (key, E.object [
                         for field in fields do
-                            match field.TryFlatten (lang, fieldData, &fieldErrors) with
+                            match field.TryFlatten (lang, None, fieldData, &fieldErrors) with
                             | Some (k, v) -> yield (k, v)
                             | None -> ()
                     ])
@@ -163,7 +209,7 @@ type ContentField with
                 let encoder = fun (fieldData : Json) ->
                     E.object [
                         for field in fields do
-                            match field.TryFlatten (lang, fieldData, &fieldErrors) with
+                            match field.TryFlatten (lang, None, fieldData, &fieldErrors) with
                             | Some (k, v) -> yield (k, v)
                             | None -> ()
                     ]
@@ -181,11 +227,7 @@ type ContentField with
         if this.IsFieldNull (key, data) then
             None
         else
-            let dataFields = SquidexItem.UnwrapDataFields fields
-            let decoder =
-                match dataFields with
-                | [] -> D.json
-                | _ -> D.field "data" D.json
+            let decoder = SquidexItem.JsonDecoder
             let decoder =
                 match selfLang with
                 | None -> D.array decoder
@@ -194,29 +236,38 @@ type ContentField with
                 data
                 |> tryCastJson (D.field key decoder)
             match result with
-            | Ok fieldArray ->
+            | Ok links ->
                 let mutable fieldErrors = []
-                let encoder = fun (fieldData : Json) ->
+                let encoder = fun (linkItem : SquidexItem) ->
+                    let dataFields = SquidexItem.UnwrapDataFields fields
                     let fields' =
                         match dataFields with
                         | [] -> fields
                         | _ -> dataFields
                     E.object [
                         for field in fields' do
-                            match field.TryFlatten (lang, fieldData, &fieldErrors) with
+                            match field.TryFlatten (lang, Some linkItem, linkItem.Data, &fieldErrors) with
                             | Some (k, v) -> yield (k, v)
                             | None -> ()
                     ]
                 let result =
-                    Some (key, E.array encoder fieldArray)
+                    Some (key, E.array encoder links)
                 errors <- fieldErrors @ errors
                 result
             | Error err ->
                 errors <- err :: errors
                 None
-    member this.TryFlatten (lang : string option, data : Json, errors : byref<string list>) : (string * Json) option =
+    member this.TryFlatten
+            (lang : string option,
+                item : SquidexItem option, data : Json,
+                errors : byref<string list>) : (string * Json) option =
         match this with
         | NoField -> None
+        | MetaValue (key, meta) ->
+            item
+            |> Option.map (fun item ->
+                (key, meta.GetJsonValue item)
+            )
         | SimpleValue (key, spec) ->
             this.TryFlattenValue (None, key, spec, data, &errors)
         | InvariantValue (key, spec) ->
@@ -292,19 +343,8 @@ type ContentsQuery with
         |> TextRequest
 
 type SquidexItem with
-    static member WrapFields (fields : ContentField list) =
-        [
-            ContentField.CreateSimpleValue "id" S.string
-            ContentField.CreateSimpleValue "version" S.int
-            ContentField.CreateSimpleValue "created" S.dateTime
-            ContentField.CreateSimpleValue "createdBy" S.string
-            ContentField.CreateSimpleValue "lastModified" S.dateTime
-            ContentField.CreateSimpleValue "lastModifiedBy" S.string
-            ContentField.CreateSimpleValue "url" S.string
-            ContentField.CreateSimpleChild "data" fields
-        ]
     static member WrapContentsQuery (withTotal : bool) (query : ContentsQuery) : ContentsQuery =
-        let fields = SquidexItem.WrapFields query.Fields
+        let fields = SquidexMeta.WrapFields query.Fields
         let fields =
             if withTotal then
                 [
@@ -325,7 +365,7 @@ type SquidexItem with
         let result =
             E.object [
                 for field in query.Fields do
-                    match field.TryFlatten (query.Lang, this.Data, &errors) with
+                    match field.TryFlatten (query.Lang, Some this, this.Data, &errors) with
                     | Some (k, v) -> yield (k, v)
                     | None -> ()
             ]
@@ -336,6 +376,8 @@ type SquidexItem with
         result
 
 type Squidex = SquidexHelper with
+    static member MetaValue key meta : ContentField =
+        ContentField.CreateMetaValue key meta
     static member SimpleValue key spec : ContentField =
         ContentField.CreateSimpleValue key spec
     static member InvariantValue key spec : ContentField =
@@ -355,11 +397,11 @@ type Squidex = SquidexHelper with
     static member LocalizedArray key fields : ContentField =
         ContentField.CreateLocalizedArray key fields
     static member SimpleLinks key fields : ContentField =
-        ContentField.CreateSimpleLinks key (SquidexItem.WrapFields fields)
+        ContentField.CreateSimpleLinks key (SquidexMeta.WrapFields fields)
     static member InvariantLinks key fields : ContentField =
-        ContentField.CreateInvariantLinks key (SquidexItem.WrapFields fields)
+        ContentField.CreateInvariantLinks key (SquidexMeta.WrapFields fields)
     static member LocalizedLinks key fields : ContentField =
-        ContentField.CreateLocalizedLinks key (SquidexItem.WrapFields fields)
+        ContentField.CreateLocalizedLinks key (SquidexMeta.WrapFields fields)
 
 type ContentsWithTotalResult with
     static member JsonDecoderWithFlatten (query : ContentsQuery) : JsonDecoder<ContentsWithTotalResult> =

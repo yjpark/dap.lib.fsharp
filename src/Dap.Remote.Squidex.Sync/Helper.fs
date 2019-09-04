@@ -13,6 +13,25 @@ module TickerTypes = Dap.Platform.Ticker.Types
 
 type SyncSnapshot with
     member this.HasError = this.Errors.Count > 0
+    member this.CastContent<'item when 'item :> IJson>
+            (logger : ILogger)
+            (key : string) (decoder : JsonDecoder<'item>) =
+        let mutable errors : string list = []
+        let items =
+            this.Contents
+            |> Map.find key
+            |> (fun x -> x.Items)
+            |> List.choose (fun item ->
+                match tryCastJson decoder item.DataFlatten with
+                | Ok item' ->
+                    logInfo logger key "Cast_Succeed" (E.encode 4 item.DataFlatten, encodeJson 4 item')
+                    Some item'
+                | Error err ->
+                    logWarn logger key "Cast_Failed" (E.encode 4 item.DataFlatten, err)
+                    errors <- err :: errors
+                    None
+            )
+        (items, errors)
 
 type ISyncPack with
     member this.SyncConfig = this.Sync.Context
