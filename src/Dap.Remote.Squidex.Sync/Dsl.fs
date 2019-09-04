@@ -16,6 +16,7 @@ let SyncSnapshot =
     combo {
         var (M.string "id")
         var (M.instant "time")
+        dict (M.string "queries")
         dict (M.custom (<@ ContentsWithTotalResult @>, "contents"))
         dict (M.string "errors")
     }

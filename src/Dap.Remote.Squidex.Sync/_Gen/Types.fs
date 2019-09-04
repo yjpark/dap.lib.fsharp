@@ -14,6 +14,7 @@ open Dap.Remote.Squidex
 type SyncSnapshot = {
     Id : (* SyncSnapshot *) string
     Time : (* SyncSnapshot *) Instant
+    Queries : (* SyncSnapshot *) Map<string, string>
     Contents : (* SyncSnapshot *) Map<string, ContentsWithTotalResult>
     Errors : (* SyncSnapshot *) Map<string, string>
 } with
@@ -21,6 +22,7 @@ type SyncSnapshot = {
         (
             ?id : (* SyncSnapshot *) string,
             ?time : (* SyncSnapshot *) Instant,
+            ?queries : (* SyncSnapshot *) Map<string, string>,
             ?contents : (* SyncSnapshot *) Map<string, ContentsWithTotalResult>,
             ?errors : (* SyncSnapshot *) Map<string, string>
         ) : SyncSnapshot =
@@ -29,6 +31,8 @@ type SyncSnapshot = {
                 |> Option.defaultWith (fun () -> "")
             Time = (* SyncSnapshot *) time
                 |> Option.defaultWith (fun () -> (getNow' ()))
+            Queries = (* SyncSnapshot *) queries
+                |> Option.defaultWith (fun () -> Map.empty)
             Contents = (* SyncSnapshot *) contents
                 |> Option.defaultWith (fun () -> Map.empty)
             Errors = (* SyncSnapshot *) errors
@@ -38,6 +42,8 @@ type SyncSnapshot = {
         {this with Id = id}
     static member SetTime ((* SyncSnapshot *) time : Instant) (this : SyncSnapshot) =
         {this with Time = time}
+    static member SetQueries ((* SyncSnapshot *) queries : Map<string, string>) (this : SyncSnapshot) =
+        {this with Queries = queries}
     static member SetContents ((* SyncSnapshot *) contents : Map<string, ContentsWithTotalResult>) (this : SyncSnapshot) =
         {this with Contents = contents}
     static member SetErrors ((* SyncSnapshot *) errors : Map<string, string>) (this : SyncSnapshot) =
@@ -47,6 +53,7 @@ type SyncSnapshot = {
             E.object [
                 "id", E.string (* SyncSnapshot *) this.Id
                 "time", E.instant (* SyncSnapshot *) this.Time
+                "queries", (E.dict E.string) (* SyncSnapshot *) this.Queries
                 "contents", (E.dict ContentsWithTotalResult.JsonEncoder) (* SyncSnapshot *) this.Contents
                 "errors", (E.dict E.string) (* SyncSnapshot *) this.Errors
             ]
@@ -55,6 +62,7 @@ type SyncSnapshot = {
             {
                 Id = get.Required.Field (* SyncSnapshot *) "id" D.string
                 Time = get.Required.Field (* SyncSnapshot *) "time" D.instant
+                Queries = get.Required.Field (* SyncSnapshot *) "queries" (D.dict D.string)
                 Contents = get.Required.Field (* SyncSnapshot *) "contents" (D.dict ContentsWithTotalResult.JsonDecoder)
                 Errors = get.Required.Field (* SyncSnapshot *) "errors" (D.dict D.string)
             }
@@ -68,6 +76,8 @@ type SyncSnapshot = {
         this |> SyncSnapshot.SetId id
     member this.WithTime ((* SyncSnapshot *) time : Instant) =
         this |> SyncSnapshot.SetTime time
+    member this.WithQueries ((* SyncSnapshot *) queries : Map<string, string>) =
+        this |> SyncSnapshot.SetQueries queries
     member this.WithContents ((* SyncSnapshot *) contents : Map<string, ContentsWithTotalResult>) =
         this |> SyncSnapshot.SetContents contents
     member this.WithErrors ((* SyncSnapshot *) errors : Map<string, string>) =

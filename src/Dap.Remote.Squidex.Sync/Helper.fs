@@ -39,6 +39,7 @@ type ISyncPack with
 
 let private execQueryAsync (pack : ISyncPack) (query : ContentsQuery) = task {
     let config = pack.SyncProps.Config.Value
+    let queryText = (SquidexItem.WrapContentsQuery true query).ToQuery config ContentsWithTotal.getQueryName
     let! response =
         ContentsWithTotal.Args.Create (config, query)
         |> ContentsWithTotal.queryAsync pack
@@ -50,18 +51,21 @@ let private execQueryAsync (pack : ISyncPack) (query : ContentsQuery) = task {
     )
     *)
     |> Result.iterError (fun err ->
-        let query = (SquidexItem.WrapContentsQuery true query).ToQuery config ContentsWithTotal.getQueryName
         logError pack "Squidex" "Query_Squidex_Failed"
             (encodeJson 4 config, query, response, err)
     )
-    return response.Result
+    return queryText, response.Result
 }
 
 let private loadSnapshotAsync (pack : ISyncPack) (queries : Map<string, ContentsQuery>) (snapshotId : string) = task {
+    let mutable queries' : Map<string, string> = Map.empty
     let mutable contents : Map<string, ContentsWithTotalResult> = Map.empty
     let mutable errors : Map<string, string> = Map.empty
     for kv in queries do
-        let! content = execQueryAsync pack kv.Value
+        let! (query, content) = execQueryAsync pack kv.Value
+        queries' <-
+            queries'
+            |> Map.add kv.Key query
         match content with
         | Ok content ->
             contents <-
@@ -73,6 +77,7 @@ let private loadSnapshotAsync (pack : ISyncPack) (queries : Map<string, Contents
                 |> Map.add kv.Key (err.ToString ())
     return SyncSnapshot.Create (
         id = snapshotId,
+        queries = queries',
         contents = contents,
         errors = errors
     )
