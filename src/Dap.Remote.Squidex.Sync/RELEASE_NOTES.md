@@ -1,3 +1,6 @@
+## 0.2.3
+* Add queries to SyncSnapshot
+
 ## 0.2.2
 * Add SyncSnapshot.CastContent<> method
 
