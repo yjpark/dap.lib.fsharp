@@ -1,3 +1,6 @@
+## 0.2.4
+* Add SyncResult
+
 ## 0.2.3
 * Add queries to SyncSnapshot
 

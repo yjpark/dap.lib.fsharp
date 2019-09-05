@@ -86,20 +86,21 @@ let private loadSnapshotAsync (pack : ISyncPack) (queries : Map<string, Contents
 let reloadSyncSnapshotAsync (pack : ISyncPack) (queries : Map<string, ContentsQuery>) = task {
     if pack.SyncProps.Loading.Value then
         logError pack "Reload" "Loading_In_Progress" ()
-        return false
+        return SyncResult.CreateFailed "Loading_In_Progress"
     else
-        let mutable result = false
+        let mutable result = SyncResult.CreateFailed "N/A"
         pack.SyncProps.Loading.SetValue (true)
         let snapshotId = pack.SyncConfig.GetNextSnapshotId.Handle ()
         try
             let! snapshot = loadSnapshotAsync pack queries snapshotId
             pack.SyncProps.Snapshots.Add snapshot.Id
             |> (fun prop -> prop.SetValue snapshot)
-            if not snapshot.HasError then
-                result <- true
+            pack.SyncProps.LastSnapshotId.SetValue snapshot.Id
+            result <- SyncResult.CreateSucceed snapshot
             pack.SyncConfig.OnLoaded.FireEvent (snapshot)
         with e ->
             logException pack "Reload" "Exception_Raised" (snapshotId) e
+            result <- SyncResult.CreateFailed (e.ToString ())
         pack.SyncProps.Loading.SetValue (false)
         return result
 }
