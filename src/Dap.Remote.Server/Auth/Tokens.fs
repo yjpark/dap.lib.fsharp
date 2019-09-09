@@ -4,11 +4,11 @@ module Dap.Remote.Server.Auth.Tokens
 
 open System.Threading.Tasks
 open FSharp.Control.Tasks.V2
-open Farango.Documents
 
 open Dap.Prelude
 open Dap.Context
 open Dap.Local.Farango
+open Dap.Local.Farango.Util
 
 type Token = Token.Record
 
@@ -32,8 +32,7 @@ let inline updateTokens (collection : string) (record : ^record) (pack : IDbPack
             "tokens", JsonEncoder true tokens
         ]
     return!
-        updateDocument pack.Conn collection key <| E.encode 0 updates
-        |> Async.StartAsTask
+        pack.Db |> Document.patchAsync collection key (E.encode 0 updates)
 }
 
 let inline addTokenAsync (collection : string) (token : Token) (record : ^record) (pack : IDbPack) : Task<Result< ^record * Token, string>> = task {
