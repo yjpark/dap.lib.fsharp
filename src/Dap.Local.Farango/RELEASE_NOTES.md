@@ -1,3 +1,6 @@
+## 0.8.1
+* Reconnect in case of invalid JWT token (might be caused by db restart or expiration)
+
 ## 0.8.0
 * log API changes
 

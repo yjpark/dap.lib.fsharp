@@ -59,14 +59,15 @@ type Query = {
     interface IJson with
         member this.ToJson () = Query.JsonEncoder this
 
-let executeAsync' (query : Query) (db : Db) = async {
-    query.FailIfInvalid ()
-    let! firstResult =
-        encodeJson 0 query
-        |> Cursor.getFirstResult Connection.post db.Conn db.CursorUrl
-    db.LogResult (sprintf "Execute_Query: %s" (query.ToString ())) firstResult
-    return! Cursor.moreResults db.Conn firstResult
-}
+let executeAsync' (query : Query) (db : Db) =
+    fun (conn : Connection) -> async {
+        query.FailIfInvalid ()
+        let! firstResult =
+            encodeJson 0 query
+            |> Cursor.getFirstResult Connection.post conn db.CursorUrl
+        db.LogResult (sprintf "Execute_Query: %s" (query.ToString ())) firstResult
+        return! Cursor.moreResults conn firstResult
+    } |> db.ExecAsync'
 
 let executeAsync query db =
     Async.StartAsTask <| executeAsync' query db
