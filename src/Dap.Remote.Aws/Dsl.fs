@@ -16,6 +16,14 @@ let AwsToken =
         option (M.string "info")
     }
 
+let AwsS3Config =
+    combo {
+        var (M.string ("region", "us-west-1"))
+        var (M.bool ("force_path_style", true))
+        var (M.bool ("log_response", true))
+        option (M.string "server_url")
+    }
+
 let compile segments =
     [
         G.File (segments, ["_Gen" ; "Types.fs"],
@@ -23,6 +31,7 @@ let compile segments =
                 [
                     G.PlatformOpens
                     G.JsonRecord <@ AwsToken @>
+                    G.LooseJsonRecord <@ AwsS3Config @>
                 ]
             )
         )

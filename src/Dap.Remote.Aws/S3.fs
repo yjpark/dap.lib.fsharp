@@ -57,15 +57,14 @@ type Amazon.S3.Model.S3Bucket with
     static member JsonSpec = FieldSpec.Create<S3Bucket> (S3Bucket.JsonEncoder, S3Bucket.JsonDecoder)
     member this.ToJson () = S3Bucket.JsonEncoder this
 
-let connect (token : AwsToken option) (config : S3Config option) : S3Client =
-    let token = token |> Option.defaultWith getAwsToken
+let connect (token : AwsToken) (config : S3Config option) : S3Client =
     match config with
     | Some config ->
         new S3Client (token.Key, token.Secret, config)
     | None ->
         new S3Client (token.Key, token.Secret)
 
-type S3 (?token : AwsToken, ?config : S3Config) =
+type S3 (token : AwsToken, ?config : S3Config) =
     let client = connect token config
     member __.Client = client
     member __.ListBucketsAsync

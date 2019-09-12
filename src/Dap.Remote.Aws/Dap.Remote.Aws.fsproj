@@ -5,13 +5,12 @@
     <PackageProjectUrl>https://github.com/yjpark/dap.lib.fsharp</PackageProjectUrl>
     <PackageTags>fsharp;dap;</PackageTags>
     <Authors>YJ Park</Authors>
-    <Version>0.8.0</Version>
+    <Version>0.8.1</Version>
     <Description>Dap Remote features depends on FSharp.Data</Description>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Dsl.fs" />
-    <Compile Include="Const.fs" />
     <Compile Include="_Gen/Types.fs" />
     <Compile Include="Util.fs" />
     <Compile Include="S3.fs" />
