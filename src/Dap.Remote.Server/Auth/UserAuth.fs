@@ -4,12 +4,12 @@ module Dap.Remote.Server.Auth.UserAuth
 
 open System.Threading.Tasks
 open FSharp.Control.Tasks.V2
-open Farango.Documents
 
 open Dap.Prelude
 open Dap.Context
 open Dap.Platform
 open Dap.Local.Farango
+open Dap.Local.Farango.Util
 
 [<Literal>]
 let Collection = "user_auth"
@@ -50,13 +50,8 @@ type Record = {
     member this.Key = this.UserKey
     member this.WithTokens tokens = {this with Tokens = tokens}
 
-let getByUserKeyAsync' (collection : string) (userKey : string) (pack : IDbPack) : Task<Result<Record, string>> = task {
-    let! doc =
-        getDocument pack.Conn collection userKey
-        |> Async.StartAsTask
-    return doc
-    |> Result.bind (D.fromString Record.JsonDecoder)
-}
+let getByUserKeyAsync' (collection : string) (userKey : string) (pack : IDbPack) : Task<Result<Record, string>> =
+    pack.Db |> Document.getAsync collection userKey Record.JsonDecoder
 
 let getByUserKeyAsync userKey app = getByUserKeyAsync' Collection userKey app
 let addTokenAsync token (record : Record) app = Tokens.addTokenAsync Collection token record app

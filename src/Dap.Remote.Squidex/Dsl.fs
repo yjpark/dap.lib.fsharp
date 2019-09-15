@@ -33,9 +33,24 @@ let SquidexItem =
         var (M.json "dataFlatten")
     }
 
+let SquidexMeta =
+    union {
+        kind "Id"
+        kind "Version"
+        kind "Created"
+        kind "CreatedBy"
+        kind "LastModified"
+        kind "LastModifiedBy"
+        kind "Url"
+    }|> UnionMeta.SetInitValue (Some "SquidMeta.Id")
+
 let ContentField =
     union {
         kind "NoField"
+        case "MetaValue" (fields {
+            var (M.string "key")
+            var (M.custom (<@ SquidexMeta @>, "meta"))
+        })
         case "SimpleValue" (fields {
             var (M.string "key")
             var (M.custom ("FieldSpec", "spec", "S.json"))
@@ -118,6 +133,9 @@ let compile segments =
             G.AutoOpenModule ("Dap.Remote.Squidex.QueryTypes",
                 [
                     G.PlatformOpens
+                    [
+                        "[<RequireQualifiedAccess>]"
+                    ] @ G.Union <@ SquidexMeta @>
                     G.Union <@ ContentField @>
                     G.Record <@ ContentsQuery @>
                     G.JsonRecord <@ ContentsWithTotalResult @>

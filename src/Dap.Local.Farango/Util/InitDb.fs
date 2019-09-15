@@ -9,7 +9,7 @@ open Dap.Prelude
 open Dap.Local.Farango
 
 let createIndexAsync' (collection : string) (def : IndexDef) (db : Db) = async {
-    let! result = createIndex db.Conn collection def
+    let! result = createIndex db._Conn collection def
     db.LogResult (sprintf "Create_Index: %A - %A" collection def) result
     return result
 }
@@ -19,9 +19,9 @@ let createIndexAsync collection def db =
 
 let createCollectionAsync' (dropFirst : bool) (def : CollectionDef) (db : Db) = async {
     if (dropFirst) then
-        let! result = dropCollection db.Conn def.Name
+        let! result = dropCollection db._Conn def.Name
         db.LogResult (sprintf "Drop_Collection: %s" def.Name) result
-    let! result = createCollection db.Conn def.Name
+    let! result = createCollection db._Conn def.Name
     db.LogResult (sprintf "Create_Collection: %s" def.Name) result
     let isNew = result.IsOk
     for index in def.Indexes do

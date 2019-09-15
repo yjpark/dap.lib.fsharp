@@ -13,6 +13,25 @@ module TickerTypes = Dap.Platform.Ticker.Types
 
 type SyncSnapshot with
     member this.HasError = this.Errors.Count > 0
+    member this.CastContent<'item when 'item :> IJson>
+            (logger : ILogger)
+            (key : string) (decoder : JsonDecoder<'item>) =
+        let mutable errors : string list = []
+        let items =
+            this.Contents
+            |> Map.find key
+            |> (fun x -> x.Items)
+            |> List.choose (fun item ->
+                match tryCastJson decoder item.DataFlatten with
+                | Ok item' ->
+                    logInfo logger key "Cast_Succeed" (E.encode 4 item.DataFlatten, encodeJson 4 item')
+                    Some item'
+                | Error err ->
+                    logWarn logger key "Cast_Failed" (E.encode 4 item.DataFlatten, err)
+                    errors <- err :: errors
+                    None
+            )
+        (items, errors)
 
 type ISyncPack with
     member this.SyncConfig = this.Sync.Context
@@ -20,6 +39,7 @@ type ISyncPack with
 
 let private execQueryAsync (pack : ISyncPack) (query : ContentsQuery) = task {
     let config = pack.SyncProps.Config.Value
+    let queryText = (SquidexItem.WrapContentsQuery true query).ToQuery config ContentsWithTotal.getQueryName
     let! response =
         ContentsWithTotal.Args.Create (config, query)
         |> ContentsWithTotal.queryAsync pack
@@ -31,18 +51,21 @@ let private execQueryAsync (pack : ISyncPack) (query : ContentsQuery) = task {
     )
     *)
     |> Result.iterError (fun err ->
-        let query = (SquidexItem.WrapContentsQuery true query).ToQuery config ContentsWithTotal.getQueryName
         logError pack "Squidex" "Query_Squidex_Failed"
             (encodeJson 4 config, query, response, err)
     )
-    return response.Result
+    return queryText, response.Result
 }
 
 let private loadSnapshotAsync (pack : ISyncPack) (queries : Map<string, ContentsQuery>) (snapshotId : string) = task {
+    let mutable queries' : Map<string, string> = Map.empty
     let mutable contents : Map<string, ContentsWithTotalResult> = Map.empty
     let mutable errors : Map<string, string> = Map.empty
     for kv in queries do
-        let! content = execQueryAsync pack kv.Value
+        let! (query, content) = execQueryAsync pack kv.Value
+        queries' <-
+            queries'
+            |> Map.add kv.Key query
         match content with
         | Ok content ->
             contents <-
@@ -54,6 +77,7 @@ let private loadSnapshotAsync (pack : ISyncPack) (queries : Map<string, Contents
                 |> Map.add kv.Key (err.ToString ())
     return SyncSnapshot.Create (
         id = snapshotId,
+        queries = queries',
         contents = contents,
         errors = errors
     )
@@ -62,20 +86,21 @@ let private loadSnapshotAsync (pack : ISyncPack) (queries : Map<string, Contents
 let reloadSyncSnapshotAsync (pack : ISyncPack) (queries : Map<string, ContentsQuery>) = task {
     if pack.SyncProps.Loading.Value then
         logError pack "Reload" "Loading_In_Progress" ()
-        return false
+        return SyncResult.CreateFailed "Loading_In_Progress"
     else
-        let mutable result = false
+        let mutable result = SyncResult.CreateFailed "N/A"
         pack.SyncProps.Loading.SetValue (true)
         let snapshotId = pack.SyncConfig.GetNextSnapshotId.Handle ()
         try
             let! snapshot = loadSnapshotAsync pack queries snapshotId
             pack.SyncProps.Snapshots.Add snapshot.Id
             |> (fun prop -> prop.SetValue snapshot)
-            if not snapshot.HasError then
-                result <- true
+            pack.SyncProps.LastSnapshotId.SetValue snapshot.Id
+            result <- SyncResult.CreateSucceed snapshot
             pack.SyncConfig.OnLoaded.FireEvent (snapshot)
         with e ->
             logException pack "Reload" "Exception_Raised" (snapshotId) e
+            result <- SyncResult.CreateFailed (e.ToString ())
         pack.SyncProps.Loading.SetValue (false)
         return result
 }

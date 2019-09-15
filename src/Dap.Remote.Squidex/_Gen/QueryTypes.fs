@@ -5,11 +5,40 @@ open Dap.Prelude
 open Dap.Context
 open Dap.Platform
 
+[<RequireQualifiedAccess>]
+(*
+ * Generated: <Union>
+ *)
+type SquidexMeta =
+    | Id
+    | Version
+    | Created
+    | CreatedBy
+    | LastModified
+    | LastModifiedBy
+    | Url
+with
+    static member CreateId () : SquidexMeta =
+        Id
+    static member CreateVersion () : SquidexMeta =
+        Version
+    static member CreateCreated () : SquidexMeta =
+        Created
+    static member CreateCreatedBy () : SquidexMeta =
+        CreatedBy
+    static member CreateLastModified () : SquidexMeta =
+        LastModified
+    static member CreateLastModifiedBy () : SquidexMeta =
+        LastModifiedBy
+    static member CreateUrl () : SquidexMeta =
+        Url
+
 (*
  * Generated: <Union>
  *)
 type ContentField =
     | NoField
+    | MetaValue of key : string * meta : SquidexMeta
     | SimpleValue of key : string * spec : FieldSpec
     | InvariantValue of key : string * spec : FieldSpec
     | LocalizedValue of key : string * spec : FieldSpec
@@ -25,6 +54,8 @@ type ContentField =
 with
     static member CreateNoField () : ContentField =
         NoField
+    static member CreateMetaValue key meta : ContentField =
+        MetaValue (key, meta)
     static member CreateSimpleValue key spec : ContentField =
         SimpleValue (key, spec)
     static member CreateInvariantValue key spec : ContentField =

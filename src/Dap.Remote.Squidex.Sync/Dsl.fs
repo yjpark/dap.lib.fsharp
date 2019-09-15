@@ -16,6 +16,7 @@ let SyncSnapshot =
     combo {
         var (M.string "id")
         var (M.instant "time")
+        dict (M.string "queries")
         dict (M.custom (<@ ContentsWithTotalResult @>, "contents"))
         dict (M.string "errors")
     }
@@ -26,7 +27,18 @@ let SyncProps =
         option (M.duration ("reload_interval", Duration.FromMinutes(60L)))
         dict (M.custom (<@ SyncSnapshot @>, "snapshots"))
         var (M.bool "loading")
+        var (M.string "last_snapshot_id")
         var (M.instant "last_loaded_time")
+    }
+
+let SyncResult =
+    union {
+        case "Succeed" (fields {
+            var (M.custom (<@ SyncSnapshot @>, "snapshot"))
+        })
+        case "Failed" (fields {
+            var (M.string "error")
+        })
     }
 
 let SyncConfig =
@@ -34,7 +46,7 @@ let SyncConfig =
         kind "SyncConfig"
         channel (M.custom (<@ SyncSnapshot @>, "on_loaded"))
         handler (M.unit "get_next_snapshot_id") (M.string response)
-        async_handler (M.unit "reload") (M.bool response)
+        async_handler (M.unit "reload") (M.custom (<@ SyncResult @>, response))
     }
 
 let ISyncPack =
@@ -51,6 +63,7 @@ let compile segments =
                     [ "open Dap.Remote.FSharpData" ]
                     [ "open Dap.Remote.Squidex" ]
                     G.JsonRecord <@ SyncSnapshot @>
+                    G.JsonUnion <@ SyncResult @>
                     G.Combo <@ SyncProps @>
                     G.Feature (<@ SyncConfig @>)
                 ]
