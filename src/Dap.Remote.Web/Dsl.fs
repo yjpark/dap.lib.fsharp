@@ -17,6 +17,20 @@ let InvalidBody =
         list (M.json "samples")
     }
 
+let OpenIdConnectConfig =
+    combo {
+        var (M.string "ClientId")
+        var (M.string "ClientSecret")
+        var (M.string "Authority")
+        var (M.string ("CallbackPath", "/signin-oidc"))
+        var (M.string ("ResponseType", "code"))
+        var (M.bool ("SaveTokens", true))
+        var (M.bool ("GetClaimsFromUserInfoEndpoint", true))
+        var (M.bool ("RequireHttpsMetadata", false))
+        var (M.string ("NameClaimType", "name"))
+        option (M.string "ClaimsIssuer")
+    }
+
 let compile segments =
     [
         G.File (segments, ["_Gen" ; "HttpTypes.fs"],
@@ -24,6 +38,7 @@ let compile segments =
                 [
                     G.PlatformOpens
                     G.JsonRecord <@ InvalidBody @>
+                    G.LooseJsonRecord <@ OpenIdConnectConfig @>
                 ]
             )
         )

@@ -1,3 +1,6 @@
+## 0.8.2
+* Add OpenIdConnectConfig
+
 ## 0.8.1
 * Can restrict certain path in static files to authenticated users
 
