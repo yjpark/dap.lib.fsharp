@@ -1,6 +1,7 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
     <PackageProjectUrl>https://github.com/yjpark/dap.lib.fsharp</PackageProjectUrl>
     <PackageTags>fsharp;dap;</PackageTags>
     <Authors>YJ Park</Authors>
@@ -18,4 +19,5 @@
     <ProjectReference Include="..\Dap.Remote.Web\Dap.Remote.Web.fsproj" />
     <ProjectReference Include="..\Dap.Remote.Squidex\Dap.Remote.Squidex.fsproj" />
   </ItemGroup>
+  <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>

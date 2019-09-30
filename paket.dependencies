@@ -58,10 +58,20 @@ nuget Fable.JsonConverter
 nuget FSharp.Control.AsyncSeq
 nuget Newtonsoft.Json
 
-# Build
-nuget Dap.Build
-
 clitool dotnet-sourcelink
 nuget Microsoft.SourceLink.GitHub prerelease
 nuget Microsoft.Build.Tasks.Git prerelease
 nuget Microsoft.SourceLink.Common prerelease
+
+group Build
+    source https://www.nuget.org/api/v2
+    framework: netstandard2.0
+    storage:none
+
+    nuget Dap.Build
+
+    nuget Dap.Prelude
+    nuget Dap.Context
+    nuget Dap.Platform
+    nuget Dap.WebSocket
+    nuget Dap.Remote
