@@ -1,3 +1,7 @@
+## 0.2.5
+* Update with FAKE 1.16.1 and Paket 5.216.0
+* Support DotNet Core 3.0
+
 ## 0.2.4
 * Add SyncResult
 

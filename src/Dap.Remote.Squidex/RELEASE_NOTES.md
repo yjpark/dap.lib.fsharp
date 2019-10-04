@@ -1,3 +1,7 @@
+## 0.2.3
+* Update with FAKE 1.16.1 and Paket 5.216.0
+* Support DotNet Core 3.0
+
 ## 0.2.2
 * Support add squidex item meta fields to flatten data
 

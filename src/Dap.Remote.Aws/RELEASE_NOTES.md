@@ -1,3 +1,7 @@
+## 0.8.2
+* Update with FAKE 1.16.1 and Paket 5.216.0
+* Support DotNet Core 3.0
+
 ## 0.8.1
 * Cleanup configuration util
 
