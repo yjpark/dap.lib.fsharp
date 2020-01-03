@@ -40,6 +40,9 @@
 			"path": "src/Fable.Dap.Fulma"
 		},
 		{
+			"path": "src/Fable.Dap.Electron"
+		},
+		{
 			"path": "demo/Squidex.Demo"
 		},
 		{
