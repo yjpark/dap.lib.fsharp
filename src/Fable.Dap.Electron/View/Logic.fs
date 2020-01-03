@@ -3,6 +3,7 @@ module Dap.Electron.View.Logic
 
 open Fable.Core
 open Elmish
+open Elmish.React
 open Elmish.Debug
 
 open Dap.Prelude
