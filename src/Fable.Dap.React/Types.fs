@@ -1,6 +1,16 @@
 [<AutoOpen>]
 module Dap.React.Types
 
+open Fable.Core
+module H = Fable.React.Helpers
+module R = Fable.React.Standard
+module P = Fable.React.Props
+                                                                      //__SILP__
+open Dap.Prelude
+open Dap.Context
+open Dap.Platform
+open Dap.React
+
 type IRoute =
     abstract Url : string with get
 
