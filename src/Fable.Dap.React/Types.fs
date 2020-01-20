@@ -9,7 +9,6 @@ module P = Fable.React.Props
 open Dap.Prelude
 open Dap.Context
 open Dap.Platform
-open Dap.React
 
 type IRoute =
     abstract Url : string with get
