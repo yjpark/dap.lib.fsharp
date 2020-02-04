@@ -27,8 +27,8 @@ type Error =
     | NetworkError of WebException
     | DecodeError of err:string
     | InternalError of exn
-    | BadStatus of HttpResponse
-    | BadPayload of HttpResponse * err:string
+    | BadStatus of int
+    | BinaryBody of byte[]
 
 type Request<'res> = {
     Method : Method
@@ -52,6 +52,7 @@ type Response<'res> = {
     ReqTime : Instant
     Request : Request<'res>
     ResTime : Instant
+    Response : HttpResponse option
     ResBody : string
     Result : Result<'res, Error>
 } with
@@ -127,7 +128,7 @@ let private tplFailed<'res> =
 
 let handleAsync' (runner : IRunner) (req : Request<'res>) (callback : (Response<'res>) -> unit) = async {
     let reqTime = runner.Clock.Now
-    let callback' = fun ((resTime, resBody, result) : Instant * string * Result<'res, Error>) ->
+    let callback' = fun ((resTime, response, resBody, result) : Instant * HttpResponse option * string * Result<'res, Error>) ->
         match result with
         | Ok res ->
             runner.Log <| tplSucceed<'res> req res resBody
@@ -137,6 +138,7 @@ let handleAsync' (runner : IRunner) (req : Request<'res>) (callback : (Response<
             ReqTime = reqTime
             Request = req
             ResTime = resTime
+            Response = response
             ResBody = resBody
             Result = result
         }|> callback
@@ -145,23 +147,32 @@ let handleAsync' (runner : IRunner) (req : Request<'res>) (callback : (Response<
         let timeout = req.Timeout |> Option.map (fun t -> t / 1<ms>)
         let! response = FSharp.Data.Http.AsyncRequest (req.Url, ?headers = req.Headers, ?httpMethod = httpMethod, ?body = req.Body, ?timeout = timeout)
         let resTime = runner.Clock.Now
-        match response.Body with
-        | Text text ->
-            try
-                tryDecodeJson req.Decoder text
-                |> Result.mapError (fun e -> DecodeError e)
-                |> fun res -> callback' (resTime, text, res)
-            with e ->
-                callback' (resTime, text, Error ^<| DecodeError ^<| sprintf "Exception_Raised: %s" e.Message)
-        | Binary bytes ->
-            callback' (resTime, "", Error ^<| BadPayload (response, sprintf "Expecting text, but got a binary response (%d bytes)" bytes.Length))
+        let resBody =
+            match response.Body with
+            | Text text ->
+                text
+            | Binary bytes ->
+                ""
+        if response.StatusCode <> 200 then
+            callback' (resTime, Some response, resBody, Error ^<| BadStatus response.StatusCode)
+        else
+            match response.Body with
+            | Text text ->
+                try
+                    tryDecodeJson req.Decoder text
+                    |> Result.mapError (fun e -> DecodeError e)
+                    |> fun res -> callback' (resTime, Some response, text, res)
+                with e ->
+                    callback' (resTime, Some response, text, Error ^<| DecodeError ^<| sprintf "Exception_Raised: %s" e.Message)
+            | Binary bytes ->
+                callback' (resTime, Some response, "", Error ^<| BinaryBody bytes)
     with
     | :? WebException as e ->
         let resTime = runner.Clock.Now
-        callback' (resTime, "", Error ^<| NetworkError e)
+        callback' (resTime, None, "", Error ^<| NetworkError e)
     | e ->
         let resTime = runner.Clock.Now
-        callback' (resTime, "", Error ^<| InternalError e)
+        callback' (resTime, None, "", Error ^<| InternalError e)
 }
 
 let handleAsync : AsyncApi<IRunner, Request<'res>, Response<'res>> =
