@@ -1,6 +1,8 @@
 [<AutoOpen>]
 module Dap.Local.Helper
 
+open System.IO
+
 open Dap.Prelude
 open Dap.Context
 open Dap.Platform
@@ -20,6 +22,30 @@ type IEnvironment with
             None
         else
             Some v
+    member this.TryLoadConfigFromData<'config>
+            (decoder : JsonDecoder<'config>, name : string, ?folder : string)
+            : Result<'config, string> =
+        let folder = defaultArg folder "config"
+        let path = Path.Combine (this.Properties.DataDirectory.Value, folder, name)
+        path
+        |> TextFile.load
+        |> function
+        | Some text ->
+            match tryDecodeJson decoder text with
+            | Ok param ->
+                Ok param
+            | Error err ->
+                Error err
+        | None ->
+            Error <| sprintf "File_Not_Exist: %s" path
+    member this.LoadConfigFromData<'config> (decoder : JsonDecoder<'config>, name : string, ?folder : string) : 'config =
+        this.TryLoadConfigFromData<'config> (decoder, name, ?folder = folder)
+        |> function
+        | Ok config ->
+            config
+        | Error err ->
+            err
+            |> failWith <| sprintf "LoadConfigFromData<%A>" typeof<'config>
 
 type FileSinkArgs with
     member this.WithTimestamp () =
