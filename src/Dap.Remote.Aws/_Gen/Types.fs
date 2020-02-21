@@ -36,9 +36,10 @@ type AwsToken = {
     static member JsonEncoder : JsonEncoder<AwsToken> =
         fun (this : AwsToken) ->
             E.object [
-                "key", E.string (* AwsToken *) this.Key
-                "secret", E.string (* AwsToken *) this.Secret
-                "info", (E.option E.string) (* AwsToken *) this.Info
+                yield "key", E.string (* AwsToken *) this.Key
+                yield "secret", E.string (* AwsToken *) this.Secret
+                if this.Info.IsSome then
+                    yield "info", (E.option E.string) (* AwsToken *) this.Info
             ]
     static member JsonDecoder : JsonDecoder<AwsToken> =
         D.object (fun get ->
@@ -97,10 +98,11 @@ type AwsS3Config = {
     static member JsonEncoder : JsonEncoder<AwsS3Config> =
         fun (this : AwsS3Config) ->
             E.object [
-                "region", E.string (* AwsS3Config *) this.Region
-                "force_path_style", E.bool (* AwsS3Config *) this.ForcePathStyle
-                "log_response", E.bool (* AwsS3Config *) this.LogResponse
-                "server_url", (E.option E.string) (* AwsS3Config *) this.ServerUrl
+                yield "region", E.string (* AwsS3Config *) this.Region
+                yield "force_path_style", E.bool (* AwsS3Config *) this.ForcePathStyle
+                yield "log_response", E.bool (* AwsS3Config *) this.LogResponse
+                if this.ServerUrl.IsSome then
+                    yield "server_url", (E.option E.string) (* AwsS3Config *) this.ServerUrl
             ]
     static member JsonDecoder : JsonDecoder<AwsS3Config> =
         D.object (fun get ->

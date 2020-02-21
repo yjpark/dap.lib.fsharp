@@ -54,12 +54,13 @@ type Version = {
     static member JsonEncoder : JsonEncoder<Version> =
         fun (this : Version) ->
             E.object [
-                "major", E.int (* Version *) this.Major
-                "minor", E.int (* Version *) this.Minor
-                "patch", E.int (* Version *) this.Patch
-                "commit", E.string (* Version *) this.Commit
-                "comment", E.string (* Version *) this.Comment
-                "pre_release", (E.option E.string) (* Version *) this.PreRelease
+                yield "major", E.int (* Version *) this.Major
+                yield "minor", E.int (* Version *) this.Minor
+                yield "patch", E.int (* Version *) this.Patch
+                yield "commit", E.string (* Version *) this.Commit
+                yield "comment", E.string (* Version *) this.Comment
+                if this.PreRelease.IsSome then
+                    yield "pre_release", (E.option E.string) (* Version *) this.PreRelease
             ]
     static member JsonDecoder : JsonDecoder<Version> =
         D.object (fun get ->

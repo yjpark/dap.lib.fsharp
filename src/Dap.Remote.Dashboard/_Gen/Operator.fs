@@ -28,7 +28,7 @@ type AuthRes = {
     static member JsonEncoder : JsonEncoder<AuthRes> =
         fun (this : AuthRes) ->
             E.object [
-                "info", E.json (* AuthRes *) this.Info
+                yield "info", E.json (* AuthRes *) this.Info
             ]
     static member JsonDecoder : JsonDecoder<AuthRes> =
         D.object (fun get ->

@@ -49,11 +49,11 @@ type AgentSnapshot = {
     static member JsonEncoder : JsonEncoder<AgentSnapshot> =
         fun (this : AgentSnapshot) ->
             E.object [
-                "time", InstantFormat.DateHourMinuteSecondSub.JsonEncoder (* AgentSnapshot *) this.Time
-                "ident", E.ident (* AgentSnapshot *) this.Ident
-                "version", E.json (* AgentSnapshot *) this.Version
-                "state", E.json (* AgentSnapshot *) this.State
-                "stats", E.json (* AgentSnapshot *) this.Stats
+                yield "time", InstantFormat.DateHourMinuteSecondSub.JsonEncoder (* AgentSnapshot *) this.Time
+                yield "ident", E.ident (* AgentSnapshot *) this.Ident
+                yield "version", E.json (* AgentSnapshot *) this.Version
+                yield "state", E.json (* AgentSnapshot *) this.State
+                yield "stats", E.json (* AgentSnapshot *) this.Stats
             ]
     static member JsonDecoder : JsonDecoder<AgentSnapshot> =
         D.object (fun get ->
@@ -118,9 +118,9 @@ type EnvSnapshot = {
     static member JsonEncoder : JsonEncoder<EnvSnapshot> =
         fun (this : EnvSnapshot) ->
             E.object [
-                "scope", E.string (* EnvSnapshot *) this.Scope
-                "services", (E.list AgentSnapshot.JsonEncoder) (* EnvSnapshot *) this.Services
-                "agents", (E.list AgentSnapshot.JsonEncoder) (* EnvSnapshot *) this.Agents
+                yield "scope", E.string (* EnvSnapshot *) this.Scope
+                yield "services", (E.list AgentSnapshot.JsonEncoder) (* EnvSnapshot *) this.Services
+                yield "agents", (E.list AgentSnapshot.JsonEncoder) (* EnvSnapshot *) this.Agents
             ]
     static member JsonDecoder : JsonDecoder<EnvSnapshot> =
         D.object (fun get ->

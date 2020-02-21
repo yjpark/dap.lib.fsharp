@@ -43,10 +43,10 @@ type SquidexConfig = {
     static member JsonEncoder : JsonEncoder<SquidexConfig> =
         fun (this : SquidexConfig) ->
             E.object [
-                "url", E.string (* SquidexConfig *) this.Url
-                "app", E.string (* SquidexConfig *) this.App
-                "token", E.string (* SquidexConfig *) this.Token
-                "languages", (E.list E.string) (* SquidexConfig *) this.Languages
+                yield "url", E.string (* SquidexConfig *) this.Url
+                yield "app", E.string (* SquidexConfig *) this.App
+                yield "token", E.string (* SquidexConfig *) this.Token
+                yield "languages", (E.list E.string) (* SquidexConfig *) this.Languages
             ]
     static member JsonDecoder : JsonDecoder<SquidexConfig> =
         D.object (fun get ->
@@ -139,15 +139,15 @@ type SquidexItem = {
     static member JsonEncoder : JsonEncoder<SquidexItem> =
         fun (this : SquidexItem) ->
             E.object [
-                "id", E.string (* SquidexItem *) this.Id
-                "version", E.int (* SquidexItem *) this.Version
-                "created", E.dateTime (* SquidexItem *) this.Created
-                "createdBy", E.string (* SquidexItem *) this.CreatedBy
-                "lastModified", E.dateTime (* SquidexItem *) this.LastModified
-                "lastModifiedBy", E.string (* SquidexItem *) this.LastModifiedBy
-                "url", E.string (* SquidexItem *) this.Url
-                "data", E.json (* SquidexItem *) this.Data
-                "dataFlatten", E.json (* SquidexItem *) this.DataFlatten
+                yield "id", E.string (* SquidexItem *) this.Id
+                yield "version", E.int (* SquidexItem *) this.Version
+                yield "created", E.dateTime (* SquidexItem *) this.Created
+                yield "createdBy", E.string (* SquidexItem *) this.CreatedBy
+                yield "lastModified", E.dateTime (* SquidexItem *) this.LastModified
+                yield "lastModifiedBy", E.string (* SquidexItem *) this.LastModifiedBy
+                yield "url", E.string (* SquidexItem *) this.Url
+                yield "data", E.json (* SquidexItem *) this.Data
+                yield "dataFlatten", E.json (* SquidexItem *) this.DataFlatten
             ]
     static member JsonDecoder : JsonDecoder<SquidexItem> =
         D.object (fun get ->

@@ -171,8 +171,8 @@ type ContentsWithTotalResult = {
     static member JsonEncoder : JsonEncoder<ContentsWithTotalResult> =
         fun (this : ContentsWithTotalResult) ->
             E.object [
-                "total", E.int (* ContentsWithTotalResult *) this.Total
-                "items", (E.list SquidexItem.JsonEncoder) (* ContentsWithTotalResult *) this.Items
+                yield "total", E.int (* ContentsWithTotalResult *) this.Total
+                yield "items", (E.list SquidexItem.JsonEncoder) (* ContentsWithTotalResult *) this.Items
             ]
     static member JsonDecoder : JsonDecoder<ContentsWithTotalResult> =
         D.object (fun get ->

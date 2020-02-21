@@ -44,10 +44,10 @@ type InvalidBody = {
     static member JsonEncoder : JsonEncoder<InvalidBody> =
         fun (this : InvalidBody) ->
             E.object [
-                "url", E.string (* InvalidBody *) this.Url
-                "body", E.string (* InvalidBody *) this.Body
-                "error", E.string (* InvalidBody *) this.Error
-                "samples", (E.list E.json) (* InvalidBody *) this.Samples
+                yield "url", E.string (* InvalidBody *) this.Url
+                yield "body", E.string (* InvalidBody *) this.Body
+                yield "error", E.string (* InvalidBody *) this.Error
+                yield "samples", (E.list E.json) (* InvalidBody *) this.Samples
             ]
     static member JsonDecoder : JsonDecoder<InvalidBody> =
         D.object (fun get ->
@@ -145,16 +145,17 @@ type OpenIdConnectConfig = {
     static member JsonEncoder : JsonEncoder<OpenIdConnectConfig> =
         fun (this : OpenIdConnectConfig) ->
             E.object [
-                "ClientId", E.string (* OpenIdConnectConfig *) this.ClientId
-                "ClientSecret", E.string (* OpenIdConnectConfig *) this.ClientSecret
-                "Authority", E.string (* OpenIdConnectConfig *) this.Authority
-                "CallbackPath", E.string (* OpenIdConnectConfig *) this.CallbackPath
-                "ResponseType", E.string (* OpenIdConnectConfig *) this.ResponseType
-                "SaveTokens", E.bool (* OpenIdConnectConfig *) this.SaveTokens
-                "GetClaimsFromUserInfoEndpoint", E.bool (* OpenIdConnectConfig *) this.GetClaimsFromUserInfoEndpoint
-                "RequireHttpsMetadata", E.bool (* OpenIdConnectConfig *) this.RequireHttpsMetadata
-                "NameClaimType", E.string (* OpenIdConnectConfig *) this.NameClaimType
-                "ClaimsIssuer", (E.option E.string) (* OpenIdConnectConfig *) this.ClaimsIssuer
+                yield "ClientId", E.string (* OpenIdConnectConfig *) this.ClientId
+                yield "ClientSecret", E.string (* OpenIdConnectConfig *) this.ClientSecret
+                yield "Authority", E.string (* OpenIdConnectConfig *) this.Authority
+                yield "CallbackPath", E.string (* OpenIdConnectConfig *) this.CallbackPath
+                yield "ResponseType", E.string (* OpenIdConnectConfig *) this.ResponseType
+                yield "SaveTokens", E.bool (* OpenIdConnectConfig *) this.SaveTokens
+                yield "GetClaimsFromUserInfoEndpoint", E.bool (* OpenIdConnectConfig *) this.GetClaimsFromUserInfoEndpoint
+                yield "RequireHttpsMetadata", E.bool (* OpenIdConnectConfig *) this.RequireHttpsMetadata
+                yield "NameClaimType", E.string (* OpenIdConnectConfig *) this.NameClaimType
+                if this.ClaimsIssuer.IsSome then
+                    yield "ClaimsIssuer", (E.option E.string) (* OpenIdConnectConfig *) this.ClaimsIssuer
             ]
     static member JsonDecoder : JsonDecoder<OpenIdConnectConfig> =
         D.object (fun get ->

@@ -30,8 +30,8 @@ type OperatorArgs = {
     static member JsonEncoder : JsonEncoder<OperatorArgs> =
         fun (this : OperatorArgs) ->
             E.object [
-                "token", E.string (* OperatorArgs *) this.Token
-                "history_size", E.int (* OperatorArgs *) this.HistorySize
+                yield "token", E.string (* OperatorArgs *) this.Token
+                yield "history_size", E.int (* OperatorArgs *) this.HistorySize
             ]
     static member JsonDecoder : JsonDecoder<OperatorArgs> =
         D.object (fun get ->

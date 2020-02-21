@@ -51,11 +51,11 @@ type SyncSnapshot = {
     static member JsonEncoder : JsonEncoder<SyncSnapshot> =
         fun (this : SyncSnapshot) ->
             E.object [
-                "id", E.string (* SyncSnapshot *) this.Id
-                "time", E.instant (* SyncSnapshot *) this.Time
-                "queries", (E.dict E.string) (* SyncSnapshot *) this.Queries
-                "contents", (E.dict ContentsWithTotalResult.JsonEncoder) (* SyncSnapshot *) this.Contents
-                "errors", (E.dict E.string) (* SyncSnapshot *) this.Errors
+                yield "id", E.string (* SyncSnapshot *) this.Id
+                yield "time", E.instant (* SyncSnapshot *) this.Time
+                yield "queries", (E.dict E.string) (* SyncSnapshot *) this.Queries
+                yield "contents", (E.dict ContentsWithTotalResult.JsonEncoder) (* SyncSnapshot *) this.Contents
+                yield "errors", (E.dict E.string) (* SyncSnapshot *) this.Errors
             ]
     static member JsonDecoder : JsonDecoder<SyncSnapshot> =
         D.object (fun get ->

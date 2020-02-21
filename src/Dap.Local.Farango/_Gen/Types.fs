@@ -24,7 +24,7 @@ type DbArgs = {
     static member JsonEncoder : JsonEncoder<DbArgs> =
         fun (this : DbArgs) ->
             E.object [
-                "uri", E.string (* DbArgs *) this.Uri
+                yield "uri", E.string (* DbArgs *) this.Uri
             ]
     static member JsonDecoder : JsonDecoder<DbArgs> =
         D.object (fun get ->
