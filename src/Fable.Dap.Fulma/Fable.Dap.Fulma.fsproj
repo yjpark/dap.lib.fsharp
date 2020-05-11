@@ -6,9 +6,17 @@
     <PackageProjectUrl>https://github.com/yjpark/dap.lib.fsharp</PackageProjectUrl>
     <PackageTags>fsharp;dap;</PackageTags>
     <Authors>YJ Park</Authors>
-    <Version>0.8.1</Version>
+    <Version>0.8.2</Version>
     <Description>Dap Lib with Fulma</Description>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
+  </ItemGroup>
+  <PropertyGroup>
+    <NpmDependencies>
+      <NpmPackage Name="json-formatter-js" Version="^2.3.4"/>
+    </NpmDependencies>
   </PropertyGroup>
   <PropertyGroup Label="UserMacros">
       <DapLibSrcDir>..</DapLibSrcDir>
@@ -19,9 +27,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Fable.Dap.React\Fable.Dap.React.fsproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta2-18618-05" PrivateAssets="All" />
   </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>

@@ -9,6 +9,9 @@
     <Description>Dap Dashboard Lib</Description>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="Dsl/Args.fs" />
     <Compile Include="_Gen/Args.fs" />
     <Compile Include="Meta.fs" />
