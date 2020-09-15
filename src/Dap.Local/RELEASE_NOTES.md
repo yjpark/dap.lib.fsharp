@@ -1,3 +1,6 @@
+## 0.8.4
+* Add FileSystem.traverse
+
 ## 0.8.3
 * Add IEnvironment.TryLoadConfigFromData and LoadConfigFromData
 

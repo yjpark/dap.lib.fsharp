@@ -94,3 +94,17 @@ let deleteFolder (path : string) =
         true
     else
         false
+
+let rec traverseFolder (callback : FileInfo -> unit) (dir : DirectoryInfo) =
+    dir.GetFiles ()
+    |> Array.iter ^<| callback
+    dir.GetDirectories ()
+    |> Array.iter ^<| traverseFolder callback
+
+let traverse (callback : FileInfo -> unit) (path : string) =
+    let root = new DirectoryInfo (path)
+    if root.Exists then
+        traverseFolder callback root
+    else
+        logError (getLogger ()) "traverse" "Directory_Not_Exist" path
+
