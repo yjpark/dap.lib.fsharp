@@ -63,15 +63,3 @@ nuget Microsoft.SourceLink.GitHub
 nuget Microsoft.Build.Tasks.Git
 nuget Microsoft.SourceLink.Common
 
-group Build
-    source https://www.nuget.org/api/v2
-    framework: netstandard2.0
-    storage:none
-
-    nuget Dap.Build
-
-    nuget Dap.Prelude
-    nuget Dap.Context
-    nuget Dap.Platform
-    nuget Dap.WebSocket
-    nuget Dap.Remote
