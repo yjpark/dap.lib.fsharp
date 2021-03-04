@@ -1,3 +1,6 @@
+## 0.9.0
+* Update for DotNet 5.0
+
 ## 0.8.2
 * Update Dap.Remote.FSharpData.Http Response
 

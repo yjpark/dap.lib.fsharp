@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+cd `dirname $0`
+
+VERSION=`../../tools/get-project-version`
+echo $VERSION
+
+dotnet pack -c Release /p:PackageReleaseNotes=RELEASE_NOTES.md
+dotnet nuget push bin/Release/Dap.Remote.Squidex.${VERSION}.nupkg -s https://www.nuget.org/api/v2/package -k $API_KEY_nuget_org

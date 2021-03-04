@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+cat *.fsproj | grep -E "<Version>(.*?)</Version>" | sed -E "s/<Version>//" | sed -E "s/<\/Version>//" | sed -E "s/ //g"
