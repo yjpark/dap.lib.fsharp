@@ -3,7 +3,6 @@ module Dap.Remote.FSharpData.Http
 
 open System.Net
 open FSharp.Data
-open FSharp.Control.Tasks.V2
 
 open Dap.Prelude
 open Dap.Context
@@ -79,7 +78,7 @@ let getReqUrlBody (req : Request<'res>) : string * Json =
 
 let getReqKindPayload (kind : string) (req : Request<'res>) =
     new System.Text.StringBuilder()
-    |> fun b -> b.AppendLine <| req.Method.ToHttpMethod ()
+    |> fun b -> b.AppendLine (req.Method.ToHttpMethod ())
     |> fun b -> b.AppendLine req.Url
     |> (fun b ->
         req.Headers
@@ -87,7 +86,7 @@ let getReqKindPayload (kind : string) (req : Request<'res>) =
             b.AppendLine "Headers:"
             |> ignore
             for (k, v) in headers do
-                b.AppendLine <| sprintf "\t%s = %s" k v
+                b.AppendLine (sprintf "\t%s = %s" k v)
                 |> ignore
         )
         b
@@ -104,10 +103,10 @@ let getReqKindPayload (kind : string) (req : Request<'res>) =
                 b.AppendLine "FormValues:"
                 |> ignore
                 for (k, v) in form do
-                    b.AppendLine <| sprintf "\t%s = %s" k v
+                    b.AppendLine (sprintf "\t%s = %s" k v)
                     |> ignore
             | _ ->
-                b.AppendLine <| sprintf "Body: %A" body
+                b.AppendLine (sprintf "Body: %A" body)
                 |> ignore
         )
         b

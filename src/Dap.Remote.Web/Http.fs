@@ -4,7 +4,6 @@ module Dap.Remote.Web.Http
 open System
 open System.Text
 open System.Threading.Tasks
-open FSharp.Control.Tasks.V2
 open Microsoft.AspNetCore.Http
 open Giraffe
 

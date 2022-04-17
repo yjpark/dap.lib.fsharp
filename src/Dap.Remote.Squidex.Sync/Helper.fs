@@ -1,7 +1,6 @@
 ﻿[<AutoOpen>]
 module Dap.Remote.Squidex.Sync.Helper
 
-open FSharp.Control.Tasks.V2
 
 open Dap.Prelude
 open Dap.Context

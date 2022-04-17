@@ -12,7 +12,7 @@ open Dap.Remote.Dashboard.Meta
 
 let AgentSnapshot =
     combo {
-        var (M.instant (InstantFormat.DateHourMinuteSecondSub, "time"))
+        var (M.instant (Dap.Platform.Clock.InstantFormat.DateHourMinuteSecondSub, "time"))
         var (M.ident "ident")
         var (M.json "version")
         var (M.json "state")

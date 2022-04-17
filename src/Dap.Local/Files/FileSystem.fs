@@ -3,7 +3,6 @@ module Dap.Local.FileSystem
 
 open System.IO
 open System.Text
-open FSharp.Control.Tasks.V2
 
 open Dap.Prelude
 open Dap.Context

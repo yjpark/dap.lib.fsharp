@@ -4,9 +4,6 @@
 			"path": "src/Dap.Local"
 		},
 		{
-			"path": "src/Dap.Local.Farango"
-		},
-		{
 			"path": "src/Dap.Remote.Dashboard"
 		},
 		{
@@ -41,10 +38,6 @@
 		},
 		{
 			"path": "demo/Squidex.Demo"
-		},
-		{
-            "name": "Farango (External)",
-			"path": "External/Farango"
 		}
 	],
     "settings": {

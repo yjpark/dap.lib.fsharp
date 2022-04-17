@@ -24,7 +24,7 @@ let SyncSnapshot =
 let SyncProps =
     combo {
         var (M.custom (<@ SquidexConfig @>, "config"))
-        option (M.duration ("reload_interval", Duration.FromMinutes(60L)))
+        option (M.duration ("reload_interval", NodaTime.Duration.FromMinutes(60L)))
         dict (M.custom (<@ SyncSnapshot @>, "snapshots"))
         var (M.bool "loading")
         var (M.string "last_snapshot_id")

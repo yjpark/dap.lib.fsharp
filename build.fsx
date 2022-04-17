@@ -1,10 +1,10 @@
-(* FAKE: 5.13.3 *)
+(* FAKE: 5.22.0 *)
 #r "paket: groupref Build //"
 #load ".fake/build.fsx/intellisense.fsx"
 
 #load "src/Dap.Local/Meta.fs"
+(*
 #load "src/Dap.Local/Dsl.fs"
-#load "src/Dap.Local.Farango/Dsl.fs"
 
 #load "src/Dap.Remote.Dashboard/Dsl/Args.fs"
 #load "src/Dap.Remote.Dashboard/_Gen/Args.fs"
@@ -18,6 +18,7 @@
 #load "src/Dap.Remote.Squidex.Sync/Dsl.fs"
 
 #load "src/Dap.Fable/Dsl.fs"
+*)
 
 open Fake.Core
 open Fake.Core.TargetOperators
@@ -35,7 +36,6 @@ let feed =
 
 let projects =
     !! "src/Dap.Local/*.fsproj"
-    ++ "src/Dap.Local.Farango/*.fsproj"
     ++ "src/Dap.Remote.Dashboard/*.fsproj"
     ++ "src/Dap.Remote.FSharpData/*.fsproj"
     ++ "src/Dap.Remote.Server/*.fsproj"
@@ -50,12 +50,10 @@ let projects =
 
 NuGet.create NuGet.release feed projects
 
+(*
 DotNet.createPrepares [
     ["Dap.Local"], fun _ ->
         Dap.Local.Dsl.compile ["src" ; "Dap.Local"]
-        |> List.iter traceSuccess
-    ["Dap.Local.Farango"], fun _ ->
-        Dap.Local.Farango.Dsl.compile ["src" ; "Dap.Local.Farango"]
         |> List.iter traceSuccess
     ["Dap.Remote.Dashboard"], fun _ ->
         Dap.Remote.Dashboard.Dsl.Args.compile ["src" ; "Dap.Remote.Dashboard"]
@@ -82,5 +80,6 @@ DotNet.createPrepares [
         Dap.Fable.Dsl.compile ["src" ; "Fable.Dap.Local"]
         |> List.iter traceSuccess
 ]
+*)
 
 Target.runOrDefault DotNet.Build

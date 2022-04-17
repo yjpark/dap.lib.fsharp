@@ -5,7 +5,6 @@ module Dap.Remote.Web.Auth.OpenIdConnect
 open System
 open System.Threading
 open System.Threading.Tasks
-open FSharp.Control.Tasks.V2
 
 open Microsoft.Extensions.Logging
 open Microsoft.Extensions.Configuration

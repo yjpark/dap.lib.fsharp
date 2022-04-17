@@ -3,7 +3,6 @@
 module Dap.Local.Feature.Environment
 
 open System.IO
-open FSharp.Control.Tasks.V2
 
 open Dap.Prelude
 open Dap.Context

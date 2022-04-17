@@ -1,4 +1,4 @@
-version 5.257.0
+version 6.2.1
 
 source https://www.nuget.org/api/v2
 storage: none
@@ -65,7 +65,7 @@ nuget Microsoft.SourceLink.Common
 
 group Build
     source https://www.nuget.org/api/v2
-    framework: netstandard2.0
+    framework: net6.0
     storage:none
 
     nuget Dap.Build
