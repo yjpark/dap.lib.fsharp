@@ -7,7 +7,7 @@
     <PackageProjectUrl>https://github.com/yjpark/dap.lib.fsharp</PackageProjectUrl>
     <PackageTags>fsharp;dap;</PackageTags>
     <Authors>YJ Park</Authors>
-    <Version>0.10.0</Version>
+    <Version>0.11.0</Version>
     <Description>Dap App on Fable React</Description>
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
