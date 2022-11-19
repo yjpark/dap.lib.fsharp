@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net7.0</TargetFramework>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="../src/Dap.Local/Meta.fs" />
+    <Compile Include="../src/Dap.Local/Dsl.fs" />
+
+    <Compile Include="../src/Dap.Remote.Dashboard/Dsl/Args.fs" />
+    <Compile Include="../src/Dap.Remote.Dashboard/_Gen/Args.fs" />
+    <Compile Include="../src/Dap.Remote.Dashboard/Meta.fs" />
+    <Compile Include="../src/Dap.Remote.Dashboard/Dsl/Types.fs" />
+    <Compile Include="../src/Dap.Remote.Dashboard/Dsl/Operator.fs" />
+    <Compile Include="../src/Dap.Remote.Dashboard/Dsl/Pack.fs" />
+    <Compile Include="../src/Dap.Remote.Web/Dsl.fs" />
+    <Compile Include="../src/Dap.Remote.Aws/Dsl.fs" />
+    <Compile Include="../src/Dap.Remote.Squidex/Dsl.fs" />
+    <Compile Include="../src/Dap.Remote.Squidex.Sync/Dsl.fs" />
+
+    <Compile Include="../src/Dap.Fable/Dsl.fs" />
+
+    <Compile Include="build.fs" />
+  </ItemGroup>
+  <Import Project="..\.paket\Paket.Restore.targets" />
+</Project>

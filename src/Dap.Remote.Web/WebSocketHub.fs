@@ -1,7 +1,6 @@
 [<RequireQualifiedAccess>]
 module Dap.Remote.Web.WebSocketHub
 
-open FSharp.Control.Tasks
 open System.Threading
 open Microsoft.AspNetCore.Http
 open Microsoft.AspNetCore.Builder

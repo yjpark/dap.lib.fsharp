@@ -2,7 +2,6 @@
 [<RequireQualifiedAccess>]
 module Dap.Local.Farango.Util.Document
 
-open FSharp.Control.Tasks.V2
 open Farango.Documents
 
 open Dap.Prelude

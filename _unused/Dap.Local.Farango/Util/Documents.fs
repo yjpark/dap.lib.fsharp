@@ -3,7 +3,6 @@
 module Dap.Local.Farango.Util.Documents
 
 open System.Threading.Tasks
-open FSharp.Control.Tasks.V2
 open Farango.Documents
 
 open Dap.Prelude

@@ -2,7 +2,6 @@
 [<RequireQualifiedAccess>]
 module Dap.Local.Farango.Query
 
-open FSharp.Control.Tasks.V2
 module Connection = Farango.Connection
 module Cursor = Farango.Cursor
 

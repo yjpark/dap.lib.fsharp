@@ -2,7 +2,6 @@
 [<RequireQualifiedAccess>]
 module Dap.Local.Farango.Util.InitDb
 
-open FSharp.Control.Tasks.V2
 open Farango.Collections
 
 open Dap.Prelude

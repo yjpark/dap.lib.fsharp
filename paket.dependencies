@@ -1,4 +1,4 @@
-version 6.2.1
+version 7.1.5
 
 source https://www.nuget.org/api/v2
 storage: none
@@ -7,6 +7,8 @@ framework: auto-detect
 nuget FSharp.Core
 
 nuget Argu
+
+nuget Dap.Build
 
 nuget Dap.Prelude
 nuget Dap.Context
@@ -58,20 +60,6 @@ nuget Fable.JsonConverter
 nuget FSharp.Control.AsyncSeq
 nuget Newtonsoft.Json
 
-clitool dotnet-sourcelink
 nuget Microsoft.SourceLink.GitHub
 nuget Microsoft.Build.Tasks.Git
 nuget Microsoft.SourceLink.Common
-
-group Build
-    source https://www.nuget.org/api/v2
-    framework: net6.0
-    storage:none
-
-    nuget Dap.Build
-
-    nuget Dap.Prelude
-    nuget Dap.Context
-    nuget Dap.Platform
-    nuget Dap.WebSocket
-    nuget Dap.Remote

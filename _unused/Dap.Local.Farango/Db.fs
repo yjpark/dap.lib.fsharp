@@ -2,7 +2,6 @@
 module Dap.Local.Farango.Db
 
 open System.Threading.Tasks
-open FSharp.Control.Tasks.V2
 
 open Farango.Types
 open Farango.Connection
